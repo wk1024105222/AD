@@ -19,11 +19,13 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.guns.core.common.constant.dictmap.base.AbstractDictMap;
 import cn.stylefeng.guns.core.common.constant.dictmap.factory.DictFieldWarpperFactory;
+import org.apache.commons.beanutils.PropertyUtilsBean;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -224,4 +226,20 @@ public class Contrast {
         }
     }
 
+    public static Map<String, Object> beanToMap(Object obj) {
+        Map<String, Object> params = new HashMap<String, Object>(0);
+        try {
+            PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
+            PropertyDescriptor[] descriptors = propertyUtilsBean.getPropertyDescriptors(obj);
+            for (int i = 0; i < descriptors.length; i++) {
+                String name = descriptors[i].getName();
+                if (!"class".equals(name)) {
+                    params.put(name, propertyUtilsBean.getNestedProperty(obj, name));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return params;
+    }
 }
