@@ -15,6 +15,7 @@
  */
 package cn.stylefeng.guns.core.common.constant.factory;
 
+import cn.stylefeng.guns.core.common.constant.state.ManagerStatus;
 import cn.stylefeng.guns.modular.system.model.Dict;
 
 import java.util.List;
@@ -127,5 +128,10 @@ public interface IConstantFactory {
      * 获取所有父部门id
      */
     List<Integer> getParentDeptIds(Integer deptid);
+
+    /**
+     * 获取摄像头状态
+     */
+    String getCameraStatusName(Integer status);
 
 }
