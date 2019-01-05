@@ -19,6 +19,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.guns.core.common.constant.cache.Cache;
 import cn.stylefeng.guns.core.common.constant.cache.CacheKey;
+import cn.stylefeng.guns.core.common.constant.state.AttendanceAction;
 import cn.stylefeng.guns.core.common.constant.state.CameraStatus;
 import cn.stylefeng.guns.core.common.constant.state.ManagerStatus;
 import cn.stylefeng.guns.core.common.constant.state.MenuStatus;
@@ -354,6 +355,11 @@ public class ConstantFactory implements IConstantFactory {
     @Override
     public String getCameraStatusName(Integer status) {
         return CameraStatus.valueOf(status);
+    }
+
+    @Override
+    public String getAttendanceName(Integer action) {
+        return AttendanceAction.valueOf(action);
     }
 
 }

@@ -134,4 +134,9 @@ public interface IConstantFactory {
      */
     String getCameraStatusName(Integer status);
 
+    /**
+     * 获取监控记录动作类型
+     */
+    String getAttendanceName(Integer action);
+
 }
