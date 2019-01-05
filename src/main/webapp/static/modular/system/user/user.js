@@ -16,15 +16,33 @@ MgrUser.initColumn = function () {
     var columns = [
         {field: 'selectItem', radio: true},
         {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle'},
-        {title: '账号', field: 'account', align: 'center', valign: 'middle', sortable: true},
+        {title: '工号', field: 'account', align: 'center', valign: 'middle', sortable: true},
         {title: '姓名', field: 'name', align: 'center', valign: 'middle', sortable: true},
         {title: '性别', field: 'sexName', align: 'center', valign: 'middle', sortable: true},
         {title: '角色', field: 'roleName', align: 'center', valign: 'middle', sortable: true},
         {title: '部门', field: 'deptName', align: 'center', valign: 'middle', sortable: true},
-        {title: '邮箱', field: 'email', align: 'center', valign: 'middle', sortable: true},
-        {title: '电话', field: 'phone', align: 'center', valign: 'middle', sortable: true},
+        // {title: '邮箱', field: 'email', align: 'center', valign: 'middle', sortable: true},
+        // {title: '电话', field: 'phone', align: 'center', valign: 'middle', sortable: true},
         {title: '创建时间', field: 'createtime', align: 'center', valign: 'middle', sortable: true},
-        {title: '状态', field: 'statusName', align: 'center', valign: 'middle', sortable: true}];
+        {title: '状态', field: 'statusName', align: 'center', valign: 'middle', sortable: true
+            // ,formatter: function (value, row, index) {
+            //
+            //     var index = layer.open({
+            //         type: 2,
+            //         title: '头像',
+            //         area: ['800px', '450px'], //宽高
+            //         fix: false, //不固定
+            //         maxmin: true,
+            //         content: Feng.ctxPath + '/kaptcha/' + this.seItem.avatar
+            //     });
+            //     this.layerIndex = index;
+            //
+            //     return '<a class="btn btn-primary btn-sm" href="">头像</a>';
+            //     // return '<img alt="image" class="img-circle" src="${ctxPath}/kaptcha/${avatar}" width="64px" height="64px"/>'
+            // }
+
+        }];
+
     return columns;
 };
 
@@ -70,6 +88,24 @@ MgrUser.openChangeUser = function () {
             fix: false, //不固定
             maxmin: true,
             content: Feng.ctxPath + '/mgr/user_edit/' + this.seItem.id
+        });
+        this.layerIndex = index;
+    }
+};
+
+/**
+ * 点击查看头像按钮时
+ * @param userId 管理员id
+ */
+MgrUser.openImage = function () {
+    if (this.check()) {
+        var index = layer.open({
+            type: 2,
+            title: '头像',
+            area: ['800px', '450px'], //宽高
+            fix: false, //不固定
+            maxmin: true,
+            content: Feng.ctxPath + '/kaptcha/' + this.seItem.avatar
         });
         this.layerIndex = index;
     }

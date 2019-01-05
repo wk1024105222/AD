@@ -22,7 +22,7 @@
 									<div class="col-lg-10 col-sm-9">
 										<div class="row">
 											<div class="col-lg-4 col-sm-12">
-												<#NameCon id="name" name="用户名称" placeholder="帐号/姓名/手机号"/>
+												<#NameCon id="name" name="用户名称" placeholder="帐号/姓名"/>
 											</div>
 											<div class="col-lg-4 col-sm-6">
 												<#TimeCon id="beginTime" name="注册开始日期" isTime="false"/>
@@ -62,6 +62,9 @@
 									@}
 									@if(shiro.hasPermission("/mgr/setRole")){
 									<#button name="角色分配" icon="fa-user-secret" clickFun="MgrUser.roleAssign()" space="true"/>
+									@}
+									@if(shiro.hasPermission("/mgr/openImg")){
+									<#button name="查看头像" icon="fa-user-secret" clickFun="MgrUser.openImage()" space="true"/>
 									@}
 								</div>
 								<#table id="managerTable"/>
