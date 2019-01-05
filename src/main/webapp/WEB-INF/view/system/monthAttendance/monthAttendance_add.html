@@ -1,0 +1,65 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="uuid" name="" underline="true"/>
+                            <#input id="year" name="年份" underline="true"/>
+                            <#input id="month" name="月份" underline="true"/>
+                            <#input id="days" name="考勤天数" underline="true"/>
+                            <#input id="userId" name="身份证号或员工编号" underline="true"/>
+                            <#input id="userName" name="姓名" underline="true"/>
+                            <#input id="company" name="公司" underline="true"/>
+                            <#input id="department" name="部门" underline="true"/>
+                            <#input id="team" name="组" underline="true"/>
+                            <#input id="day1" name="1" underline="true"/>
+                            <#input id="day2" name="2" underline="true"/>
+                            <#input id="day3" name="3" underline="true"/>
+                            <#input id="day4" name="4" underline="true"/>
+                            <#input id="day5" name="5" underline="true"/>
+                            <#input id="day6" name="6" underline="true"/>
+                            <#input id="day7" name="7" underline="true"/>
+                            <#input id="day8" name="8" underline="true"/>
+                            <#input id="day9" name="9" underline="true"/>
+                            <#input id="day10" name="10" underline="true"/>
+                            <#input id="day11" name="11"/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="day12" name="12" underline="true"/>
+                            <#input id="day13" name="13" underline="true"/>
+                            <#input id="day14" name="14" underline="true"/>
+                            <#input id="day15" name="15" underline="true"/>
+                            <#input id="day16" name="16" underline="true"/>
+                            <#input id="day17" name="17" underline="true"/>
+                            <#input id="day18" name="18" underline="true"/>
+                            <#input id="day19" name="19" underline="true"/>
+                            <#input id="day20" name="20" underline="true"/>
+                            <#input id="day21" name="21" underline="true"/>
+                            <#input id="day22" name="22" underline="true"/>
+                            <#input id="day23" name="23" underline="true"/>
+                            <#input id="day24" name="24" underline="true"/>
+                            <#input id="day25" name="25" underline="true"/>
+                            <#input id="day26" name="26" underline="true"/>
+                            <#input id="day27" name="27" underline="true"/>
+                            <#input id="day28" name="28" underline="true"/>
+                            <#input id="day29" name="29" underline="true"/>
+                            <#input id="day30" name="30" underline="true"/>
+                            <#input id="day31" name="31" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="MonthAttendanceInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="MonthAttendanceInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/monthAttendance/monthAttendance_info.js"></script>
+@}

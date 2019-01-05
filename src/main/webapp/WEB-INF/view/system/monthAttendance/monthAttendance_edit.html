@@ -1,0 +1,65 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="uuid" name="" value="${item.uuid}" underline="true"/>
+                            <#input id="year" name="年份" value="${item.year}" underline="true"/>
+                            <#input id="month" name="月份" value="${item.month}" underline="true"/>
+                            <#input id="days" name="考勤天数" value="${item.days}" underline="true"/>
+                            <#input id="userId" name="身份证号或员工编号" value="${item.userId}" underline="true"/>
+                            <#input id="userName" name="姓名" value="${item.userName}" underline="true"/>
+                            <#input id="company" name="公司" value="${item.company}" underline="true"/>
+                            <#input id="department" name="部门" value="${item.department}" underline="true"/>
+                            <#input id="team" name="组" value="${item.team}" underline="true"/>
+                            <#input id="day1" name="1" value="${item.day1}" underline="true"/>
+                            <#input id="day2" name="2" value="${item.day2}" underline="true"/>
+                            <#input id="day3" name="3" value="${item.day3}" underline="true"/>
+                            <#input id="day4" name="4" value="${item.day4}" underline="true"/>
+                            <#input id="day5" name="5" value="${item.day5}" underline="true"/>
+                            <#input id="day6" name="6" value="${item.day6}" underline="true"/>
+                            <#input id="day7" name="7" value="${item.day7}" underline="true"/>
+                            <#input id="day8" name="8" value="${item.day8}" underline="true"/>
+                            <#input id="day9" name="9" value="${item.day9}" underline="true"/>
+                            <#input id="day10" name="10" value="${item.day10}" underline="true"/>
+                            <#input id="day11" name="11" value="${item.day11}" />
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="day12" name="12" value="${item.day12}" underline="true"/>
+                            <#input id="day13" name="13" value="${item.day13}" underline="true"/>
+                            <#input id="day14" name="14" value="${item.day14}" underline="true"/>
+                            <#input id="day15" name="15" value="${item.day15}" underline="true"/>
+                            <#input id="day16" name="16" value="${item.day16}" underline="true"/>
+                            <#input id="day17" name="17" value="${item.day17}" underline="true"/>
+                            <#input id="day18" name="18" value="${item.day18}" underline="true"/>
+                            <#input id="day19" name="19" value="${item.day19}" underline="true"/>
+                            <#input id="day20" name="20" value="${item.day20}" underline="true"/>
+                            <#input id="day21" name="21" value="${item.day21}" underline="true"/>
+                            <#input id="day22" name="22" value="${item.day22}" underline="true"/>
+                            <#input id="day23" name="23" value="${item.day23}" underline="true"/>
+                            <#input id="day24" name="24" value="${item.day24}" underline="true"/>
+                            <#input id="day25" name="25" value="${item.day25}" underline="true"/>
+                            <#input id="day26" name="26" value="${item.day26}" underline="true"/>
+                            <#input id="day27" name="27" value="${item.day27}" underline="true"/>
+                            <#input id="day28" name="28" value="${item.day28}" underline="true"/>
+                            <#input id="day29" name="29" value="${item.day29}" underline="true"/>
+                            <#input id="day30" name="30" value="${item.day30}" underline="true"/>
+                            <#input id="day31" name="31" value="${item.day31}" />
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="MonthAttendanceInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="MonthAttendanceInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/monthAttendance/monthAttendance_info.js"></script>
+@}

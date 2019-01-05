@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.system.dao.MonthAttendanceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.MonthAttendance">
+        <id column="uuid" property="uuid" />
+        <result column="year" property="year" />
+        <result column="month" property="month" />
+        <result column="days" property="days" />
+        <result column="userId" property="userId" />
+        <result column="userName" property="userName" />
+        <result column="company" property="company" />
+        <result column="department" property="department" />
+        <result column="team" property="team" />
+        <result column="day1" property="day1" />
+        <result column="day2" property="day2" />
+        <result column="day3" property="day3" />
+        <result column="day4" property="day4" />
+        <result column="day5" property="day5" />
+        <result column="day6" property="day6" />
+        <result column="day7" property="day7" />
+        <result column="day8" property="day8" />
+        <result column="day9" property="day9" />
+        <result column="day10" property="day10" />
+        <result column="day11" property="day11" />
+        <result column="day12" property="day12" />
+        <result column="day13" property="day13" />
+        <result column="day14" property="day14" />
+        <result column="day15" property="day15" />
+        <result column="day16" property="day16" />
+        <result column="day17" property="day17" />
+        <result column="day18" property="day18" />
+        <result column="day19" property="day19" />
+        <result column="day20" property="day20" />
+        <result column="day21" property="day21" />
+        <result column="day22" property="day22" />
+        <result column="day23" property="day23" />
+        <result column="day24" property="day24" />
+        <result column="day25" property="day25" />
+        <result column="day26" property="day26" />
+        <result column="day27" property="day27" />
+        <result column="day28" property="day28" />
+        <result column="day29" property="day29" />
+        <result column="day30" property="day30" />
+        <result column="day31" property="day31" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        uuid, year, month, days, userId, userName, company, department, team, day1, day2, day3, day4, day5, day6, day7, day8, day9, day10, day11, day12, day13, day14, day15, day16, day17, day18, day19, day20, day21, day22, day23, day24, day25, day26, day27, day28, day29, day30, day31
+    </sql>
+
+</mapper>
