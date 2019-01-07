@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.system.controller;
 
 import cn.stylefeng.guns.core.util.Contrast;
+import cn.stylefeng.guns.core.util.PersonUtil;
 import cn.stylefeng.guns.modular.system.warpper.CameraWarpper;
 import cn.stylefeng.guns.modular.system.warpper.UserWarpper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
@@ -79,7 +80,7 @@ public class CameraController extends BaseController {
         List<Camera> cameras = cameraService.selectList(wrapper);
         List<Map<String, Object>> cameras1 = new ArrayList<Map<String, Object>>(cameras.size());
         for (Camera c : cameras) {
-            cameras1.add(Contrast.beanToMap(c));
+            cameras1.add(PersonUtil.beanToMap(c));
         }
 
         List<Map<String, Object>> result = new CameraWarpper(cameras1).wrap();

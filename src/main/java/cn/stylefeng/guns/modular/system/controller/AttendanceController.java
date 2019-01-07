@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.system.controller;
 
 import cn.stylefeng.guns.core.util.Contrast;
+import cn.stylefeng.guns.core.util.PersonUtil;
 import cn.stylefeng.guns.modular.system.model.Camera;
 import cn.stylefeng.guns.modular.system.warpper.AttendanceWarpper;
 import cn.stylefeng.guns.modular.system.warpper.CameraWarpper;
@@ -82,7 +83,7 @@ public class AttendanceController extends BaseController {
         List<AttendanceRecord> records = attendanceRecordService.selectList(wrapper);
         List<Map<String, Object>> mapRecords = new ArrayList<Map<String, Object>>(records.size());
         for (AttendanceRecord a : records) {
-            mapRecords.add(Contrast.beanToMap(a));
+            mapRecords.add(PersonUtil.beanToMap(a));
         }
 
         List<Map<String, Object>> result = new AttendanceWarpper(mapRecords).wrap();
