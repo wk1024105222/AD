@@ -1,0 +1,33 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="imgName" name="照片filename" underline="true"/>
+                            <#input id="actionType" name="0：删除 1：新增" underline="true"/>
+                            <#input id="userId" name="工号" underline="true"/>
+                            <#input id="createTime" name="创建时间yyyy-MM-dd HH:mm:ss"/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="sendFlag" name="发送状态 null/0：未发送 1：已发送 2：发送失败" underline="true"/>
+                            <#input id="receiveFlag" name="返回状态 null：未返回 0：未返回 1：成功 2：失败" underline="true"/>
+                            <#input id="updateTime" name="更新时间" underline="true"/>
+                            <#input id="imageId" name="人脸识别引擎返回的照片id" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="ImageChangeInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="ImageChangeInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/imageChange/imageChange_info.js"></script>
+@}
