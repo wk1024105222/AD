@@ -14,11 +14,22 @@
         <result column="department" property="department" />
         <result column="team" property="team" />
         <result column="note" property="note" />
+        <result column="img_id" property="imgId" />
+        <result column="flag" property="flag" />
+
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        uuid, attendanceTime, userId,userName, action, imgPath, company, department, team, note
+        uuid,attendance_Time,user_Id,user_name,action,img_Path,company,department,team,note,img_id,flag
     </sql>
+
+    <select id="getOneDayAttendRecords" resultType="cn.stylefeng.guns.modular.system.model.AttendanceRecord">
+        select
+        <include refid="Base_Column_List" />
+        from user_attendance_record
+        where (attendance_Time between CONCAT(#{date},' 00:00:00') and CONCAT(#{date},' 23:59:59'))
+        order by user_Id,attendance_Time
+    </select>
 
 </mapper>

@@ -43,4 +43,10 @@ public interface DeptMapper extends BaseMapper<Dept> {
      */
     List<Map<String, Object>> list(@Param("condition") String condition);
 
+    /**
+     * 根据工号获取所属部门
+     * @param userId 工号
+     * @return
+     */
+    Dept getDeptByUserId(@Param("userId") String userId);
 }

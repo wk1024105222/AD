@@ -54,6 +54,15 @@ public class AttendanceRecord extends Model<AttendanceRecord> {
      * 备注
      */
     private String note;
+    /**
+     * 识别引擎返回的头像id
+     */
+    private String imgId;
+
+    /**
+     * 进出类型
+     */
+    private String flag;
 
 
     public String getUuid() {
@@ -134,6 +143,22 @@ public class AttendanceRecord extends Model<AttendanceRecord> {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getImgId() {
+        return imgId;
+    }
+
+    public void setImgId(String imgId) {
+        this.imgId = imgId;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 
     @Override

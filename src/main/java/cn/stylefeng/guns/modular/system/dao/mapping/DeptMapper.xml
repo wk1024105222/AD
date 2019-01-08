@@ -12,7 +12,23 @@
         <result column="fullname" property="fullname"/>
         <result column="tips" property="tips"/>
         <result column="version" property="version"/>
+        <result column="attend_times" property="attendTimes" />
+        <result column="start_work_time" property="startWorkTime" />
+        <result column="end_work_time" property="endWorkTime" />
+        <result column="start_rest_time" property="startRestTime" />
+        <result column="end_rest_time" property="endRestTime" />
+        <result column="leave_time" property="leaveTime" />
+        <result column="start_over_time" property="startOverTime" />
+        <result column="email1" property="email1" />
+        <result column="email2" property="email2" />
+        <result column="email3" property="email3" />
+        <result column="send_email_cycle" property="sendEmailCycle" />
+        <result column="work_day" property="workDay" />
     </resultMap>
+
+    <sql id="Base_Column_List">
+        id,num,pid,pids,simplename,fullname,tips,version,attend_times,start_work_time,end_work_time,start_rest_time,end_rest_time,leave_time,start_over_time,email1,email2,email3,send_email_cycle,work_day
+    </sql>
 
     <select id="tree" resultType="cn.stylefeng.guns.core.common.node.ZTreeNode">
 		select id,pid as pId,simplename as name,
@@ -33,5 +49,14 @@
         </if>
         order by num ASC
     </select>
+
+    <select id="getDeptByUserId"  resultType="cn.stylefeng.guns.modular.system.model.Dept">
+        select
+        <include refid="Base_Column_List" />
+        from sys_dept d, sys_user u where u.deptid=d.id and u.account = #{userId}
+
+    </select>
+
+
 
 </mapper>
