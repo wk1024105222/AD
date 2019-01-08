@@ -19,20 +19,23 @@
 		<result column="status" property="status" />
 		<result column="createtime" property="createtime" />
 		<result column="version" property="version" />
+		<result column="imgmd5" property="imgmd5" />
+		<result column="imgid" property="imgid" />
+
 	</resultMap>
 
 	<sql id="Base_Column_List">
 		id, account, name, birthday, sex, email, avatar,
 		phone, roleid,
 		deptid, status,
-		createtime, version
+		createtime, version, imgmd5, imgid
 	</sql>
 
 	<sql id="Base_Column_List_With_Pwd">
 		id, account, name, birthday,password, sex, email, avatar,
 		phone, roleid,salt,
 		deptid, status,
-		createtime, version
+		createtime, version, imgmd5, imgid
 	</sql>
 
 	<select id="selectUsers" resultType="map">
@@ -74,4 +77,8 @@
 		from sys_user where account = #{account} and status != 3
 	</select>
 
+	<update id="updateImgId">
+		update sys_user set imgid = #{imgId} where account =
+		#{userId} and status != 3
+	</update>
 </mapper>

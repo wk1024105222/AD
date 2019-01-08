@@ -1,6 +1,8 @@
 package cn.stylefeng.guns.modular.system.service;
 
 import cn.stylefeng.guns.modular.system.model.ImageChange;
+import cn.stylefeng.guns.modular.system.model.User;
+import cn.stylefeng.guns.modular.system.transfer.UserDto;
 import com.baomidou.mybatisplus.service.IService;
 
 /**
@@ -13,4 +15,9 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface IImageChangeService extends IService<ImageChange> {
 
+    int addImage(UserDto user);
+
+    int deleteImage(Integer userId);
+
+    int updateImage(User oldUser, UserDto user);
 }

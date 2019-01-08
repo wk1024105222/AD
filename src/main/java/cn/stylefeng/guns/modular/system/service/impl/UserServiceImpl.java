@@ -60,4 +60,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public User getByAccount(String account) {
         return this.baseMapper.getByAccount(account);
     }
+
+    @Override
+    public int updateImgId(String userId, String imgId) {
+        return this.baseMapper.updateImgId(userId, imgId);
+    }
 }

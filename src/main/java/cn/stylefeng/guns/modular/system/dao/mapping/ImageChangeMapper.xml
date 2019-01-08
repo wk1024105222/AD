@@ -12,11 +12,12 @@
         <result column="receive_flag" property="receiveFlag" />
         <result column="update_time" property="updateTime" />
         <result column="image_id" property="imageId" />
+        <result column="change_result" property="changeResult" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        img_name, action_type, user_id, create_time, send_flag, receive_flag, update_time, image_id
+        img_name, action_type, user_id, create_time, send_flag, receive_flag, update_time, image_id, change_result
     </sql>
 
 </mapper>

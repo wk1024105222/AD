@@ -3,11 +3,9 @@ package cn.stylefeng.guns.core.util;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 
 import java.beans.PropertyDescriptor;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigInteger;
+import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -56,5 +54,46 @@ public class PersonUtil {
             e.printStackTrace();
         }
         return bigInt.toString(16);
+    }
+
+
+    public static String sendMsg(String request) {
+        Socket socket = null;
+        OutputStream os = null;
+        PrintWriter pw = null;
+        InputStream is = null;
+        BufferedReader br = null;
+        String result = null;
+        try {
+            socket = new Socket("localhost", 4000);
+
+            os = socket.getOutputStream();
+            pw = new PrintWriter(os);
+
+            pw.write(request);
+            pw.flush();
+            socket.shutdownOutput();
+
+            is = socket.getInputStream();
+            br = new BufferedReader(new InputStreamReader(is));
+            String resMsg = null;
+            while ((resMsg = br.readLine()) != null) {
+                result =  resMsg;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                br.close();
+                is.close();
+                pw.close();
+                os.close();
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 }

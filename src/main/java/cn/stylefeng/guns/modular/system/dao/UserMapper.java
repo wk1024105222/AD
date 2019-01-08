@@ -57,4 +57,10 @@ public interface UserMapper extends BaseMapper<User> {
      * 通过账号获取用户
      */
     User getByAccount(@Param("account") String account);
+
+    /**
+     * 更新头像引擎id
+     */
+    int updateImgId(@Param("userId") String userId, @Param("imgId") String imgId);
+
 }

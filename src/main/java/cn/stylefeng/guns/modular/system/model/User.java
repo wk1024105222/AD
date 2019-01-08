@@ -82,7 +82,14 @@ public class User extends Model<User> {
      * 保留字段
      */
     private Integer version;
-
+    /**
+     * 头像MD5
+     */
+    private String imgmd5;
+    /**
+     * 头像引擎id
+     */
+    private String imgid;
 
     public Integer getId() {
         return id;
@@ -202,6 +209,22 @@ public class User extends Model<User> {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public String getImgmd5() {
+        return imgmd5;
+    }
+
+    public void setImgmd5(String imgmd5) {
+        this.imgmd5 = imgmd5;
+    }
+
+    public String getImgid() {
+        return imgid;
+    }
+
+    public void setImgid(String imgid) {
+        this.imgid = imgid;
     }
 
     @Override

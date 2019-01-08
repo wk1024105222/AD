@@ -26,8 +26,11 @@ import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.shiro.ShiroUser;
+import cn.stylefeng.guns.core.util.PersonUtil;
 import cn.stylefeng.guns.modular.system.factory.UserFactory;
+import cn.stylefeng.guns.modular.system.model.ImageChange;
 import cn.stylefeng.guns.modular.system.model.User;
+import cn.stylefeng.guns.modular.system.service.IImageChangeService;
 import cn.stylefeng.guns.modular.system.service.IUserService;
 import cn.stylefeng.guns.modular.system.transfer.UserDto;
 import cn.stylefeng.guns.modular.system.warpper.UserWarpper;
@@ -40,6 +43,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.DigestUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +51,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.naming.NoPermissionException;
 import javax.validation.Valid;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +74,9 @@ public class UserMgrController extends BaseController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IImageChangeService imageChangeService;
 
     /**
      * 跳转到查看管理员列表的页面
@@ -203,12 +211,17 @@ public class UserMgrController extends BaseController {
         }
 
         // 完善账号信息
+//        String md5 = PersonUtil.getMD5(new File(path));
+//        user.setImgmd5(md5);
         user.setSalt(ShiroKit.getRandomSalt(5));
         user.setPassword(ShiroKit.md5(user.getPassword(), user.getSalt()));
         user.setStatus(ManagerStatus.OK.getCode());
         user.setCreatetime(new Date());
 
         this.userService.insert(UserFactory.createUser(user));
+
+        this.imageChangeService.addImage(user);
+
         return SUCCESS_TIP;
     }
 
@@ -229,12 +242,21 @@ public class UserMgrController extends BaseController {
 
         if (ShiroKit.hasRole(Const.ADMIN_NAME)) {
             this.userService.updateById(UserFactory.editUser(user, oldUser));
+            //添加修改操作影像同步记录
+            if(!user.getAvatar().equals(oldUser.getAvatar())) {
+                this.imageChangeService.updateImage(oldUser, user);
+            }
+
             return SUCCESS_TIP;
         } else {
             assertAuth(user.getId());
             ShiroUser shiroUser = ShiroKit.getUser();
             if (shiroUser.getId().equals(user.getId())) {
                 this.userService.updateById(UserFactory.editUser(user, oldUser));
+                if(!user.getAvatar().equals(oldUser.getAvatar())) {
+                    //添加修改操作影像同步记录
+                    this.imageChangeService.updateImage(oldUser, user);
+                }
                 return SUCCESS_TIP;
             } else {
                 throw new ServiceException(BizExceptionEnum.NO_PERMITION);
@@ -259,6 +281,9 @@ public class UserMgrController extends BaseController {
         }
         assertAuth(userId);
         this.userService.setStatus(userId, ManagerStatus.DELETED.getCode());
+        //添加删除操作影像同步记录
+        this.imageChangeService.deleteImage(userId);
+
         return SUCCESS_TIP;
     }
 
