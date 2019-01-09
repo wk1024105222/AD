@@ -52,7 +52,26 @@
 
     <select id="getDeptByUserId"  resultType="cn.stylefeng.guns.modular.system.model.Dept">
         select
-        <include refid="Base_Column_List" />
+        	d.id,
+            d.num,
+            d.pid,
+            d.pids,
+            d.simplename,
+            d.fullname,
+            d.tips,
+            d.version,
+            d.attend_times,
+            d.start_work_time,
+            d.end_work_time,
+            d.start_rest_time,
+            d.end_rest_time,
+            d.leave_time,
+            d.start_over_time,
+            d.email1,
+            d.email2,
+            d.email3,
+            d.send_email_cycle,
+            d.work_day
         from sys_dept d, sys_user u where u.deptid=d.id and u.account = #{userId}
 
     </select>

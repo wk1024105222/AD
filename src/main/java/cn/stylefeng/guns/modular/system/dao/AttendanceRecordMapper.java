@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -18,4 +19,5 @@ public interface AttendanceRecordMapper extends BaseMapper<AttendanceRecord> {
 
     List<AttendanceRecord> getOneDayAttendRecords(@Param("date") String date);
 
+    List<Map<String,Object>> statisticsOneDayAttendRecords(@Param("date") String date);
 }

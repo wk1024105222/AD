@@ -1,12 +1,13 @@
 package cn.stylefeng.guns.modular.system.controller;
 
-import cn.stylefeng.guns.core.util.Contrast;
 import cn.stylefeng.guns.core.util.PersonUtil;
-import cn.stylefeng.guns.modular.system.model.Camera;
 import cn.stylefeng.guns.modular.system.warpper.AttendanceWarpper;
-import cn.stylefeng.guns.modular.system.warpper.CameraWarpper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import cn.stylefeng.guns.modular.system.model.AttendanceRecord;
 import cn.stylefeng.guns.modular.system.service.IAttendanceService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import javax.mail.internet.MimeMessage;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 出入记录控制器
@@ -37,6 +38,9 @@ public class AttendanceController extends BaseController {
 
     @Autowired
     private IAttendanceService attendanceRecordService;
+//
+    @Autowired
+    private JavaMailSender mailSender;
 
     /**
      * 跳转到出入记录首页
@@ -72,6 +76,26 @@ public class AttendanceController extends BaseController {
     @ResponseBody
     public Object list(String condition) {
 //        return attendanceRecordService.selectList(null);
+//        String[] to = {"1024105222@qq.com","david_wang@comwave.com.cn"};
+//        String filePath = "E:/WeChat Files/shengji310065/Files/51还款测试案例--0109(3).xlsx";
+//        PersonUtil.sendMail(mailSender,"18565430729@163.com",to,"发多人","测试邮件内容",new File(filePath), "月度考勤表");
+
+        //触发跑批
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String today = sdf.format(new Date());
+        List<AttendanceRecord> ads =  attendanceRecordService.getOneDayAttendRecords(today);
+        if(ads.size()<2) {
+            return "";
+        }
+        int begin = 0;
+        for(int i=1; i!=ads.size(); i++) {
+            if(!ads.get(i).getUserId().equals(ads.get(i-1).getUserId())) {
+                attendanceRecordService.handleSomeOneAttendRecord(new LinkedList(ads.subList(begin, i)));
+                begin = i;
+            }
+        }
+
+        List<Map<String, Object>> statisticsRlt = attendanceRecordService.statisticsOneDayAttendRecords(today);
 
 
         EntityWrapper<AttendanceRecord> wrapper = new EntityWrapper<AttendanceRecord>();

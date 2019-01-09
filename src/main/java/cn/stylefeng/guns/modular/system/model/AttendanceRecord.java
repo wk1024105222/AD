@@ -17,7 +17,7 @@ public class AttendanceRecord extends Model<AttendanceRecord> {
 
     private static final long serialVersionUID = 1L;
 
-    private String uuid;
+    private String id;
     /**
      * 登记时间
      */
@@ -66,11 +66,11 @@ public class AttendanceRecord extends Model<AttendanceRecord> {
 
 
     public String getUuid() {
-        return uuid;
+        return id;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setUuid(String id) {
+        this.id = id;
     }
 
     public String getAttendanceTime() {
@@ -163,13 +163,13 @@ public class AttendanceRecord extends Model<AttendanceRecord> {
 
     @Override
     protected Serializable pkVal() {
-        return this.uuid;
+        return this.id;
     }
 
     @Override
     public String toString() {
         return "AttendanceRecord{" +
-        ", uuid=" + uuid +
+        ", id=" + id +
         ", attendanceTime=" + attendanceTime +
         ", userId=" + userId +
         ", action=" + action +

@@ -149,7 +149,7 @@ public class DeptController extends BaseController {
             //更新下属考勤参数
             int num = deptService.updateChildAttendParam(dept);
 
-            System.out.println(num);
+//            System.out.println(num);
         }
         return SUCCESS_TIP;
     }

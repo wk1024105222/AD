@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.AttendanceRecord">
-        <id column="uuid" property="uuid" />
+        <id column="id" property="id" />
         <result column="attendanceTime" property="attendanceTime" />
         <result column="userId" property="userId" />
         <result column="userName" property="userName" />
@@ -21,7 +21,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        uuid,attendance_Time,user_Id,user_name,action,img_Path,company,department,team,note,img_id,flag
+        id,attendance_Time,user_Id,user_name,action,img_Path,company,department,team,note,img_id,flag
     </sql>
 
     <select id="getOneDayAttendRecords" resultType="cn.stylefeng.guns.modular.system.model.AttendanceRecord">
@@ -30,6 +30,12 @@
         from user_attendance_record
         where (attendance_Time between CONCAT(#{date},' 00:00:00') and CONCAT(#{date},' 23:59:59'))
         order by user_Id,attendance_Time
+    </select>
+
+    <select id="statisticsOneDayAttendRecords" resultType="map">
+        select user_id,group_concat(note order by attendance_Time) result from user_attendance_record
+        where (attendance_Time between CONCAT(#{date},' 00:00:00') and CONCAT(#{date},' 23:59:59')) and flag like 'F%'
+        group by user_id;
     </select>
 
 </mapper>

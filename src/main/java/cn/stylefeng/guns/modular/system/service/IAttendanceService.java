@@ -3,7 +3,9 @@ package cn.stylefeng.guns.modular.system.service;
 import cn.stylefeng.guns.modular.system.model.AttendanceRecord;
 import com.baomidou.mybatisplus.service.IService;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -17,5 +19,7 @@ public interface IAttendanceService extends IService<AttendanceRecord> {
 
     List<AttendanceRecord> getOneDayAttendRecords(String date);
 
-    void handleSomeOneAttendRecord(List<AttendanceRecord> attendanceRecords);
+    void handleSomeOneAttendRecord(LinkedList<AttendanceRecord> attendanceRecords);
+
+    List<Map<String,Object>> statisticsOneDayAttendRecords(String date);
 }
