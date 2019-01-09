@@ -14,7 +14,7 @@ beetl:
 
 spring:
   profiles:
-    active: @spring.active@
+    active: produce
   mvc:
     static-path-pattern: /static/**
     view:
@@ -28,6 +28,11 @@ spring:
     multipart:
       max-request-size: 100MB
       max-file-size: 100MB
+  mail:
+    host: smtp.163.com
+    username: 18565430729@163.com
+    password: q1w2e3r4
+    default-encoding: UTF-8
 
 mybatis-plus:
   typeAliasesPackage: cn.stylefeng.guns.modular.system.model
