@@ -1,7 +1,11 @@
 package cn.stylefeng.guns.core.util;
 
 import org.apache.commons.beanutils.PropertyUtilsBean;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
+import javax.mail.internet.MimeMessage;
 import java.beans.PropertyDescriptor;
 import java.io.*;
 import java.math.BigInteger;
@@ -95,5 +99,27 @@ public class PersonUtil {
             }
         }
         return result;
+    }
+
+    public static boolean sendMail(JavaMailSender mailSender, String from, String[] to, String subject, String text, File file, String fileName  ) {
+        MimeMessage message=mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper=new MimeMessageHelper(message,true);
+            helper.setFrom(from);
+            helper.setTo(to);
+
+            helper.setSubject(subject);
+            helper.setText(text);
+            FileSystemResource fsr=new FileSystemResource(file);
+            helper.addAttachment(fileName,fsr);
+            mailSender.send(message);
+//            System.out.println("带附件的邮件发送成功");
+
+        }catch (Exception e){
+            e.printStackTrace();
+//            System.out.println("发送带附件的邮件失败");
+            return false;
+        }
+        return true;
     }
 }
