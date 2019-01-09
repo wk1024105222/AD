@@ -17,7 +17,7 @@ public class MonthAttendance extends Model<MonthAttendance> {
 
     private static final long serialVersionUID = 1L;
 
-    private String uuid;
+    private String id;
     /**
      * 年份
      */
@@ -175,13 +175,22 @@ public class MonthAttendance extends Model<MonthAttendance> {
      */
     private String day31;
 
-
-    public String getUuid() {
-        return uuid;
+    public MonthAttendance() {
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public MonthAttendance(String id, String year, String month, String userId) {
+        this.id = id;
+        this.year = year;
+        this.month = month;
+        this.userId = userId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getYear() {
@@ -498,13 +507,13 @@ public class MonthAttendance extends Model<MonthAttendance> {
 
     @Override
     protected Serializable pkVal() {
-        return this.uuid;
+        return this.id;
     }
 
     @Override
     public String toString() {
         return "MonthAttendance{" +
-        ", uuid=" + uuid +
+        ", id=" + id +
         ", year=" + year +
         ", month=" + month +
         ", days=" + days +

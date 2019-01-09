@@ -108,7 +108,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
             collect.add(tmp);
 
             if (tmp.getAction().equals("1")) {
-                startWorkId = tmp.getUuid();
+                startWorkId = tmp.getId();
                 String attendTime = tmp.getAttendanceTime().substring(11);
                 if (attendTime.compareTo(dept.getStartWorkTime()) <= 0) {
                     tmp.setFlag("SI");
@@ -200,7 +200,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                             oeols.add(new OneLeaveOneEnter(null, secondRecard));
                             collect.add(adrs.remove());
                             if (startWorkId == null) {
-                                startWorkId = firstRecard.getUuid();
+                                startWorkId = firstRecard.getId();
                             }
                         } else {
                             //离开离开
@@ -211,14 +211,14 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                             //进入离开
                             oeols.add(new OneLeaveOneEnter(null, firstRecard));
                             if (startWorkId == null) {
-                                startWorkId = firstRecard.getUuid();
+                                startWorkId = firstRecard.getId();
                             }
                         } else {
                             //离开进入
                             oeols.add(new OneLeaveOneEnter(firstRecard, secondRecard));
                             collect.add(adrs.remove());
                             if (startWorkId == null) {
-                                startWorkId = secondRecard.getUuid();
+                                startWorkId = secondRecard.getId();
                             }
                         }
                     }

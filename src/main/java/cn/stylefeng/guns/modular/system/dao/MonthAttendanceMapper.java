@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.system.dao;
 
 import cn.stylefeng.guns.modular.system.model.MonthAttendance;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface MonthAttendanceMapper extends BaseMapper<MonthAttendance> {
 
+    MonthAttendance getMonthAttendanceByYearMonthUserId(@Param("year") String year,
+                                                        @Param("month") String month,
+                                                        @Param("userId") String userId);
 }

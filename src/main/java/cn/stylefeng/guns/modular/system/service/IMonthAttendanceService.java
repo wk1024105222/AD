@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface IMonthAttendanceService extends IService<MonthAttendance> {
 
+    MonthAttendance getMonthAttendanceByYearMonthUserId(String year, String month, String userId);
 }

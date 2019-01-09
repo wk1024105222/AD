@@ -1,6 +1,8 @@
 package cn.stylefeng.guns.modular.system.controller;
 
 import cn.stylefeng.guns.core.util.PersonUtil;
+import cn.stylefeng.guns.modular.system.model.MonthAttendance;
+import cn.stylefeng.guns.modular.system.service.IMonthAttendanceService;
 import cn.stylefeng.guns.modular.system.warpper.AttendanceWarpper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -21,6 +23,8 @@ import cn.stylefeng.guns.modular.system.service.IAttendanceService;
 
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -38,6 +42,9 @@ public class AttendanceController extends BaseController {
 
     @Autowired
     private IAttendanceService attendanceRecordService;
+
+    @Autowired
+    private IMonthAttendanceService monthAttendanceService;
 //
     @Autowired
     private JavaMailSender mailSender;
@@ -96,6 +103,35 @@ public class AttendanceController extends BaseController {
         }
 
         List<Map<String, Object>> statisticsRlt = attendanceRecordService.statisticsOneDayAttendRecords(today);
+        for(Map<String, Object> tmp : statisticsRlt) {
+            String userId = (String) tmp.get("user_id");
+            String note = (String) tmp.get("result");
+            String year = today.substring(0,4);
+            String month = today.substring(5,7);
+            String day = today.substring(8);
+            if(day.startsWith("0")) {
+                day = day.substring(1);
+            }
+            MonthAttendance m = monthAttendanceService.getMonthAttendanceByYearMonthUserId(year,month,userId);
+            if(m == null) {
+                m = new MonthAttendance(UUID.randomUUID().toString().replaceAll("-", ""),year,month,userId);
+            }
+
+            Class reflect = m.getClass();
+            try {
+                Method setDayN= reflect.getMethod("setDay"+day,String.class);
+                setDayN.invoke(m,note);
+
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+
+            boolean a = monthAttendanceService.insertOrUpdate(m);
+        }
 
 
         EntityWrapper<AttendanceRecord> wrapper = new EntityWrapper<AttendanceRecord>();

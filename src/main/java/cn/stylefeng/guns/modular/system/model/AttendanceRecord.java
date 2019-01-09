@@ -64,12 +64,11 @@ public class AttendanceRecord extends Model<AttendanceRecord> {
      */
     private String flag;
 
-
-    public String getUuid() {
+    public String getId() {
         return id;
     }
 
-    public void setUuid(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 

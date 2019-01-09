@@ -17,4 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class MonthAttendanceServiceImpl extends ServiceImpl<MonthAttendanceMapper, MonthAttendance> implements IMonthAttendanceService {
 
+    @Override
+    public MonthAttendance getMonthAttendanceByYearMonthUserId(String year, String month, String userId) {
+        return this.baseMapper.getMonthAttendanceByYearMonthUserId(year,month,userId);
+    }
 }
