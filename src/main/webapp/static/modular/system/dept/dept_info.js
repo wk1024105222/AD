@@ -1,4 +1,4 @@
-/**
+DeptInfoDlg/**
  * 初始化部门详情对话框
  */
 var DeptInfoDlg = {
@@ -105,7 +105,20 @@ DeptInfoDlg.hideDeptSelectTree = function() {
  * 收集数据
  */
 DeptInfoDlg.collectData = function() {
-    this.set('id').set('simplename').set('fullname').set('tips').set('num').set('pid');
+    this.set('id').set('simplename').set('fullname').set('tips').set('num').set('pid').set('startWorkTime')
+        .set('startRestTime')
+        .set('leaveTime')
+        .set('email1')
+        .set('email2')
+        .set('email3')
+        .set('attendTimes')
+        .set('endWorkTime')
+        .set('endRestTime')
+        .set('startOverTime')
+        .set('sendEmailCycle')
+        .set('workDay')
+        .set('updateChild')
+    ;
 }
 
 /**

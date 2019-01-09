@@ -45,8 +45,23 @@ public interface DeptMapper extends BaseMapper<Dept> {
 
     /**
      * 根据工号获取所属部门
+     *
      * @param userId 工号
      * @return
      */
     Dept getDeptByUserId(@Param("userId") String userId);
+
+    int updateChildAttendParam(@Param("deptId") String deptId,
+                               @Param("attendTimes") Integer attendTimes,
+                               @Param("startWorkTime") String startWorkTime,
+                               @Param("endWorkTime") String endWorkTime,
+                               @Param("startRestTime") String startRestTime,
+                               @Param("endRestTime") String endRestTime,
+                               @Param("startOverTime") String startOverTime,
+                               @Param("leaveTime") Integer leaveTime,
+                               @Param("email1") String email1,
+                               @Param("email2") String email2,
+                               @Param("email3") String email3,
+                               @Param("sendEmailCycle") String sendEmailCycle,
+                               @Param("workDay") String workDay);
 }

@@ -46,4 +46,6 @@ public interface IDeptService extends IService<Dept> {
     List<Map<String, Object>> list(String condition);
 
     Dept getDeptByUserId(String userId);
+
+    int updateChildAttendParam(Dept dept);
 }

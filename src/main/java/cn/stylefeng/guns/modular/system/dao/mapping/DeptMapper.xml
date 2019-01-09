@@ -57,6 +57,22 @@
 
     </select>
 
+    <update id="updateChildAttendParam">
+		update sys_dept set attend_times    = #{attendTimes},
+                            start_work_time = #{startWorkTime},
+                            end_work_time   = #{endWorkTime},
+                            start_rest_time = #{startRestTime},
+                            end_rest_time   = #{endRestTime},
+                            leave_time      = #{leaveTime},
+                            start_over_time = #{startOverTime},
+                            email1          = #{email1},
+                            email2          = #{email2},
+                            email3          = #{email3},
+                            send_email_cycle= #{sendEmailCycle},
+                            work_day        = #{workDay}
+		where pids like CONCAT('%',#{deptId},'%')
+	</update>
+
 
 
 </mapper>

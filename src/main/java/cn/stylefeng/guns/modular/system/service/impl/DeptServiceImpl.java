@@ -70,4 +70,15 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements ID
     public Dept getDeptByUserId(String userId) {
         return this.baseMapper.getDeptByUserId(userId);
     }
+
+    @Override
+    public int updateChildAttendParam(Dept dept) {
+        return this.baseMapper.updateChildAttendParam("["+dept.getId()+"]",dept.getAttendTimes(),
+                dept.getStartWorkTime(),dept.getEndWorkTime(),dept.getStartRestTime(),dept.getEndRestTime(),
+                dept.getStartOverTime(),dept.getLeaveTime(),dept.getEmail1(),dept.getEmail2(),dept.getEmail3(),
+                dept.getSendEmailCycle(),dept.getWorkDay()
+        );
+
+
+    }
 }

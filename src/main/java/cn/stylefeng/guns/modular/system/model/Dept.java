@@ -104,6 +104,8 @@ public class Dept extends Model<Dept> {
     @TableField("work_day")
     private String workDay;
 
+    private String updateChild;
+
     public Integer getId() {
         return id;
     }
@@ -263,6 +265,14 @@ public class Dept extends Model<Dept> {
 
     public void setWorkDay(String workDay) {
         this.workDay = workDay;
+    }
+
+    public String getUpdateChild() {
+        return updateChild;
+    }
+
+    public void setUpdateChild(String updateChild) {
+        this.updateChild = updateChild;
     }
 
     @Override

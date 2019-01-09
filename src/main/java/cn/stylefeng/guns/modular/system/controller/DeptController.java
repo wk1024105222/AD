@@ -144,6 +144,13 @@ public class DeptController extends BaseController {
         }
         deptSetPids(dept);
         deptService.updateById(dept);
+
+        if(dept.getUpdateChild().equals("1")) {
+            //更新下属考勤参数
+            int num = deptService.updateChildAttendParam(dept);
+
+            System.out.println(num);
+        }
         return SUCCESS_TIP;
     }
 
