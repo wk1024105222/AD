@@ -1,13 +1,11 @@
 package cn.stylefeng.guns.modular.system.service.impl;
 
+import cn.stylefeng.guns.modular.system.model.AttendanceDetail;
 import cn.stylefeng.guns.modular.system.model.AttendanceRecord;
 import cn.stylefeng.guns.modular.system.dao.AttendanceRecordMapper;
 import cn.stylefeng.guns.modular.system.model.Dept;
 import cn.stylefeng.guns.modular.system.model.MonthAttendance;
-import cn.stylefeng.guns.modular.system.service.IAttendanceService;
-import cn.stylefeng.guns.modular.system.service.IDeptService;
-import cn.stylefeng.guns.modular.system.service.IMonthAttendanceService;
-import cn.stylefeng.guns.modular.system.service.IUserService;
+import cn.stylefeng.guns.modular.system.service.*;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +37,9 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
 
     @Autowired
     private IMonthAttendanceService monthAttendanceService;
+
+    @Autowired
+    private IAttendanceDetailService attendanceDetailService;
 
     @Override
     public List<AttendanceRecord> getOneDayAttendRecords(String date) {
@@ -120,12 +121,12 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 String attendTime = tmp.getAttendanceTime().substring(11);
                 if (attendTime.compareTo(dept.getStartWorkTime()) <= 0) {
                     tmp.setFlag("1");
-                    tmp.setNote("上班时间"+attendTime);
+                    tmp.setNote("上班时间:"+attendTime);
                 } else {
                     tmp.setFlag("1");
                     try {
                         int m = (int) Math.ceil((sdf.parse(attendTime).getTime() - sdf.parse(dept.getStartWorkTime()).getTime()) / (1000 * 60));
-                        tmp.setNote("上班迟到"+attendTime);
+                        tmp.setNote("上班迟到:"+attendTime);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -162,18 +163,18 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                     tmp.setFlag("1");
                     try {
                         int m = (int) Math.ceil((sdf.parse(leaveTime).getTime() - sdf.parse(dept.getStartOverTime()).getTime()) / (1000 * 60));
-                        tmp.setNote("下班时间"+leaveTime+",加班" + m + "分钟");
+                        tmp.setNote("下班时间:"+leaveTime+",加班:" + m + "分钟");
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 } else if (leaveTime.compareTo(dept.getEndWorkTime()) >= 0) {
                     //正常下班
                     tmp.setFlag("1");
-                    tmp.setNote("下班时间"+leaveTime);
+                    tmp.setNote("下班时间:"+leaveTime);
                 } else {
                     //早退
                     tmp.setFlag("1");
-                    tmp.setNote("下班早退"+leaveTime);
+                    tmp.setNote("下班早退:"+leaveTime);
 //                    try {
 //                        int m = (int) Math.ceil((sdf.parse(dept.getEndWorkTime()).getTime() - sdf.parse(leaveTime).getTime()) / (1000 * 60));
 //                        tmp.setNote("下班早退"+leaveTime);
@@ -249,18 +250,18 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                             tmp.setFlag("1");
                             try {
                                 int m = (int) Math.ceil((sdf.parse(leaveTime).getTime() - sdf.parse(dept.getStartOverTime()).getTime()) / (1000 * 60));
-                                tmp.setNote("下班时间"+leaveTime+",加班" + m + "分钟");
+                                tmp.setNote("下班时间:"+leaveTime+",加班:" + m + "分钟");
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
                         } else if (leaveTime.compareTo(dept.getEndWorkTime()) >= 0) {
                             //正常下班
                             tmp.setFlag("1");
-                            tmp.setNote("下班时间"+leaveTime);
+                            tmp.setNote("下班时间:"+leaveTime);
                         } else {
                             //早退
                             tmp.setFlag("1");
-                            tmp.setNote("下班早退"+leaveTime);
+                            tmp.setNote("下班早退:"+leaveTime);
 //                            try {
 //                                int m = (int) Math.ceil((sdf.parse(dept.getEndWorkTime()).getTime() - sdf.parse(leaveTime).getTime()) / (1000 * 60));
 //                                tmp.setNote("下班时间"+leaveTime+",早退" + m + "分钟");
@@ -280,6 +281,18 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
         }
         for(AttendanceRecord b : collect) {
             attendanceRecordService.updateById(b);
+            String note = b.getNote();
+            if(note != null && !note.equals("")) {
+                String text = note.split(":")[0];
+                String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+                if(text.indexOf("时间") == -1 && b.getFlag().equals("1")) {
+                    attendanceDetailService.insert(
+                            new AttendanceDetail(uuid,
+                                    b.getAttendanceTime().substring(0,10),
+                                    b.getUserId(),
+                                    text));
+                }
+            }
         }
     }
 
@@ -314,7 +327,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 e.printStackTrace();
             }
 
-            boolean a = monthAttendanceService.insertOrUpdate(m);
+                boolean a = monthAttendanceService.insertOrUpdate(m);
         }
         return true;
     }
@@ -380,7 +393,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                     int m = (int) Math.ceil((sdf.parse(enterTime).getTime() - sdf.parse(dept.getStartWorkTime()).getTime()) / (1000 * 60));
                     if (m > dept.getLeaveTime()) {
                         enter.setFlag("1");
-                        enter.setNote("离岗超时"+dept.getStartWorkTime()+"-"+enterTime);
+                        enter.setNote("离岗超时:"+dept.getStartWorkTime()+"-"+enterTime);
                     } else {
                         enter.setFlag("0");
                     }
@@ -393,7 +406,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 leave.setFlag("0");//正常离开
                 leave.setNote("未到上班时间离开");//正常离开
                 enter.setFlag("1");
-                enter.setNote("上午旷工"+leaveTime+"-"+enterTime+",下午上班迟到"+enterTime);
+                enter.setNote("上午旷工:"+leaveTime+"-"+enterTime+",午休迟到:"+enterTime);
 //                try {
 //                    int m = (int) Math.ceil((sdf.parse(enterTime).getTime() - sdf.parse(dept.getStartWorkTime()).getTime()) / (1000 * 60));
 //                    if (m > dept.getLeaveTime()) {
@@ -411,7 +424,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 leave.setFlag("0");//正常离开
                 leave.setNote("未到上班时间离开");//正常离开
                 enter.setFlag("1");
-                enter.setNote("上午旷工"+leaveTime+"-"+enterTime+",下午上班迟到"+enterTime);
+                enter.setNote("上午旷工:"+leaveTime+"-"+enterTime+",午休迟到:"+enterTime);
 //                try {
 //                    enter.setFlag("1");
 //                    int m = (int) Math.ceil((sdf.parse(enterTime).getTime() -
@@ -419,9 +432,9 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
 //                            sdf.parse(dept.getEndRestTime()).getTime() +
 //                            sdf.parse(dept.getStartRestTime()).getTime()) / (1000 * 60));
 //                    if (m > dept.getLeaveTime()) {
-//                        enter.setNote("离岗超时"+dept.getStartWorkTime()+"-"+enterTime+",下午上班迟到"+enterTime);
+//                        enter.setNote("离岗超时"+dept.getStartWorkTime()+"-"+enterTime+",午休迟到"+enterTime);
 //                    } else {
-//                        enter.setNote("下午上班迟到"+enterTime);
+//                        enter.setNote("午休迟到"+enterTime);
 //                    }
 ////                    enter.setNote("离岗"+m+"分钟");
 //                } catch (ParseException e) {
@@ -432,7 +445,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 leave.setFlag("0");//正常离开
                 leave.setNote("未到上班时间离开");//正常离开
                 enter.setFlag("1");
-                enter.setNote("全天旷工"+leaveTime+"-"+enterTime);
+                enter.setNote("全天旷工:"+leaveTime+"-"+enterTime);
 //                try {
 //                    enter.setFlag("1");
 //                    int m = (int) Math.ceil((sdf.parse(enterTime).getTime() -
@@ -440,9 +453,9 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
 //                            sdf.parse(dept.getEndRestTime()).getTime() +
 //                            sdf.parse(dept.getStartRestTime()).getTime()) / (1000 * 60));
 //                    if (m > dept.getLeaveTime()) {
-//                        enter.setNote("离岗超时,下午上班迟到");
+//                        enter.setNote("离岗超时,午休迟到");
 //                    } else {
-//                        enter.setNote("下午上班迟到"+enterTime);
+//                        enter.setNote("午休迟到"+enterTime);
 //                    }
 ////                    enter.setNote("离岗"+m+"分钟");
 //                } catch (ParseException e) {
@@ -453,7 +466,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 leave.setFlag("0");//正常离开
                 leave.setNote("未到上班时间离开");//正常离开
                 enter.setFlag("1");
-                enter.setNote("全天旷工"+leaveTime+"-"+enterTime);
+                enter.setNote("全天旷工:"+leaveTime+"-"+enterTime);
 
 //                try {
 //                    enter.setFlag("FI");
@@ -462,9 +475,9 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
 //                            sdf.parse(dept.getEndRestTime()).getTime() +
 //                            sdf.parse(dept.getStartRestTime()).getTime()) / (1000 * 60));
 //                    if (m > dept.getLeaveTime()) {
-//                        enter.setNote("离岗超时,下午上班迟到");
+//                        enter.setNote("离岗超时,午休迟到");
 //                    } else {
-//                        enter.setNote("下午上班迟到");
+//                        enter.setNote("午休迟到");
 //                    }
 ////                    enter.setNote("离岗"+m+"分钟");
 //                } catch (ParseException e) {
@@ -479,7 +492,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                     int m = (int) Math.ceil((sdf.parse(enterTime).getTime() - sdf.parse(leaveTime).getTime()) / (1000 * 60));
                     if (m > dept.getLeaveTime()) {
                         enter.setFlag("1");
-                        enter.setNote("离岗超时"+leaveTime+"-"+enterTime);
+                        enter.setNote("离岗超时:"+leaveTime+"-"+enterTime);
                     } else {
                         enter.setFlag("0");
                         enter.setNote("离岗返回");
@@ -490,9 +503,9 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 break;
             case "0101000":
                 leave.setFlag("1");//正常离开
-                leave.setNote("提前就餐"+leaveTime);//正常离开
+                leave.setNote("提前就餐:"+leaveTime);//正常离开
                 enter.setFlag("1");
-                enter.setNote("下午上班时间"+enterTime);
+                enter.setNote("午休上班时间:"+enterTime);
 //                try {
 //                    enter.setFlag("FI");
 //                    int m = (int) Math.ceil((sdf.parse(dept.getStartRestTime()).getTime() - sdf.parse(enterTime).getTime()) / (1000 * 60));
@@ -507,9 +520,9 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 break;
             case "0100100":
                 leave.setFlag("1");//正常离开
-                leave.setNote("提前就餐"+leaveTime);//正常离开
+                leave.setNote("提前就餐:"+leaveTime);//正常离开
                 enter.setFlag("1");
-                enter.setNote("下午上班迟到"+enterTime);
+                enter.setNote("午休迟到:"+enterTime);
 //                try {
 //                    enter.setFlag("1");
 //                    int m = (int) Math.ceil((sdf.parse(enterTime).getTime() -
@@ -517,9 +530,9 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
 //                            sdf.parse(dept.getEndRestTime()).getTime() +
 //                            sdf.parse(dept.getStartRestTime()).getTime()) / (1000 * 60));
 //                    if (m > dept.getLeaveTime()) {
-//                        enter.setNote("离岗超时,提前就餐,下午上班迟到");
+//                        enter.setNote("离岗超时,提前就餐,午休迟到");
 //                    } else {
-//                        enter.setNote("提前就餐,下午上班迟到");
+//                        enter.setNote("提前就餐,午休迟到");
 //                    }
 //                } catch (ParseException e) {
 //                    e.printStackTrace();
@@ -527,9 +540,9 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 break;
             case "0100010":
                 leave.setFlag("1");//正常离开
-                leave.setNote("提前就餐"+leaveTime);//正常离开
+                leave.setNote("提前就餐:"+leaveTime);//正常离开
                 enter.setFlag("1");
-                enter.setNote("下午旷工"+leaveTime+"-"+enterTime);
+                enter.setNote("下午旷工:"+leaveTime+"-"+enterTime);
 //                try {
 //                    enter.setFlag("FI");
 //                    int m = (int) Math.ceil((sdf.parse(dept.getEndWorkTime()).getTime() -
@@ -537,9 +550,9 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
 //                            sdf.parse(dept.getEndRestTime()).getTime() +
 //                            sdf.parse(dept.getStartRestTime()).getTime()) / (1000 * 60));
 //                    if (m > dept.getLeaveTime()) {
-//                        enter.setNote("离岗超时,提前就餐,下午上班迟到");
+//                        enter.setNote("离岗超时,提前就餐,午休迟到");
 //                    } else {
-//                        enter.setNote("提前就餐,下午上班迟到");
+//                        enter.setNote("提前就餐,午休迟到");
 //                    }
 //                } catch (ParseException e) {
 //                    e.printStackTrace();
@@ -547,9 +560,9 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 break;
             case "0100001":
                 leave.setFlag("1");//正常离开
-                leave.setNote("提前就餐"+leaveTime);//正常离开
+                leave.setNote("提前就餐:"+leaveTime);//正常离开
                 enter.setFlag("1");
-                enter.setNote("下午旷工"+leaveTime+"-"+enterTime);
+                enter.setNote("下午旷工:"+leaveTime+"-"+enterTime);
 //                try {
 //                    enter.setFlag("1");
 //                    int m = (int) Math.ceil((sdf.parse(dept.getEndWorkTime()).getTime() -
@@ -557,7 +570,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
 //                            sdf.parse(dept.getEndRestTime()).getTime() +
 //                            sdf.parse(dept.getStartRestTime()).getTime()) / (1000 * 60));
 //                    if (m > dept.getLeaveTime()) {
-//                        enter.setNote("离岗超时,提前就餐,下午上班迟到");
+//                        enter.setNote("离岗超时,提前就餐,午休迟到");
 //                    } else {
 //                        enter.setNote("提前就餐"+leaveTime+",下午旷工"+leaveTime+"-"+enterTime);
 //                    }
@@ -570,25 +583,25 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 leave.setFlag("0");//正常离开
                 leave.setNote("正常就餐");//正常离开
                 enter.setFlag("1");//正常进入
-                enter.setNote("下午上班时间"+enterTime);
+                enter.setNote("午休上班时间:"+enterTime);
                 break;
             case "0010100":
                 leave.setFlag("0");//正常离开
                 leave.setNote("正常就餐");//正常离开
                 enter.setFlag("1");//正常进入
-                enter.setNote("下午上班迟到"+enterTime);
+                enter.setNote("午休迟到:"+enterTime);
                 break;
             case "0010010":
                 leave.setFlag("0");//正常离开
                 leave.setNote("正常就餐");//正常离开
                 enter.setFlag("1");//正常进入
-                enter.setNote("下午旷工"+leaveTime+"-"+enterTime);
+                enter.setNote("下午旷工:"+leaveTime+"-"+enterTime);
                 break;
             case "0010001":
                 leave.setFlag("0");//正常离开
                 leave.setNote("正常就餐");//正常离开
                 enter.setFlag("1");//正常进入
-                enter.setNote("下午旷工"+leaveTime+"-"+enterTime);
+                enter.setNote("下午旷工:"+leaveTime+"-"+enterTime);
                 break;
            //=============================================================================
             case "0001100":
@@ -598,7 +611,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                     int m = (int) Math.ceil((sdf.parse(enterTime).getTime() - sdf.parse(leaveTime).getTime()) / (1000 * 60));
                     if (m > dept.getLeaveTime()) {
                         enter.setFlag("1");
-                        enter.setNote("离岗超时"+leaveTime+"-"+enterTime);
+                        enter.setNote("离岗超时:"+leaveTime+"-"+enterTime);
                     } else {
                         enter.setFlag("0");
                     }
@@ -608,31 +621,31 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 break;
             case "0001010":
                 leave.setFlag("1");
-                leave.setNote("下班早退"+leaveTime);
+                leave.setNote("下班早退:"+leaveTime);
                 enter.setFlag("0");
                 break;
             case "0001001":
                 leave.setFlag("1");
-                leave.setNote("下班早退"+leaveTime);
+                leave.setNote("下班早退:"+leaveTime);
                 enter.setFlag("0");
                 break;
             //=============================================================================
             case "0000110":
                 leave.setFlag("0");
-                leave.setNote("下班时间"+leaveTime);
+                leave.setNote("下班时间:"+leaveTime);
                 enter.setFlag("0");
                 enter.setNote("下班后进入");
                 break;
             case "0000101":
                 leave.setFlag("1");
-                leave.setNote("下班时间"+leaveTime);
+                leave.setNote("下班时间:"+leaveTime);
                 enter.setFlag("0");
                 enter.setNote("下班后进入");
                 break;
             //=============================================================================
             case "0000011":
                 leave.setFlag("1");
-                leave.setNote("下班时间"+leaveTime);
+                leave.setNote("下班时间:"+leaveTime);
                 enter.setFlag("0");
                 enter.setNote("下班后进入");
                 break;

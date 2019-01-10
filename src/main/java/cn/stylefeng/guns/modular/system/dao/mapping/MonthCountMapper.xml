@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.system.dao.MonthCountMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.MonthCount">
+        <id column="id" property="id" />
+        <result column="month" property="month" />
+        <result column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="company" property="company" />
+        <result column="department" property="department" />
+        <result column="team" property="team" />
+        <result column="times" property="times" />
+        <result column="type" property="type" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, month, user_id, user_name, company, department, team, times, type
+    </sql>
+
+    <delete id="deleteMonthCountByDate" >
+        DELETE FROM user_month_count WHERE month = #{date}
+    </delete>
+
+    <select id="getMonthCountByDate" resultType="map">
+        select user_id,type,count(1) times
+        from user_attendance_detail
+        where date like CONCAT(#{date},'%') group by user_id,type
+    </select>
+
+</mapper>

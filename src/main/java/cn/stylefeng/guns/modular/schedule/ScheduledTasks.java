@@ -7,6 +7,7 @@ import cn.stylefeng.guns.modular.system.model.MonthAttendance;
 import cn.stylefeng.guns.modular.system.service.IAttendanceService;
 import cn.stylefeng.guns.modular.system.service.IDeptService;
 import cn.stylefeng.guns.modular.system.service.IMonthAttendanceService;
+import cn.stylefeng.guns.modular.system.service.IMonthCountService;
 import org.apache.poi.hssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,66 +41,77 @@ public class ScheduledTasks {
     private IMonthAttendanceService monthAttendanceService;
     @Autowired
     private JavaMailSender mailSender;
-
     @Autowired
     private IDeptService deptService;
-
-    //每周一11点
-//    @Scheduled(cron = "0 0 11 ? * MON")
-    public void everyWeekSendMail() {
-
-        String[] to = {"1024105222@qq.com", "david_wang@comwave.com.cn"};
-        String filePath = "E:/WeChat Files/shengji310065/Files/51还款测试案例--0109(3).xlsx";
-        PersonUtil.sendMail(mailSender, "18565430729@163.com", to, "发多人", "测试邮件内容", new File(filePath), "月度考勤表");
-        logger.info("everyWeekSendMail run");
-    }
+    @Autowired
+    private IMonthCountService monthCountService;
 
     //每天10点
     @Scheduled(cron = "0 0 10 * * ?")
     public void everyDaySendMail() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM");
-        LocalDate yesterday = LocalDate.now().minus(1, ChronoUnit.DAYS);
-        int year = yesterday.getYear();
-        int month = yesterday.getMonthValue();
-
         logger.info("everyDaySendMail run");
-        String cycle  = "1";
-        List<Dept> depts = deptService.getDeptBySendEmailCycle(cycle);
-
-        for(Dept d : depts) {
-            List<MonthAttendance> ads = monthAttendanceService.getMonthAttendanceByYearMonthDeptId(year,month, d.getId());
-            if(ads.size()>0) {
-                String fileName= d.getSimplename()+yesterday.format(dtf)+"月度考勤表.xls";
-                File f = new File(fileName);
-                if(f.exists()) {
-                    f.delete();
-                }
-                boolean a = monthAttendanceService.exportMonthAttendanceReportXls(ads,fileName);
-
-                if(f.exists()) {
-                    List<String> toEmails = new ArrayList<String>() ;
-                    if(d.getEmail1()!=null) {toEmails.add(d.getEmail1());}
-                    if(d.getEmail2()!=null) {toEmails.add(d.getEmail2());}
-                    if(d.getEmail3()!=null) {toEmails.add(d.getEmail3());}
-                    String[] to = new String[toEmails.size()];
-                    for(int i=0;i!=to.length;i++) {
-                        to[i]=toEmails.get(i);
-                    }
-                    PersonUtil.sendMail(mailSender, "18565430729@163.com", to, fileName, "", new File(fileName), yesterday.format(dtf)+".xls");
-
-                }
-
-            }
-        }
+        sendReportMail("1");
     }
 
-
-
+    //每周一11点
+    @Scheduled(cron = "0 0 11 ? * MON")
+    public void everyWeekSendMail() {
+        logger.info("everyWeekSendMail run");
+        sendReportMail("2");
+    }
 
     //每月1日12点
     @Scheduled(cron = "0 0 12 1 * ?")
     public void everyMonthSendMail() {
         logger.info("everyMonthSendMail run");
+        sendReportMail("3");
+
+    }
+
+    private void sendReportMail(String cycle) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM");
+        LocalDate yesterday = LocalDate.now().minus(1, ChronoUnit.DAYS);
+        int year = yesterday.getYear();
+        int month = yesterday.getMonthValue();
+
+
+        List<Dept> depts = deptService.getDeptBySendEmailCycle(cycle);
+
+        for (Dept d : depts) {
+            List<MonthAttendance> ads = monthAttendanceService.getMonthAttendanceByYearMonthDeptId(year, month, d.getId());
+            if (ads.size() > 0) {
+                String fileName = d.getSimplename() + yesterday.format(dtf) + "月度考勤表.xls";
+                File f = new File(fileName);
+                if (f.exists()) {
+                    f.delete();
+                }
+                monthAttendanceService.exportMonthAttendanceReportXls(ads, fileName);
+
+                if (f.exists()) {
+                    List<String> toEmails = new ArrayList<String>();
+                    if (d.getEmail1() != null) {
+                        toEmails.add(d.getEmail1());
+                    }
+                    if (d.getEmail2() != null) {
+                        toEmails.add(d.getEmail2());
+                    }
+                    if (d.getEmail3() != null) {
+                        toEmails.add(d.getEmail3());
+                    }
+                    String[] to = new String[toEmails.size()];
+                    for (int i = 0; i != to.length; i++) {
+                        to[i] = toEmails.get(i);
+                    }
+                    PersonUtil.sendMail(mailSender,
+                            "18565430729@163.com",
+                            to,
+                            fileName,
+                            "",
+                            new File(fileName),
+                            yesterday.format(dtf) + ".xls");
+                }
+            }
+        }
     }
 //
 //    @Scheduled(fixedRate = 1000)
@@ -117,7 +129,14 @@ public class ScheduledTasks {
 
         boolean markRlt = attendanceRecordService.markAttendanceRecord(yesterday);
 
-        boolean  statisticsRlt = attendanceRecordService.statisticsOneDayAttendRecords(yesterday);
+        boolean statisticsRlt = attendanceRecordService.statisticsOneDayAttendRecords(yesterday);
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM");
+
+        String date = yesterday.format(dtf);
+
+        monthCountService.deleteMonthCountByDate(date);
+        monthCountService.insertNewMonthCountByDate(date);
 
     }
 
