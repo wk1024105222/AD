@@ -9,12 +9,17 @@
         <div id="${id}PreId">
             <div><img width="100px" height="100px"
                 @if(isEmpty(avatarImg)){
-                      src="${ctxPath}/static/img/girl.gif"></div>
+                      src="${ctxPath}/static/img/default.jpg"></div>
                 @}else{
                       src="${ctxPath}/kaptcha/${avatarImg}"></div>
                 @}
         </div>
-    </div>
+    </div>@/*
+    <div class="btn-group-vertical" >
+        <button class="btn btn-default btn-sm btn-danger" >&nbsp;拍照</button>
+        <button class="btn btn-default btn-sm btn-warning">&nbsp;确定</button>
+        <button class="btn btn-default btn-sm btn-primary" >&nbsp;本地</button>
+    </div>@*/
     <div class="col-sm-2">
         <div class="head-scu-btn upload-btn" id="${id}BtnId">
             <i class="fa fa-upload"></i>&nbsp;上传
