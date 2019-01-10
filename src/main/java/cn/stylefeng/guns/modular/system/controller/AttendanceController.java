@@ -105,7 +105,7 @@ public class AttendanceController extends BaseController {
         List<Map<String, Object>> statisticsRlt = attendanceRecordService.statisticsOneDayAttendRecords(today);
         for(Map<String, Object> tmp : statisticsRlt) {
             String userId = (String) tmp.get("user_id");
-            String note = (String) tmp.get("result");
+            String note = ((String) tmp.get("result")).replace(",","</br>");
             String year = today.substring(0,4);
             String month = today.substring(5,7);
             String day = today.substring(8);
