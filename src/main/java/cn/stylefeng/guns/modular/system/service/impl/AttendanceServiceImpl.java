@@ -3,15 +3,20 @@ package cn.stylefeng.guns.modular.system.service.impl;
 import cn.stylefeng.guns.modular.system.model.AttendanceRecord;
 import cn.stylefeng.guns.modular.system.dao.AttendanceRecordMapper;
 import cn.stylefeng.guns.modular.system.model.Dept;
+import cn.stylefeng.guns.modular.system.model.MonthAttendance;
 import cn.stylefeng.guns.modular.system.service.IAttendanceService;
 import cn.stylefeng.guns.modular.system.service.IDeptService;
+import cn.stylefeng.guns.modular.system.service.IMonthAttendanceService;
 import cn.stylefeng.guns.modular.system.service.IUserService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -31,6 +36,9 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
 
     @Autowired
     private IAttendanceService attendanceRecordService;
+
+    @Autowired
+    private IMonthAttendanceService monthAttendanceService;
 
     @Override
     public List<AttendanceRecord> getOneDayAttendRecords(String date) {
@@ -276,8 +284,56 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
     }
 
     @Override
-    public List<Map<String, Object>> statisticsOneDayAttendRecords(String date) {
-        return this.baseMapper.statisticsOneDayAttendRecords(date);
+    public boolean statisticsOneDayAttendRecords(LocalDate date) {
+        int year = date.getYear();
+        int month = date.getMonthValue();
+
+        List<Map<String, Object>> statisticsRlt = this.baseMapper.statisticsOneDayAttendRecords(date.toString());
+
+        for (Map<String, Object> tmp : statisticsRlt) {
+            String userId = (String) tmp.get("user_id");
+            String note = ((String) tmp.get("result")).replace(",", "</br>");
+
+            int day = date.getDayOfMonth();
+
+            MonthAttendance m = monthAttendanceService.getMonthAttendanceByYearMonthUserId(year, month, userId);
+            if (m == null) {
+                m = new MonthAttendance(UUID.randomUUID().toString().replaceAll("-", ""), year, month, userId);
+            }
+
+            Class reflect = m.getClass();
+            try {
+                Method setDayN = reflect.getMethod("setDay" + day, String.class);
+                setDayN.invoke(m, note);
+
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+
+            boolean a = monthAttendanceService.insertOrUpdate(m);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean markAttendanceRecord(LocalDate date) {
+
+        List<AttendanceRecord> ads = attendanceRecordService.getOneDayAttendRecords(date.toString());
+        if (ads.size() < 2) {
+            return false;
+        }
+        int begin = 0;
+        for (int i = 1; i != ads.size(); i++) {
+            if (!ads.get(i).getUserId().equals(ads.get(i - 1).getUserId())) {
+                attendanceRecordService.handleSomeOneAttendRecord(new LinkedList(ads.subList(begin, i)));
+                begin = i;
+            }
+        }
+        return true;
     }
 
     private void markEnterAndLeave(OneLeaveOneEnter o, Dept dept, String startWorkId) {

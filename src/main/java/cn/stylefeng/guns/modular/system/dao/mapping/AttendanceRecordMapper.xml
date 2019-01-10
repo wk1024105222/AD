@@ -35,7 +35,7 @@
     <select id="statisticsOneDayAttendRecords" resultType="map">
         select user_id,group_concat(note order by attendance_Time) result from user_attendance_record
         where (attendance_Time between CONCAT(#{date},' 00:00:00') and CONCAT(#{date},' 23:59:59')) and flag ='1'
-        group by user_id;
+        group by user_id
     </select>
 
 </mapper>

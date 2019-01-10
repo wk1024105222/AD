@@ -4,6 +4,8 @@ import cn.stylefeng.guns.modular.system.model.MonthAttendance;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * <p>
  * 月度考勤表 Mapper 接口
@@ -14,7 +16,11 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface MonthAttendanceMapper extends BaseMapper<MonthAttendance> {
 
-    MonthAttendance getMonthAttendanceByYearMonthUserId(@Param("year") String year,
-                                                        @Param("month") String month,
+    MonthAttendance getMonthAttendanceByYearMonthUserId(@Param("year") Integer year,
+                                                        @Param("month") Integer month,
                                                         @Param("userId") String userId);
+
+    List<MonthAttendance> getMonthAttendanceByYearMonthDeptId(@Param("year") Integer year,
+                                                              @Param("month") Integer month,
+                                                             @Param("deptId") Integer deptId);
 }

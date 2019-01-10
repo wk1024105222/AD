@@ -64,4 +64,6 @@ public interface DeptMapper extends BaseMapper<Dept> {
                                @Param("email3") String email3,
                                @Param("sendEmailCycle") String sendEmailCycle,
                                @Param("workDay") String workDay);
+
+    List<Dept> getDeptBySendEmailCycle(@Param("cycle") String cycle);
 }

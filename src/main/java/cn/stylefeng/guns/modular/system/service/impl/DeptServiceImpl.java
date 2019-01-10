@@ -81,4 +81,9 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements ID
 
 
     }
+
+    @Override
+    public List<Dept> getDeptBySendEmailCycle(String cycle) {
+        return this.baseMapper.getDeptBySendEmailCycle(cycle);
+    }
 }

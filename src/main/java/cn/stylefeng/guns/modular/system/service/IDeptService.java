@@ -48,4 +48,6 @@ public interface IDeptService extends IService<Dept> {
     Dept getDeptByUserId(String userId);
 
     int updateChildAttendParam(Dept dept);
+
+    List<Dept> getDeptBySendEmailCycle(String cycle);
 }

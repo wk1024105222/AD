@@ -21,11 +21,11 @@ public class MonthAttendance extends Model<MonthAttendance> {
     /**
      * 年份
      */
-    private String year;
+    private Integer year;
     /**
      * 月份
      */
-    private String month;
+    private Integer month;
     /**
      * 考勤天数
      */
@@ -178,7 +178,7 @@ public class MonthAttendance extends Model<MonthAttendance> {
     public MonthAttendance() {
     }
 
-    public MonthAttendance(String id, String year, String month, String userId) {
+    public MonthAttendance(String id, Integer year, Integer month, String userId) {
         this.id = id;
         this.year = year;
         this.month = month;
@@ -193,19 +193,19 @@ public class MonthAttendance extends Model<MonthAttendance> {
         this.id = id;
     }
 
-    public String getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(String year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 
-    public String getMonth() {
+    public Integer getMonth() {
         return month;
     }
 
-    public void setMonth(String month) {
+    public void setMonth(Integer month) {
         this.month = month;
     }
 

@@ -93,5 +93,32 @@
 	</update>
 
 
+    <select id="getDeptBySendEmailCycle"  resultType="cn.stylefeng.guns.modular.system.model.Dept">
+        select
+        	d.id,
+            d.num,
+            d.pid,
+            d.pids,
+            d.simplename,
+            d.fullname,
+            d.tips,
+            d.version,
+            d.attend_times,
+            d.start_work_time,
+            d.end_work_time,
+            d.start_rest_time,
+            d.end_rest_time,
+            d.leave_time,
+            d.start_over_time,
+            d.email1,
+            d.email2,
+            d.email3,
+            d.send_email_cycle,
+            d.work_day
+        from sys_dept d  where send_email_cycle=#{cycle} and (email1 is not null or  email2 is not null or email3 is not null)
+
+    </select>
+
+
 
 </mapper>

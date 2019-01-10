@@ -3,6 +3,7 @@ package cn.stylefeng.guns.modular.system.service;
 import cn.stylefeng.guns.modular.system.model.AttendanceRecord;
 import com.baomidou.mybatisplus.service.IService;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -21,5 +22,7 @@ public interface IAttendanceService extends IService<AttendanceRecord> {
 
     void handleSomeOneAttendRecord(LinkedList<AttendanceRecord> attendanceRecords);
 
-    List<Map<String,Object>> statisticsOneDayAttendRecords(String date);
+    boolean statisticsOneDayAttendRecords(LocalDate date);
+
+    boolean markAttendanceRecord(LocalDate date);
 }
