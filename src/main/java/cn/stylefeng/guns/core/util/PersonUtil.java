@@ -1,6 +1,9 @@
 package cn.stylefeng.guns.core.util;
 
+import cn.stylefeng.guns.modular.schedule.ScheduledTasks;
 import org.apache.commons.beanutils.PropertyUtilsBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,6 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PersonUtil {
+    private static final Logger logger = LoggerFactory.getLogger(PersonUtil.class);
+
     public static Map<String, Object> beanToMap(Object obj) {
         Map<String, Object> params = new HashMap<String, Object>(0);
         try {
@@ -76,12 +81,14 @@ public class PersonUtil {
 
             pw.write(request);
             pw.flush();
+            PersonUtil.logger.info("请求报文"+request);
             socket.shutdownOutput();
 
             is = socket.getInputStream();
             br = new BufferedReader(new InputStreamReader(is));
             String resMsg = null;
             while ((resMsg = br.readLine()) != null) {
+                PersonUtil.logger.info("接收报文"+resMsg);
                 result =  resMsg;
             }
 
@@ -113,11 +120,11 @@ public class PersonUtil {
             FileSystemResource fsr=new FileSystemResource(file);
             helper.addAttachment(fileName,fsr);
             mailSender.send(message);
-//            System.out.println("带附件的邮件发送成功");
+            PersonUtil.logger.info("带附件的邮件发送成功");
 
         }catch (Exception e){
             e.printStackTrace();
-//            System.out.println("发送带附件的邮件失败");
+            PersonUtil.logger.info("发送带附件的邮件失败");
             return false;
         }
         return true;

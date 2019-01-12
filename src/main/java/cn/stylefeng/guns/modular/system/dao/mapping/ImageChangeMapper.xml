@@ -20,4 +20,10 @@
         img_name, action_type, user_id, create_time, send_flag, receive_flag, update_time, image_id, change_result
     </sql>
 
+    <select id="getErrorImageChanges" resultType="cn.stylefeng.guns.modular.system.model.ImageChange">
+        select
+        <include refid="Base_Column_List" />
+        from user_image_change where receive_flag is not null and  receive_flag != '1'
+    </select>
+
 </mapper>

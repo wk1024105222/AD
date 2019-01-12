@@ -5,6 +5,8 @@ import cn.stylefeng.guns.modular.system.model.User;
 import cn.stylefeng.guns.modular.system.transfer.UserDto;
 import com.baomidou.mybatisplus.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 影像管理 服务类
@@ -20,4 +22,8 @@ public interface IImageChangeService extends IService<ImageChange> {
     int deleteImage(Integer userId);
 
     int updateImage(User oldUser, UserDto user);
+
+    List<ImageChange> getErrorImageChanges();
+
+    void changeImage(ImageChange imgChange) ;
 }

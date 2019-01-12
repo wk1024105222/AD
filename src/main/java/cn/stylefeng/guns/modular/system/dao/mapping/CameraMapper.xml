@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.Camera">
-        <id column="uuid" property="uuid" />
+        <id column="id" property="id" />
         <result column="camera_Id" property="cameraId" />
         <result column="address" property="address" />
         <result column="status" property="status" />
@@ -12,7 +12,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        uuid, camera_Id, address, status
+        id, camera_Id, address, status
     </sql>
 
 </mapper>

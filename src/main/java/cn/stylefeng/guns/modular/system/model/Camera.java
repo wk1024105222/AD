@@ -2,7 +2,10 @@ package cn.stylefeng.guns.modular.system.model;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+
 import java.io.Serializable;
 
 /**
@@ -18,7 +21,8 @@ public class Camera extends Model<Camera> {
 
     private static final long serialVersionUID = 1L;
 
-    private String uuid;
+    @TableId(value = "id")
+    private String id;
     /**
      * 设备编号
      */
@@ -34,12 +38,12 @@ public class Camera extends Model<Camera> {
     private String status;
 
 
-    public String getUuid() {
-        return uuid;
+    public String getId() {
+        return id;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCameraId() {
@@ -68,13 +72,13 @@ public class Camera extends Model<Camera> {
 
     @Override
     protected Serializable pkVal() {
-        return this.uuid;
+        return this.id;
     }
 
     @Override
     public String toString() {
         return "Camera{" +
-        ", uuid=" + uuid +
+        ", id=" + id +
         ", cameraId=" + cameraId +
         ", address=" + address +
         ", status=" + status +

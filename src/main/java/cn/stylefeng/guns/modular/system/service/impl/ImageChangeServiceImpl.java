@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.net.Socket;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -33,7 +34,7 @@ public class ImageChangeServiceImpl extends ServiceImpl<ImageChangeMapper, Image
     @Autowired
     private IUserService userService;
 
-
+    @Override
     public void changeImage(ImageChange imgChange) {
         String action = imgChange.getActionType();
         StringBuffer reqMsg = new StringBuffer().append(imgChange.getActionType()).append("|");
@@ -53,9 +54,9 @@ public class ImageChangeServiceImpl extends ServiceImpl<ImageChangeMapper, Image
             imgChange.setReceiveFlag("1");
             if (imgChange.getActionType().equals("1")) {
                 //新增结果
-                String rlt = resArray[2];
+                String rlt = resArray[3];
                 imgChange.setChangeResult(resArray[2]);
-                if ("1".equals(rlt)) {
+                if (!"-1".equals(rlt)) {
                     //新增成功
                     imgChange.setImageId(resArray[3]);
                     userService.updateImgId(imgChange.getUserId(), resArray[3]);
@@ -101,5 +102,10 @@ public class ImageChangeServiceImpl extends ServiceImpl<ImageChangeMapper, Image
         this.changeImage(addImg);
 
         return 1;
+    }
+
+    @Override
+    public List<ImageChange> getErrorImageChanges() {
+        return this.baseMapper.getErrorImageChanges();
     }
 }

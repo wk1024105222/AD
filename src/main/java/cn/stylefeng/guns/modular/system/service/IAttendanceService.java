@@ -24,4 +24,6 @@ public interface IAttendanceService extends IService<AttendanceRecord> {
     boolean statisticsOneDayAttendRecords(LocalDate date);
 
     boolean markAttendanceRecord(LocalDate date);
+
+    List<AttendanceRecord> getLackDeptInfoAttendanceRecord();
 }

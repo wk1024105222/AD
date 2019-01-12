@@ -78,7 +78,6 @@
 	</select>
 
 	<update id="updateImgId">
-		update sys_user set imgid = #{imgId} where account =
-		#{userId} and status != 3
+		update sys_user set imgid = #{imgId} where account = #{userId}
 	</update>
 </mapper>

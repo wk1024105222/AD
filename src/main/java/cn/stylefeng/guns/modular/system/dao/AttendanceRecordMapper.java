@@ -20,4 +20,6 @@ public interface AttendanceRecordMapper extends BaseMapper<AttendanceRecord> {
     List<AttendanceRecord> getOneDayAttendRecords(@Param("date") String date);
 
     List<Map<String,Object>> statisticsOneDayAttendRecords(@Param("date") String date);
+
+    List<AttendanceRecord> getLackDeptInfoAttendanceRecord();
 }

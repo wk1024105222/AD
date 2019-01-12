@@ -38,4 +38,13 @@
         group by user_id
     </select>
 
+    <select id="getLackDeptInfoAttendanceRecord" resultType="cn.stylefeng.guns.modular.system.model.AttendanceRecord">
+        select
+        <include refid="Base_Column_List" />
+        from user_attendance_record
+        where user_name is null
+    </select>
+
+
+
 </mapper>

@@ -3,6 +3,8 @@ package cn.stylefeng.guns.modular.system.dao;
 import cn.stylefeng.guns.modular.system.model.ImageChange;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  * 影像管理 Mapper 接口
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface ImageChangeMapper extends BaseMapper<ImageChange> {
 
+    List<ImageChange> getErrorImageChanges();
 }

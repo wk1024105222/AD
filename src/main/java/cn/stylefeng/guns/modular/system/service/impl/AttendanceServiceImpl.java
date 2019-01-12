@@ -334,6 +334,11 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
         return true;
     }
 
+    @Override
+    public List<AttendanceRecord> getLackDeptInfoAttendanceRecord() {
+        return this.baseMapper.getLackDeptInfoAttendanceRecord();
+    }
+
     private void markEnterAndLeave(OneLeaveOneEnter o, Dept dept, String startWorkId) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 

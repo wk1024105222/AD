@@ -241,22 +241,23 @@ public class UserMgrController extends BaseController {
         User oldUser = userService.selectById(user.getId());
 
         if (ShiroKit.hasRole(Const.ADMIN_NAME)) {
-            this.userService.updateById(UserFactory.editUser(user, oldUser));
+
             //添加修改操作影像同步记录
             if(!user.getAvatar().equals(oldUser.getAvatar())) {
                 this.imageChangeService.updateImage(oldUser, user);
             }
-
+            this.userService.updateById(UserFactory.editUser(user, oldUser));
             return SUCCESS_TIP;
         } else {
             assertAuth(user.getId());
             ShiroUser shiroUser = ShiroKit.getUser();
             if (shiroUser.getId().equals(user.getId())) {
-                this.userService.updateById(UserFactory.editUser(user, oldUser));
+
                 if(!user.getAvatar().equals(oldUser.getAvatar())) {
                     //添加修改操作影像同步记录
                     this.imageChangeService.updateImage(oldUser, user);
                 }
+                this.userService.updateById(UserFactory.editUser(user, oldUser));
                 return SUCCESS_TIP;
             } else {
                 throw new ServiceException(BizExceptionEnum.NO_PERMITION);
