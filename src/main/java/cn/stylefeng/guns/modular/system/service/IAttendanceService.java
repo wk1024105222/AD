@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.service.IService;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -20,7 +19,7 @@ public interface IAttendanceService extends IService<AttendanceRecord> {
 
     List<AttendanceRecord> getOneDayAttendRecords(String date);
 
-    void handleSomeOneAttendRecord(LinkedList<AttendanceRecord> attendanceRecords);
+    void handleSomeOneAttendRecord(LinkedList<AttendanceRecord> attendanceRecords, LocalDate date);
 
     boolean statisticsOneDayAttendRecords(LocalDate date);
 
