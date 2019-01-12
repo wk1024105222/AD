@@ -58,6 +58,11 @@ public class MonthCount extends Model<MonthCount> {
      */
     private String type;
 
+    /**
+     * 日期拼接
+     */
+    private String dates;
+
 
     public String getId() {
         return id;
@@ -131,6 +136,14 @@ public class MonthCount extends Model<MonthCount> {
         this.type = type;
     }
 
+    public String getDates() {
+        return dates;
+    }
+
+    public void setDates(String dates) {
+        this.dates = dates;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -148,6 +161,7 @@ public class MonthCount extends Model<MonthCount> {
         ", team=" + team +
         ", times=" + times +
         ", type=" + type +
+        ", dates=" + dates +
         "}";
     }
 }

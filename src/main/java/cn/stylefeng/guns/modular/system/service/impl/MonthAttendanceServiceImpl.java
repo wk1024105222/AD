@@ -1,7 +1,7 @@
 package cn.stylefeng.guns.modular.system.service.impl;
 
-import cn.stylefeng.guns.modular.system.model.MonthAttendance;
 import cn.stylefeng.guns.modular.system.dao.MonthAttendanceMapper;
+import cn.stylefeng.guns.modular.system.model.MonthAttendance;
 import cn.stylefeng.guns.modular.system.service.IMonthAttendanceService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.apache.poi.hssf.usermodel.*;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -25,13 +24,70 @@ import java.util.List;
 public class MonthAttendanceServiceImpl extends ServiceImpl<MonthAttendanceMapper, MonthAttendance> implements IMonthAttendanceService {
 
     @Override
-    public MonthAttendance getMonthAttendanceByYearMonthUserId(Integer year, Integer month, String userId) {
+    public List<MonthAttendance> getMonthAttendanceByYearMonthUserId(Integer year, Integer month, String userId) {
         return this.baseMapper.getMonthAttendanceByYearMonthUserId(year,month,userId);
     }
 
     @Override
     public List<MonthAttendance> getMonthAttendanceByYearMonthDeptId(Integer year, Integer month, Integer deptId) {
         return this.baseMapper.getMonthAttendanceByYearMonthDeptId(year,month, deptId);
+    }
+
+    private void createTitle(HSSFWorkbook workbook, HSSFSheet sheet) {
+        HSSFRow row = sheet.createRow(0);
+        //设置列宽，setColumnWidth的第二个参数要乘以256，这个参数的单位是1/256个字符宽度
+        sheet.setColumnWidth(1,12*256);
+        sheet.setColumnWidth(3,17*256);
+
+        //设置为居中加粗
+        HSSFCellStyle style = workbook.createCellStyle();
+        HSSFFont font = workbook.createFont();
+        font.setBold(true);
+//        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        style.setFont(font);
+
+        HSSFCell cell;
+        cell=row.createCell(0);cell.setCellValue("序号");cell.setCellStyle(style);
+        cell=row.createCell(1);cell.setCellValue("年份");cell.setCellStyle(style);
+        cell=row.createCell(2);cell.setCellValue("月份");cell.setCellStyle(style);
+        cell=row.createCell(3);cell.setCellValue("天数");cell.setCellStyle(style);
+        cell=row.createCell(4);cell.setCellValue("工号");cell.setCellStyle(style);
+        cell=row.createCell(5);cell.setCellValue("姓名");cell.setCellStyle(style);
+        cell=row.createCell(6);cell.setCellValue("公司");cell.setCellStyle(style);
+        cell=row.createCell(7);cell.setCellValue("部分");cell.setCellStyle(style);
+        cell=row.createCell(8);cell.setCellValue("组");cell.setCellStyle(style);
+        cell=row.createCell(9);cell.setCellValue("1");cell.setCellStyle(style);
+        cell=row.createCell(10);cell.setCellValue("2");cell.setCellStyle(style);
+        cell=row.createCell(11);cell.setCellValue("3");cell.setCellStyle(style);
+        cell=row.createCell(12);cell.setCellValue("4");cell.setCellStyle(style);
+        cell=row.createCell(13);cell.setCellValue("5");cell.setCellStyle(style);
+        cell=row.createCell(14);cell.setCellValue("6");cell.setCellStyle(style);
+        cell=row.createCell(15);cell.setCellValue("7");cell.setCellStyle(style);
+        cell=row.createCell(16);cell.setCellValue("8");cell.setCellStyle(style);
+        cell=row.createCell(17);cell.setCellValue("9");cell.setCellStyle(style);
+        cell=row.createCell(18);cell.setCellValue("10");cell.setCellStyle(style);
+        cell=row.createCell(19);cell.setCellValue("11");cell.setCellStyle(style);
+        cell=row.createCell(20);cell.setCellValue("12");cell.setCellStyle(style);
+        cell=row.createCell(21);cell.setCellValue("13");cell.setCellStyle(style);
+        cell=row.createCell(22);cell.setCellValue("14");cell.setCellStyle(style);
+        cell=row.createCell(23);cell.setCellValue("15");cell.setCellStyle(style);
+        cell=row.createCell(24);cell.setCellValue("16");cell.setCellStyle(style);
+        cell=row.createCell(25);cell.setCellValue("17");cell.setCellStyle(style);
+        cell=row.createCell(26);cell.setCellValue("18");cell.setCellStyle(style);
+        cell=row.createCell(27);cell.setCellValue("19");cell.setCellStyle(style);
+        cell=row.createCell(28);cell.setCellValue("20");cell.setCellStyle(style);
+        cell=row.createCell(29);cell.setCellValue("21");cell.setCellStyle(style);
+        cell=row.createCell(30);cell.setCellValue("22");cell.setCellStyle(style);
+        cell=row.createCell(31);cell.setCellValue("23");cell.setCellStyle(style);
+        cell=row.createCell(32);cell.setCellValue("24");cell.setCellStyle(style);
+        cell=row.createCell(33);cell.setCellValue("25");cell.setCellStyle(style);
+        cell=row.createCell(34);cell.setCellValue("26");cell.setCellStyle(style);
+        cell=row.createCell(35);cell.setCellValue("27");cell.setCellStyle(style);
+        cell=row.createCell(36);cell.setCellValue("28");cell.setCellStyle(style);
+        cell=row.createCell(37);cell.setCellValue("29");cell.setCellStyle(style);
+        cell=row.createCell(38);cell.setCellValue("30");cell.setCellStyle(style);
+        cell=row.createCell(39);cell.setCellValue("31");cell.setCellStyle(style);
+
     }
 
     @Override
@@ -111,62 +167,5 @@ public class MonthAttendanceServiceImpl extends ServiceImpl<MonthAttendanceMappe
             e.printStackTrace();
         }
         return result;
-    }
-
-    private void createTitle(HSSFWorkbook workbook, HSSFSheet sheet) {
-        HSSFRow row = sheet.createRow(0);
-        //设置列宽，setColumnWidth的第二个参数要乘以256，这个参数的单位是1/256个字符宽度
-        sheet.setColumnWidth(1,12*256);
-        sheet.setColumnWidth(3,17*256);
-
-        //设置为居中加粗
-        HSSFCellStyle style = workbook.createCellStyle();
-        HSSFFont font = workbook.createFont();
-        font.setBold(true);
-//        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        style.setFont(font);
-
-        HSSFCell cell;
-        cell=row.createCell(0);cell.setCellValue("序号");cell.setCellStyle(style);
-        cell=row.createCell(1);cell.setCellValue("年份");cell.setCellStyle(style);
-        cell=row.createCell(2);cell.setCellValue("月份");cell.setCellStyle(style);
-        cell=row.createCell(3);cell.setCellValue("天数");cell.setCellStyle(style);
-        cell=row.createCell(4);cell.setCellValue("工号");cell.setCellStyle(style);
-        cell=row.createCell(5);cell.setCellValue("姓名");cell.setCellStyle(style);
-        cell=row.createCell(6);cell.setCellValue("公司");cell.setCellStyle(style);
-        cell=row.createCell(7);cell.setCellValue("部分");cell.setCellStyle(style);
-        cell=row.createCell(8);cell.setCellValue("组");cell.setCellStyle(style);
-        cell=row.createCell(9);cell.setCellValue("1");cell.setCellStyle(style);
-        cell=row.createCell(10);cell.setCellValue("2");cell.setCellStyle(style);
-        cell=row.createCell(11);cell.setCellValue("3");cell.setCellStyle(style);
-        cell=row.createCell(12);cell.setCellValue("4");cell.setCellStyle(style);
-        cell=row.createCell(13);cell.setCellValue("5");cell.setCellStyle(style);
-        cell=row.createCell(14);cell.setCellValue("6");cell.setCellStyle(style);
-        cell=row.createCell(15);cell.setCellValue("7");cell.setCellStyle(style);
-        cell=row.createCell(16);cell.setCellValue("8");cell.setCellStyle(style);
-        cell=row.createCell(17);cell.setCellValue("9");cell.setCellStyle(style);
-        cell=row.createCell(18);cell.setCellValue("10");cell.setCellStyle(style);
-        cell=row.createCell(19);cell.setCellValue("11");cell.setCellStyle(style);
-        cell=row.createCell(20);cell.setCellValue("12");cell.setCellStyle(style);
-        cell=row.createCell(21);cell.setCellValue("13");cell.setCellStyle(style);
-        cell=row.createCell(22);cell.setCellValue("14");cell.setCellStyle(style);
-        cell=row.createCell(23);cell.setCellValue("15");cell.setCellStyle(style);
-        cell=row.createCell(24);cell.setCellValue("16");cell.setCellStyle(style);
-        cell=row.createCell(25);cell.setCellValue("17");cell.setCellStyle(style);
-        cell=row.createCell(26);cell.setCellValue("18");cell.setCellStyle(style);
-        cell=row.createCell(27);cell.setCellValue("19");cell.setCellStyle(style);
-        cell=row.createCell(28);cell.setCellValue("20");cell.setCellStyle(style);
-        cell=row.createCell(29);cell.setCellValue("21");cell.setCellStyle(style);
-        cell=row.createCell(30);cell.setCellValue("22");cell.setCellStyle(style);
-        cell=row.createCell(31);cell.setCellValue("23");cell.setCellStyle(style);
-        cell=row.createCell(32);cell.setCellValue("24");cell.setCellStyle(style);
-        cell=row.createCell(33);cell.setCellValue("25");cell.setCellStyle(style);
-        cell=row.createCell(34);cell.setCellValue("26");cell.setCellStyle(style);
-        cell=row.createCell(35);cell.setCellValue("27");cell.setCellStyle(style);
-        cell=row.createCell(36);cell.setCellValue("28");cell.setCellStyle(style);
-        cell=row.createCell(37);cell.setCellValue("29");cell.setCellStyle(style);
-        cell=row.createCell(38);cell.setCellValue("30");cell.setCellStyle(style);
-        cell=row.createCell(39);cell.setCellValue("31");cell.setCellStyle(style);
-
     }
 }

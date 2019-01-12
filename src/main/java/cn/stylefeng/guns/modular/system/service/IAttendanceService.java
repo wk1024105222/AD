@@ -21,9 +21,11 @@ public interface IAttendanceService extends IService<AttendanceRecord> {
 
     void handleSomeOneAttendRecord(LinkedList<AttendanceRecord> attendanceRecords, LocalDate date);
 
-    boolean statisticsOneDayAttendRecords(LocalDate date);
+    int statisticsOneDayAttendRecords(LocalDate date);
 
-    boolean markAttendanceRecord(LocalDate date);
+    int markAttendanceRecord(LocalDate date);
 
     List<AttendanceRecord> getLackDeptInfoAttendanceRecord();
+
+    int fillAttendRecordDeptInfo();
 }

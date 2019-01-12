@@ -55,7 +55,10 @@
         select
         <include refid="Base_Column_List" />
         from user_month_attendance
-        where year = #{year} and month =#{month} and user_id=#{userId}
+        where year = #{year} and month =#{month}
+        <if test="userId != null and userId != ''">
+        and user_id=#{userId}
+        </if>
     </select>
 
     <select id="getMonthAttendanceByYearMonthDeptId" resultType="cn.stylefeng.guns.modular.system.model.MonthAttendance">
@@ -103,7 +106,11 @@
         from user_month_attendance uma
         left join sys_user su on uma.user_Id=su.account
         left join sys_dept sd on su.deptid=sd.id
-        where  uma.year = #{year} and uma.month =#{month} and (sd.pids like CONCAT('%[',#{deptId},']%') or sd.id= #{deptId})
+        where  uma.year = #{year} and uma.month =#{month}
+        and (sd.pids like CONCAT('%[',#{deptId},']%') or sd.id= #{deptId})
     </select>
+
+    <!--getMonthAttendanceByYearMonth-->
+
 
 </mapper>

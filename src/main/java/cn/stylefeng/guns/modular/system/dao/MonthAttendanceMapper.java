@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface MonthAttendanceMapper extends BaseMapper<MonthAttendance> {
 
-    MonthAttendance getMonthAttendanceByYearMonthUserId(@Param("year") Integer year,
+    List<MonthAttendance> getMonthAttendanceByYearMonthUserId(@Param("year") Integer year,
                                                         @Param("month") Integer month,
                                                         @Param("userId") String userId);
 

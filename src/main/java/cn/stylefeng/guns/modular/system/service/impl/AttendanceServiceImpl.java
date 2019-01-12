@@ -1,12 +1,11 @@
 package cn.stylefeng.guns.modular.system.service.impl;
 
-import cn.stylefeng.guns.modular.system.model.AttendanceDetail;
-import cn.stylefeng.guns.modular.system.model.AttendanceRecord;
 import cn.stylefeng.guns.modular.system.dao.AttendanceRecordMapper;
-import cn.stylefeng.guns.modular.system.model.Dept;
-import cn.stylefeng.guns.modular.system.model.MonthAttendance;
+import cn.stylefeng.guns.modular.system.model.*;
 import cn.stylefeng.guns.modular.system.service.*;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,7 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -29,9 +28,12 @@ import java.util.*;
 @Service
 public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, AttendanceRecord> implements IAttendanceService {
 
+    private static final Logger logger = LoggerFactory.getLogger(AttendanceServiceImpl.class);
 
     @Autowired
     private IDeptService deptService;
+    @Autowired
+    private IUserService userService;
 
     @Autowired
     private IAttendanceService attendanceRecordService;
@@ -42,12 +44,23 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
     @Autowired
     private IAttendanceDetailService attendanceDetailService;
 
+
+    /**
+     * 获取指定日期的所有考勤记录
+     * @param date
+     * @return
+     */
     @Override
     public List<AttendanceRecord> getOneDayAttendRecords(String date) {
 
         return this.baseMapper.getOneDayAttendRecords(date);
     }
 
+    /**
+     * 更新指定日期某个人的所有考勤记录备注
+     * @param adrs
+     * @param date
+     */
     @Override
     public void handleSomeOneAttendRecord(LinkedList<AttendanceRecord> adrs, LocalDate date) {
         Dept dept = deptService.getDeptByUserId(adrs.get(0).getUserId());
@@ -61,7 +74,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
         List<AttendanceRecord> collect = new ArrayList<AttendanceRecord>();
         AttendanceRecord tmp = null;
 
-        if (dept.getWorkDay().indexOf(week + "") == -1) {
+        if (dept.getWorkDay().indexOf(String.valueOf(week)) == -1) {
             //非工作日
             collect = new ArrayList<AttendanceRecord>(adrs);
             AttendanceRecord onWork = null;
@@ -78,7 +91,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
             }
             //查找第一次离开时间
             for (int n = collect.size()-1; n>=0;n--) {
-                if (collect.get(n).getAction().equals("0")) {
+                if (collect.get(n).getAction().equals("2")) {
                     offWork = collect.get(n);
                     leaveTime =offWork.getAttendanceTime().substring(11);
                     break;
@@ -91,7 +104,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                     onWork.setFlag("1");
                     onWork.setNote("休息有进出记录,上班时间:" + enterTime);
                     offWork.setFlag("1");
-                    offWork.setNote("下班时间:" + leaveTime );
+                    offWork.setNote("下班时间:" + leaveTime +",加班:"+enterTime+"-"+leaveTime);
                 } else {
                     onWork.setFlag("1");
                     onWork.setNote("休息有进出记录,上班时间:" + enterTime);
@@ -264,41 +277,139 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
             attendanceRecordService.updateById(b);
             String note = b.getNote();
             if(note != null && !note.equals("")) {
-                String text = note.split(":")[0];
-                String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-                if(text.indexOf("时间") == -1 && b.getFlag().equals("1")) {
-                    attendanceDetailService.insert(
-                            new AttendanceDetail(uuid,
-                                    b.getAttendanceTime().substring(0,10),
-                                    b.getUserId(),
-                                    text));
+                String[] arr =note.split(",");
+                for (String a : arr) {
+                    String text = a.split(":")[0];
+                    String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+
+                    if(text.indexOf("时间") == -1 && b.getFlag().equals("1")) {
+                        attendanceDetailService.insert(
+                                new AttendanceDetail(uuid,
+                                        b.getAttendanceTime().substring(0,10),
+                                        b.getUserId(),
+                                        text));
+                    }
+
                 }
+
             }
         }
     }
 
+    /**
+     * 统计指定日期的月度考勤表
+     * @param date
+     * @return
+     */
     @Override
-    public boolean statisticsOneDayAttendRecords(LocalDate date) {
+    public int statisticsOneDayAttendRecords(LocalDate date) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         int year = date.getYear();
         int month = date.getMonthValue();
+        int day = date.getDayOfMonth();
+        int dayOfWeek = date.getDayOfWeek().getValue();
 
+        List<Dept> depts = deptService.selectList(null);
+        Map<String,Dept> idToDept = new HashMap<String,Dept>();
+
+        for (Dept d : depts) {
+            idToDept.put(d.getId().toString(),d);
+        }
+
+        List<User> users = userService.selectList(null);
+        Map<String,User> idToUser = new HashMap<String,User>();
+
+        for (User u : users) {
+            idToUser.put(u.getAccount(),u);
+        }
+
+        //group by 聚合数据 已员工为主体 左连接 聚合结果
         List<Map<String, Object>> statisticsRlt = this.baseMapper.statisticsOneDayAttendRecords(date.toString());
+
+//        Map<String,String> userIdToAttendTotal = new HashMap<String,String>();
+////        for (Map<String, Object> tmp : statisticsRlt) {
+////            Object o = tmp.get("result");
+////            if(o != null && !((String)o).equals("")) {
+////                userIdToAttendTotal.put((String) tmp.get("user_id"),((String)o).replace(",", "</br>"));
+////            } else {
+////                userIdToAttendTotal.put((String) tmp.get("user_id"),null);
+////            }
+////        }
+        //查出指定月份所有人的月度考勤记录
+        List<MonthAttendance> mas = monthAttendanceService.getMonthAttendanceByYearMonthUserId(year, month, null);
+        Map<String,MonthAttendance> uesrIdToMonthAttend = new HashMap<String,MonthAttendance>();
+        //转成Map<userid,MonthAttendance> 方便后面获取
+        for (MonthAttendance ma : mas) {
+            uesrIdToMonthAttend.put(ma.getUserId(),ma);
+        }
+
+        User user = null;
+        Dept dept = null;
+        String workDays = null;
+        MonthAttendance ma = null;
+        int rank = 0;
+        String pids = null;
 
         for (Map<String, Object> tmp : statisticsRlt) {
             String userId = (String) tmp.get("user_id");
-            String note = ((String) tmp.get("result")).replace(",", "</br>");
-
-            int day = date.getDayOfMonth();
-
-            MonthAttendance m = monthAttendanceService.getMonthAttendanceByYearMonthUserId(year, month, userId);
-            if (m == null) {
-                m = new MonthAttendance(UUID.randomUUID().toString().replaceAll("-", ""), year, month, userId);
+            String note = "";
+            user = idToUser.get(userId);
+            if(user != null) {
+                dept = idToDept.get(idToUser.get(userId).getDeptid().toString());
             }
 
-            Class reflect = m.getClass();
+            if (tmp.get("result") != null && !((String) tmp.get("result")).equals("")) {
+                note = ((String) tmp.get("result")).replace(",", "</br>");
+            } else {
+                //无考勤记录需判断是否为休息日
+                workDays = dept.getWorkDay();
+                if (dept != null) {
+                    if (workDays.indexOf(String.valueOf(dayOfWeek) ) == -1) {
+                        //休息日
+                        note = "休息";
+                    } else {
+                        note = "全天旷工";
+                        attendanceDetailService.insert(
+                                new AttendanceDetail(UUID.randomUUID().toString().replaceAll("-", ""),
+                                        date.format(dtf),
+                                        userId,
+                                        note));
+                    }
+                }
+            }
+
+            ma = uesrIdToMonthAttend.get(userId);
+            if (ma == null) {
+                ma = new MonthAttendance();
+
+                ma.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+                ma.setYear(year);
+                ma.setMonth(month);
+                ma.setUserId(userId);
+                ma.setUserName(user.getName());
+
+                pids = dept.getPids();
+                rank = pids.split(",").length;
+                if(rank == 3) {
+                    int index1=pids.indexOf(',');
+                    int index2=pids.indexOf(',',index1+1);
+                    ma.setCompany(idToDept.get(pids.substring(index1+2,index2-1)).getSimplename());
+                    ma.setDepartment(idToDept.get(pids.substring(index2+2,pids.length()-2)).getSimplename());
+                    ma.setTeam(idToDept.get(user.getDeptid().toString()).getSimplename());
+
+                } else if(rank == 2) {
+                    int index1=pids.indexOf(',');
+                    ma.setCompany(idToDept.get(pids.substring(index1+2,pids.length()-2)).getSimplename());
+                    ma.setDepartment(idToDept.get(user.getDeptid().toString()).getSimplename());
+                } else {
+                    ma.setCompany(idToDept.get(user.getDeptid().toString()).getSimplename());
+                }
+            }
+
+            Class reflect = ma.getClass();
             try {
                 Method setDayN = reflect.getMethod("setDay" + day, String.class);
-                setDayN.invoke(m, note);
+                setDayN.invoke(ma, note);
 
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
@@ -308,35 +419,98 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 e.printStackTrace();
             }
 
-                boolean a = monthAttendanceService.insertOrUpdate(m);
+                boolean a = monthAttendanceService.insertOrUpdate(ma);
         }
-        return true;
+        return statisticsRlt.size();
     }
 
+    /**
+     * 更新指定日期的考勤记录备注
+     * @param date
+     * @return 处理数量
+     */
     @Override
-    public boolean markAttendanceRecord(LocalDate date) {
-
+    public int markAttendanceRecord(LocalDate date) {
+        //获取指定日期的所有考勤记录
         List<AttendanceRecord> ads = attendanceRecordService.getOneDayAttendRecords(date.toString());
         if (ads.size() ==0) {
-            return true;
+            return 0;
         }
         int begin = 0;
         for (int i = 1; i != ads.size(); i++) {
             if (!ads.get(i).getUserId().equals(ads.get(i - 1).getUserId())) {
+                //更新指定日期某个人的所有考勤记录备注
                 attendanceRecordService.handleSomeOneAttendRecord(new LinkedList(ads.subList(begin, i)), date);
                 begin = i;
             }
         }
         if (begin==0) {
             attendanceRecordService.handleSomeOneAttendRecord(new LinkedList(ads), date);
+        } else {
+            attendanceRecordService.handleSomeOneAttendRecord(new LinkedList(ads.subList(begin,ads.size())), date);
         }
 
-        return true;
+        return ads.size();
     }
 
     @Override
     public List<AttendanceRecord> getLackDeptInfoAttendanceRecord() {
         return this.baseMapper.getLackDeptInfoAttendanceRecord();
+    }
+
+    /**
+     * 补充考勤记录的个人信息 姓名 公司 部门 组
+     * @return
+     */
+    @Override
+    public int fillAttendRecordDeptInfo() {
+        List<Dept> depts = deptService.selectList(null);
+        Map<String,Dept> idToDept = new HashMap<String,Dept>();
+
+        for (Dept d : depts) {
+            idToDept.put(d.getId().toString(),d);
+        }
+
+        List<User> users = userService.selectList(null);
+        Map<String,User> idToUser = new HashMap<String,User>();
+
+        for (User u : users) {
+            idToUser.put(u.getAccount(),u);
+        }
+
+        //获取确实姓名的考勤数据
+        List<AttendanceRecord> adrs = attendanceRecordService.getLackDeptInfoAttendanceRecord();
+        User user = null;
+        Dept dept = null;
+        for (AttendanceRecord adr:adrs) {
+            if(adr.getUserId() != null) {
+                user = idToUser.get(adr.getUserId());
+                adr.setUserName(user.getName());
+                dept = idToDept.get(user.getDeptid().toString());
+                String pids = dept.getPids();
+                int rank = pids.split(",").length;
+                if(rank == 3) {
+                    int index1=pids.indexOf(',');
+                    int index2=pids.indexOf(',',index1+1);
+                    adr.setCompany(idToDept.get(pids.substring(index1+2,index2-1)).getSimplename());
+                    adr.setDepartment(idToDept.get(pids.substring(index2+2,pids.length()-2)).getSimplename());
+                    adr.setTeam(idToDept.get(user.getDeptid().toString()).getSimplename());
+
+                } else if(rank == 2) {
+                    int index1=pids.indexOf(',');
+                    adr.setCompany(idToDept.get(pids.substring(index1+2,pids.length()-2)).getSimplename());
+                    adr.setDepartment(idToDept.get(user.getDeptid().toString()).getSimplename());
+                } else {
+                    adr.setCompany(idToDept.get(user.getDeptid().toString()).getSimplename());
+                }
+                attendanceRecordService.updateById(adr);
+                logger.info("考勤个人信息补充完毕"+adr.toString());
+            } else {
+                logger.info("无法根据人脸引擎imgid:"+adr.getImgId()+"找到对应人员");
+            }
+
+        }
+        return adrs.size();
     }
 
     private void markEnterAndLeave(OneLeaveOneEnter o, Dept dept, String startWorkId) {

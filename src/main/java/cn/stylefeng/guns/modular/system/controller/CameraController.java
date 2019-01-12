@@ -1,21 +1,19 @@
 package cn.stylefeng.guns.modular.system.controller;
 
-import cn.stylefeng.guns.core.util.Contrast;
-import cn.stylefeng.guns.core.util.PersonUtil;
-import cn.stylefeng.guns.modular.system.warpper.CameraWarpper;
-import cn.stylefeng.guns.modular.system.warpper.UserWarpper;
-import cn.stylefeng.roses.core.base.controller.BaseController;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.beans.factory.annotation.Autowired;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
-import org.springframework.web.bind.annotation.RequestParam;
+import cn.stylefeng.guns.core.util.PersonUtil;
 import cn.stylefeng.guns.modular.system.model.Camera;
 import cn.stylefeng.guns.modular.system.service.ICameraService;
+import cn.stylefeng.guns.modular.system.warpper.CameraWarpper;
+import cn.stylefeng.roses.core.base.controller.BaseController;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.Collections;

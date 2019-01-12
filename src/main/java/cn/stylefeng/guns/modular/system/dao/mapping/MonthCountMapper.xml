@@ -13,11 +13,12 @@
         <result column="team" property="team" />
         <result column="times" property="times" />
         <result column="type" property="type" />
+        <result column="dates" property="dates" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, month, user_id, user_name, company, department, team, times, type
+        id, month, user_id, user_name, company, department, team, times, type, dates
     </sql>
 
     <delete id="deleteMonthCountByDate" >
@@ -25,9 +26,9 @@
     </delete>
 
     <select id="getMonthCountByDate" resultType="map">
-        select user_id,type,count(1) times
+        select user_id,type,count(1) times,group_concat(date order by date) dates
         from user_attendance_detail
-        where date like CONCAT(#{date},'%') group by user_id,type
+        where date like CONCAT(#{date},'%')  group by user_id,type
     </select>
 
 </mapper>

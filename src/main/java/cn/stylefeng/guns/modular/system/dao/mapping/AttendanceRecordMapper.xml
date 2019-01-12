@@ -33,16 +33,18 @@
     </select>
 
     <select id="statisticsOneDayAttendRecords" resultType="map">
-        select user_id,group_concat(note order by attendance_Time) result from user_attendance_record
-        where (attendance_Time between CONCAT(#{date},' 00:00:00') and CONCAT(#{date},' 23:59:59')) and flag ='1'
-        group by user_id
+        select a.account as user_id,b.result from sys_user a
+        left join (
+          select user_id,group_concat(note order by attendance_Time) result from user_attendance_record where (attendance_Time between CONCAT(#{date},' 00:00:00') and CONCAT(#{date},' 23:59:59')) and flag ='1'
+          group by user_id
+        ) b on a.account=b.user_id
     </select>
 
     <select id="getLackDeptInfoAttendanceRecord" resultType="cn.stylefeng.guns.modular.system.model.AttendanceRecord">
-        select
-        <include refid="Base_Column_List" />
-        from user_attendance_record
-        where user_name is null
+        select a.id,a.attendance_Time,b.account as user_Id,a.user_name,a.action,a.img_Path,a.company,a.department,a.team,a.note,a.img_id,a.flag
+        from user_attendance_record a
+        left join sys_user b on a.img_id=b.imgid
+        where a.user_name is null
     </select>
 
 

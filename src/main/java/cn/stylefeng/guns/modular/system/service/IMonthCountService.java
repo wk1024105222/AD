@@ -15,5 +15,5 @@ public interface IMonthCountService extends IService<MonthCount> {
 
     void deleteMonthCountByDate(String date);
 
-    void insertNewMonthCountByDate(String date);
+    int insertNewMonthCountByDate(String date);
 }

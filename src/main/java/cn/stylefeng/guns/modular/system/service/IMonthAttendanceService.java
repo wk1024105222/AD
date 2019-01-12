@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface IMonthAttendanceService extends IService<MonthAttendance> {
 
-    MonthAttendance getMonthAttendanceByYearMonthUserId(Integer year, Integer month, String userId);
+    List<MonthAttendance> getMonthAttendanceByYearMonthUserId(Integer year, Integer month, String userId);
 
     List<MonthAttendance> getMonthAttendanceByYearMonthDeptId(Integer year, Integer month, Integer id);
 
