@@ -1,13 +1,8 @@
 package cn.stylefeng.guns.modular.schedule;
 
 import cn.stylefeng.guns.core.util.PersonUtil;
-import cn.stylefeng.guns.modular.system.model.AttendanceRecord;
-import cn.stylefeng.guns.modular.system.model.Dept;
-import cn.stylefeng.guns.modular.system.model.MonthAttendance;
-import cn.stylefeng.guns.modular.system.service.IAttendanceService;
-import cn.stylefeng.guns.modular.system.service.IDeptService;
-import cn.stylefeng.guns.modular.system.service.IMonthAttendanceService;
-import cn.stylefeng.guns.modular.system.service.IMonthCountService;
+import cn.stylefeng.guns.modular.system.model.*;
+import cn.stylefeng.guns.modular.system.service.*;
 import org.apache.poi.hssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +25,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Component
-@Configuration
-@EnableScheduling // 启用定时任务
 public class ScheduledTasks {
 
     private static final Logger logger = LoggerFactory.getLogger(ScheduledTasks.class);
@@ -45,6 +38,8 @@ public class ScheduledTasks {
     private IDeptService deptService;
     @Autowired
     private IMonthCountService monthCountService;
+    @Autowired
+    private IImageChangeService imageChangeService;
 
     //每天10点
     @Scheduled(cron = "0 0 10 * * ?")
@@ -113,31 +108,49 @@ public class ScheduledTasks {
             }
         }
     }
-//
-//    @Scheduled(fixedRate = 1000)
-//    public void reportCurrent() {
-//        SimpleDateFormat dataFromat = new SimpleDateFormat("HH:mm:ss");
-//        logger.info("现在时间：{}", dataFromat.format(new Date()));
-//    }
 
-    //每天2点跑批
+    //每天2点跑批 更新月度考勤表 月度统计表
     @Scheduled(cron = "0 0 2 ? * *")
     public void runButch() {
         logger.info("runButch run");
 
         LocalDate yesterday = LocalDate.now().minus(1, ChronoUnit.DAYS);
+        //更新指定日期的考勤记录备注
+        int markRlt = attendanceRecordService.markAttendanceRecord(yesterday);
 
-        boolean markRlt = attendanceRecordService.markAttendanceRecord(yesterday);
-
-        boolean statisticsRlt = attendanceRecordService.statisticsOneDayAttendRecords(yesterday);
+        //统计指定日期的月度考勤表
+        int statisticsRlt = attendanceRecordService.statisticsOneDayAttendRecords(yesterday);
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM");
 
         String date = yesterday.format(dtf);
 
+        //统计月度统计表
         monthCountService.deleteMonthCountByDate(date);
-        monthCountService.insertNewMonthCountByDate(date);
+        int insertNum = monthCountService.insertNewMonthCountByDate(date);
 
     }
+
+    //重试影像同步
+    @Scheduled(cron = "0 0/5 * * * ?")
+    public void retryImageChange() {
+        logger.info("retryImageChange run");
+
+        List<ImageChange> ics = imageChangeService.getErrorImageChanges();
+        for (ImageChange ic:ics) {
+            imageChangeService.changeImage(ic);
+        }
+    }
+
+    //AttendanceRecord 补充机构信息
+    @Scheduled(cron = "0 0/5 * * * ?")
+    public void fillAttendRecordDeptInfo() {
+        logger.info("fillAttendRecordDeptInfo run");
+
+        int num = attendanceRecordService.fillAttendRecordDeptInfo();
+
+        logger.info("考勤记录补充个人信息执行完毕:"+num);
+    }
+
 
 }
