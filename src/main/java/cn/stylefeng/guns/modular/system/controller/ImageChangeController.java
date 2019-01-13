@@ -1,6 +1,11 @@
 package cn.stylefeng.guns.modular.system.controller;
 
+import cn.stylefeng.guns.core.util.PersonUtil;
+import cn.stylefeng.guns.modular.system.model.Camera;
+import cn.stylefeng.guns.modular.system.warpper.CameraWarpper;
+import cn.stylefeng.guns.modular.system.warpper.ImageChangeWarpper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,6 +16,11 @@ import cn.stylefeng.guns.core.log.LogObjectHolder;
 import org.springframework.web.bind.annotation.RequestParam;
 import cn.stylefeng.guns.modular.system.model.ImageChange;
 import cn.stylefeng.guns.modular.system.service.IImageChangeService;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 影像管理控制器
@@ -60,7 +70,23 @@ public class ImageChangeController extends BaseController {
     @RequestMapping(value = "/list")
     @ResponseBody
     public Object list(String condition) {
-        return imageChangeService.selectList(null);
+//        return imageChangeService.selectList(null);
+
+        EntityWrapper<ImageChange> wrapper = new EntityWrapper<ImageChange>();
+        wrapper.orderDesc(Collections.singleton("create_time"));
+        if(condition != null && !"".equalsIgnoreCase(condition)) {
+            wrapper.where("user_id = " + condition);
+        }
+
+        List<ImageChange> imageChanges = imageChangeService.selectList(wrapper);
+        List<Map<String, Object>> imageChangesMap = new ArrayList<Map<String, Object>>(imageChanges.size());
+        for (ImageChange i : imageChanges) {
+            imageChangesMap.add(PersonUtil.beanToMap(i));
+        }
+
+        List<Map<String, Object>> result = new ImageChangeWarpper(imageChangesMap).wrap();
+        //return new UserWarpper(cameras).wrap();
+        return result ;
     }
 
     /**

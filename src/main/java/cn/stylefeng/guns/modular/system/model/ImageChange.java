@@ -66,6 +66,9 @@ public class ImageChange extends Model<ImageChange> {
     @TableField("change_result")
     private String changeResult;
 
+    public ImageChange() {
+    }
+
     public ImageChange(String imgName, String actionType, String userId, Date createTime, String sendFlag, String receiveFlag, Date updateTime, String imageId) {
         this.imgName = imgName;
         this.actionType = actionType;

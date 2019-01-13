@@ -139,4 +139,8 @@ public interface IConstantFactory {
      */
     String getAttendanceName(Integer action);
 
+    String getImageChangeActionName(String action_type);
+
+    String getImageChangeSendName(String send_flag);
+
 }
