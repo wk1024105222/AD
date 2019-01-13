@@ -21,7 +21,8 @@ MonthCount.initColumn = function () {
             {title: '公司', field: 'company', visible: true, align: 'center', valign: 'middle'},
             {title: '部门', field: 'department', visible: true, align: 'center', valign: 'middle'},
             {title: '组', field: 'team', visible: true, align: 'center', valign: 'middle'},
-            {title: '次数', field: 'times', visible: true, align: 'center', valign: 'middle'}
+            {title: '次数', field: 'times', visible: true, align: 'center', valign: 'middle'},
+            {title: '日期', field: 'dates', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 

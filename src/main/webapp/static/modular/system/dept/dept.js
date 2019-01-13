@@ -14,23 +14,23 @@ var Dept = {
 Dept.initColumn = function () {
     return [
         {field: 'selectItem', radio: true},
-        {title: 'id', field: 'id', align: 'center', valign: 'middle',width:'50px'},
-        {title: '部门简称', field: 'simplename', align: 'center', valign: 'middle', sortable: true},
+        // {title: 'id', field: 'id', align: 'center', valign: 'middle',width:'50px'},
+        {title: '机构名称', field: 'simplename', align: 'center', valign: 'middle', sortable: true,width:'120px'},
         // {title: '部门全称', field: 'fullname', align: 'center', valign: 'middle', sortable: true},
-        {title: '排序', field: 'num', align: 'center', valign: 'middle', sortable: true},
+        // {title: '排序', field: 'num', align: 'center', valign: 'middle', sortable: true},
         //{title: '备注', field: 'tips', align: 'center', valign: 'middle', sortable: true},
-        {title: '打卡次数', field: 'attend_times', visible: true, align: 'center', valign: 'middle'},
-        {title: '上班时间', field: 'start_work_time', visible: true, align: 'center', valign: 'middle'},
-        {title: '下班时间', field: 'end_work_time', visible: true, align: 'center', valign: 'middle'},
-        {title: '午休开始', field: 'start_rest_time', visible: true, align: 'center', valign: 'middle'},
-        {title: '午休结束', field: 'end_rest_time', visible: true, align: 'center', valign: 'middle'},
-        {title: '离岗时间', field: 'leave_time', visible: true, align: 'center', valign: 'middle'},
-        {title: '加班时间', field: 'start_over_time', visible: true, align: 'center', valign: 'middle'},
-        {title: '邮箱1', field: 'email1', visible: true, align: 'center', valign: 'middle'},
-        {title: '邮箱2', field: 'email2', visible: true, align: 'center', valign: 'middle'},
-        {title: '邮箱3', field: 'email3', visible: true, align: 'center', valign: 'middle'},
-        {title: '发送周期', field: 'send_email_cycle', visible: true, align: 'center', valign: 'middle'},
-        {title: '工作日', field: 'work_day', visible: true, align: 'center', valign: 'middle'}
+        {title: '打卡次数', field: 'attend_times', visible: true, align: 'center', valign: 'middle',width:'80px'},
+        {title: '上班时间', field: 'start_work_time', visible: true, align: 'center', valign: 'middle',width:'80px'},
+        {title: '下班时间', field: 'end_work_time', visible: true, align: 'center', valign: 'middle',width:'80px'},
+        {title: '午休开始', field: 'start_rest_time', visible: true, align: 'center', valign: 'middle',width:'80px'},
+        {title: '午休结束', field: 'end_rest_time', visible: true, align: 'center', valign: 'middle',width:'80px'},
+        {title: '离岗时间', field: 'leave_time', visible: true, align: 'center', valign: 'middle',width:'80px'},
+        {title: '加班时间', field: 'start_over_time', visible: true, align: 'center', valign: 'middle',width:'80px'},
+        {title: '邮箱1', field: 'email1', visible: true, align: 'center', valign: 'middle',width:'120px'},
+        {title: '邮箱2', field: 'email2', visible: true, align: 'center', valign: 'middle',width:'120px'},
+        {title: '邮箱3', field: 'email3', visible: true, align: 'center', valign: 'middle',width:'120px'},
+        {title: '发送周期', field: 'send_email_cycle', visible: true, align: 'center', valign: 'middle',width:'80px'},
+        {title: '工作日', field: 'work_day', visible: true, align: 'center', valign: 'middle',width:'80px'}
 
         ];
 };
@@ -114,7 +114,7 @@ Dept.search = function () {
 $(function () {
     var defaultColunms = Dept.initColumn();
     var table = new BSTreeTable(Dept.id, "/dept/list", defaultColunms);
-    table.setExpandColumn(2);
+    table.setExpandColumn(1);
     table.setIdField("id");
     table.setCodeField("id");
     table.setParentCodeField("pid");

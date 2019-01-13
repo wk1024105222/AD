@@ -14,7 +14,7 @@ var Camera = {
 Camera.initColumn = function () {
     return [
         {field: 'selectItem', radio: true},
-            {title: '', field: 'uuid', visible: true, align: 'center', valign: 'middle'},
+            // {title: '', field: 'uuid', visible: true, align: 'center', valign: 'middle'},
             {title: '设备编号', field: 'cameraId', visible: true, align: 'center', valign: 'middle'},
             {title: '地址', field: 'address', visible: true, align: 'center', valign: 'middle'},
             {title: '状态', field: 'statusName', visible: true, align: 'center', valign: 'middle'}

@@ -16,12 +16,13 @@ ImageChange.initColumn = function () {
         {field: 'selectItem', radio: true},
             {title: '工号', field: 'userId', visible: true, align: 'center', valign: 'middle'},
             {title: '照片', field: 'imgName', visible: true, align: 'center', valign: 'middle'},
-            {title: '操作', field: 'actionType', visible: true, align: 'center', valign: 'middle'},
+            {title: '操作', field: 'actionName', visible: true, align: 'center', valign: 'middle'},
             {title: '创建时间', field: 'createTime', visible: true, align: 'center', valign: 'middle'},
-            {title: '发送状态', field: 'sendFlag', visible: true, align: 'center', valign: 'middle'},
-            {title: '返回状态', field: 'receiveFlag', visible: true, align: 'center', valign: 'middle'},
+            {title: '发送状态', field: 'sendName', visible: true, align: 'center', valign: 'middle'},
+            {title: '返回状态', field: 'receiveName', visible: true, align: 'center', valign: 'middle'},
             {title: '更新时间', field: 'updateTime', visible: true, align: 'center', valign: 'middle'},
-            {title: '引擎id', field: 'imageId', visible: true, align: 'center', valign: 'middle'}
+            {title: '引擎id', field: 'imageId', visible: true, align: 'center', valign: 'middle'},
+            {title: '同步结果', field: 'resultName', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 
