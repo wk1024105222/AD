@@ -36,7 +36,12 @@
 
                     <#input id="startOverTime" name="加班时间" underline="true"/>
 
-                    <#input id="sendEmailCycle" name="发送周期" underline="true"/>
+
+                    <#select id="sendEmailCycle" name="发送周期" underline="true">
+                        <option value="1">每天</option>
+                        <option value="2">每周一</option>
+                        <option value="3">每月一日</option>
+                    </#select>
 
                     <#input id="workDay" name="工作日" underline="true"/>
 
