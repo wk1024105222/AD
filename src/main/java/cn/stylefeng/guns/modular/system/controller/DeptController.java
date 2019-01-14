@@ -22,10 +22,12 @@ import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.system.model.Dept;
 import cn.stylefeng.guns.modular.system.service.IDeptService;
 import cn.stylefeng.guns.modular.system.warpper.DeptWarpper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.datascope.DataScope;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +119,9 @@ public class DeptController extends BaseController {
     @Permission
     @ResponseBody
     public Object list(String condition) {
-        List<Map<String, Object>> list = this.deptService.list(condition);
+        DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope());
+
+        List<Map<String, Object>> list = this.deptService.list(condition,ShiroKit.getUser().getDeptId());
         for (Map<String, Object> map : list) {
             for (Map.Entry<String, Object> entry : map.entrySet()) {
                 if (entry.getKey().equals("send_email_cycle")) {

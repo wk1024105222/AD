@@ -41,7 +41,8 @@ public interface DeptMapper extends BaseMapper<Dept> {
     /**
      * 获取所有部门列表
      */
-    List<Map<String, Object>> list(@Param("condition") String condition);
+    List<Map<String, Object>> list(@Param("condition") String condition,
+                                   @Param("deptId") Integer deptId);
 
     /**
      * 根据工号获取所属部门

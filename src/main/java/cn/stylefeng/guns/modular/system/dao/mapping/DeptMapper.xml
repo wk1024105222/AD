@@ -43,9 +43,12 @@
 	</select>
 
     <select id="list" resultType="map">
-        select * from sys_dept
+        select * from sys_dept where 1=1
         <if test="condition != null and condition != ''">
-            where simplename like CONCAT('%',#{condition},'%') or fullname like CONCAT('%',#{condition},'%')
+            and (simplename like CONCAT('%',#{condition},'%') or fullname like CONCAT('%',#{condition},'%'))
+        </if>
+        <if test="deptId != null and deptId != 0">
+            and (id = #{deptId} or id in ( select id from sys_dept where pids like CONCAT('%[', #{deptId}, ']%') ))
         </if>
         order by num ASC
     </select>

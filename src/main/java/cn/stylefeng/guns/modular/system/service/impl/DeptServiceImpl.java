@@ -19,6 +19,7 @@ import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.modular.system.dao.DeptMapper;
 import cn.stylefeng.guns.modular.system.model.Dept;
 import cn.stylefeng.guns.modular.system.service.IDeptService;
+import cn.stylefeng.roses.core.datascope.DataScope;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -62,8 +63,8 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements ID
     }
 
     @Override
-    public List<Map<String, Object>> list(String condition) {
-        return this.baseMapper.list(condition);
+    public List<Map<String, Object>> list(String condition, Integer deptId) {
+        return this.baseMapper.list(condition,deptId);
     }
 
     @Override
