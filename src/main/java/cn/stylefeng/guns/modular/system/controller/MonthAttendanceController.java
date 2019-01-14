@@ -1,6 +1,8 @@
 package cn.stylefeng.guns.modular.system.controller;
 
+import cn.stylefeng.guns.modular.system.model.MonthCount;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,6 +13,9 @@ import cn.stylefeng.guns.core.log.LogObjectHolder;
 import org.springframework.web.bind.annotation.RequestParam;
 import cn.stylefeng.guns.modular.system.model.MonthAttendance;
 import cn.stylefeng.guns.modular.system.service.IMonthAttendanceService;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 月度考勤表控制器
@@ -59,8 +64,24 @@ public class MonthAttendanceController extends BaseController {
      */
     @RequestMapping(value = "/list")
     @ResponseBody
-    public Object list(String condition) {
-        return monthAttendanceService.selectList(null);
+    public Object list(String user, String year,String month) {
+        EntityWrapper<MonthAttendance> wrapper = new EntityWrapper<MonthAttendance>();
+        wrapper.orderDesc(Collections.singleton("year"))
+                .orderDesc(Collections.singleton("month"))
+                .orderDesc(Collections.singleton("user_Id"));
+        wrapper.where("1=1");
+        if(user != null && !"".equalsIgnoreCase(user)) {
+            wrapper.where("(user_Id like '%" + user+"%' or user_name like '%"+user+"%')");
+        }
+        if(year != null && !"".equalsIgnoreCase(year) ) {
+            wrapper.eq("year",Integer.parseInt(year));
+        }
+        if(month != null && !"".equalsIgnoreCase(month)) {
+            wrapper.eq("month",Integer.parseInt(month));
+        }
+
+        List<MonthAttendance> records = monthAttendanceService.selectList(wrapper);
+        return records ;
     }
 
     /**

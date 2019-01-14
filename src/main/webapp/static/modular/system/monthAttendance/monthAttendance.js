@@ -155,7 +155,9 @@ MonthAttendance.delete = function () {
  */
 MonthAttendance.search = function () {
     var queryData = {};
-    queryData['condition'] = $("#condition").val();
+    queryData['user'] = $("#user").val();
+    queryData['year'] = $("#year").val();
+    queryData['month'] = $("#month").val();
     MonthAttendance.table.refresh({query: queryData});
 };
 

@@ -26,6 +26,7 @@ import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.shiro.ShiroUser;
+import cn.stylefeng.guns.core.util.PersonUtil;
 import cn.stylefeng.guns.modular.system.factory.UserFactory;
 import cn.stylefeng.guns.modular.system.model.User;
 import cn.stylefeng.guns.modular.system.service.IImageChangeService;
@@ -405,5 +406,53 @@ public class UserMgrController extends BaseController {
             throw new ServiceException(BizExceptionEnum.NO_PERMITION);
         }
 
+    }
+
+    /**
+     * 打开摄像头
+     */
+    @RequestMapping("/openCamera")
+    @ResponseBody
+    public String openCamera() {
+        String response = PersonUtil.sendMsg("2|");
+        if (response != null && !response.equals("")) {
+            String[] arr = response.split("\\|");
+            if (arr.length==2) {
+                if (arr[1].equals("1")) {
+                    return "1";
+                } else {
+                    return "0";
+                }
+            } else {
+                return "0";
+            }
+        }
+        return "0";
+    }
+
+    /**
+     * 打开摄像头
+     */
+    @RequestMapping("/takePhoto")
+    @ResponseBody
+    public String takePhoto() {
+        String response = PersonUtil.sendMsg("3|");
+        if (response != null && !response.equals("")) {
+            String[] arr = response.split("\\|");
+            if (arr.length==2) {
+                String pictureName = UUID.randomUUID().toString() + "." + "jpg";
+                String path = gunsProperties.getFileUploadPath() + pictureName;
+                File file = new File(arr[1]);
+
+                if (file.renameTo(new File(path))) {
+                    return pictureName;
+                } else {
+                    return "0";
+                }
+            } else {
+                return "0";
+            }
+        }
+        return "0";
     }
 }

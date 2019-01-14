@@ -4,10 +4,14 @@ import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.core.util.PersonUtil;
 import cn.stylefeng.guns.modular.system.model.AttendanceRecord;
 import cn.stylefeng.guns.modular.system.service.IAttendanceService;
+import cn.stylefeng.guns.modular.system.service.IDeptService;
+import cn.stylefeng.guns.modular.system.service.IMonthAttendanceService;
+import cn.stylefeng.guns.modular.system.service.IMonthCountService;
 import cn.stylefeng.guns.modular.system.warpper.AttendanceWarpper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 /**
  * 出入记录控制器
@@ -34,6 +38,17 @@ public class AttendanceController extends BaseController {
 
     @Autowired
     private IAttendanceService attendanceRecordService;
+
+    @Autowired
+    private IMonthAttendanceService monthAttendanceService;
+//
+    @Autowired
+    private JavaMailSender mailSender;
+    @Autowired
+    private IDeptService deptService;
+    @Autowired
+    private IMonthCountService monthCountService;
+
 
     /**
      * 跳转到出入记录首页
@@ -67,13 +82,21 @@ public class AttendanceController extends BaseController {
      */
     @RequestMapping(value = "/list")
     @ResponseBody
-    public Object list(String condition) {
-//        return attendanceRecordService.selectList(null);
+    public Object list(String user, String date) {
+
         EntityWrapper<AttendanceRecord> wrapper = new EntityWrapper<AttendanceRecord>();
-        wrapper.orderDesc(Collections.singleton("attendance_Time"));
-        if(condition != null && !"".equalsIgnoreCase(condition)) {
-            wrapper.where("user_Id like '%" + condition+"%' or user_name like '%"+condition+"%'");
+
+
+        wrapper.where("1=1");
+        if(user != null && !"".equalsIgnoreCase(user)) {
+            wrapper.where("(user_Id like '%" + user+"%' or user_name like '%"+user+"%')");
         }
+        if(date != null && !"".equalsIgnoreCase(date) ) {
+            wrapper.like("attendance_Time",date+"%");
+        }
+
+        wrapper.orderDesc(Collections.singleton("attendance_Time"));
+
 
         List<AttendanceRecord> records = attendanceRecordService.selectList(wrapper);
         List<Map<String, Object>> mapRecords = new ArrayList<Map<String, Object>>(records.size());
@@ -82,7 +105,6 @@ public class AttendanceController extends BaseController {
         }
 
         List<Map<String, Object>> result = new AttendanceWarpper(mapRecords).wrap();
-        //return new UserWarpper(cameras).wrap();
         return result ;
     }
 
@@ -123,5 +145,29 @@ public class AttendanceController extends BaseController {
     @ResponseBody
     public Object detail(@PathVariable("attendanceRecordId") Integer attendanceRecordId) {
         return attendanceRecordService.selectById(attendanceRecordId);
+    }
+
+    @RequestMapping(value = "/byhand/{date}")
+    @ResponseBody
+    public String byhand(@PathVariable("date") String date) {
+        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate yesterday = LocalDate.parse(date,dtf1);
+
+        //更新指定日期的考勤记录备注
+        int markRlt = attendanceRecordService.markAttendanceRecord(yesterday);
+
+        //统计指定日期的月度考勤表
+        int statisticsRlt = attendanceRecordService.statisticsOneDayAttendRecords(yesterday);
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM");
+
+        String yearMonth = yesterday.format(dtf);
+
+        //统计月度统计表
+        monthCountService.deleteMonthCountByDate(yearMonth);
+        int insertNum = monthCountService.insertNewMonthCountByDate(yearMonth);
+
+        return "ok"+new Date();
     }
 }

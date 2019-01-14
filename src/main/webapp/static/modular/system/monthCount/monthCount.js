@@ -94,7 +94,8 @@ MonthCount.delete = function () {
  */
 MonthCount.search = function () {
     var queryData = {};
-    queryData['condition'] = $("#condition").val();
+    queryData['user'] = $("#user").val();
+    queryData['month'] = $("#month").val();
     MonthCount.table.refresh({query: queryData});
 };
 

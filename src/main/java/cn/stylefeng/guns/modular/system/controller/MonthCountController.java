@@ -1,6 +1,10 @@
 package cn.stylefeng.guns.modular.system.controller;
 
+import cn.stylefeng.guns.core.util.PersonUtil;
+import cn.stylefeng.guns.modular.system.model.AttendanceRecord;
+import cn.stylefeng.guns.modular.system.warpper.AttendanceWarpper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,6 +15,11 @@ import cn.stylefeng.guns.core.log.LogObjectHolder;
 import org.springframework.web.bind.annotation.RequestParam;
 import cn.stylefeng.guns.modular.system.model.MonthCount;
 import cn.stylefeng.guns.modular.system.service.IMonthCountService;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 月度统计表控制器
@@ -59,8 +68,22 @@ public class MonthCountController extends BaseController {
      */
     @RequestMapping(value = "/list")
     @ResponseBody
-    public Object list(String condition) {
-        return monthCountService.selectList(null);
+    public Object list(String user, String month) {
+
+        EntityWrapper<MonthCount> wrapper = new EntityWrapper<MonthCount>();
+        wrapper.where("1=1");
+        if(user != null && !"".equalsIgnoreCase(user)) {
+            wrapper.where("(user_Id like '%" + user+"%' or user_name like '%"+user+"%')");
+        }
+        if(month != null && !"".equalsIgnoreCase(month)) {
+            wrapper.eq("month",month);
+        }
+        wrapper.orderDesc(Collections.singleton("month")).orderDesc(Collections.singleton("user_Id"));
+
+        List<MonthCount> records = monthCountService.selectList(wrapper);
+        return records ;
+
+//        return monthCountService.selectList(null);
     }
 
     /**

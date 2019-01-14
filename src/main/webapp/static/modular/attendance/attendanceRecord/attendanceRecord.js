@@ -94,7 +94,8 @@ AttendanceRecord.delete = function () {
  */
 AttendanceRecord.search = function () {
     var queryData = {};
-    queryData['condition'] = $("#condition").val();
+    queryData['user'] = $("#user").val();
+    queryData['date'] = $("#date").val();
     AttendanceRecord.table.refresh({query: queryData});
 };
 
