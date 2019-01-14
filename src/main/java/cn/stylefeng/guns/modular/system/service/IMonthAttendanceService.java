@@ -20,4 +20,6 @@ public interface IMonthAttendanceService extends IService<MonthAttendance> {
     List<MonthAttendance> getMonthAttendanceByYearMonthDeptId(Integer year, Integer month, Integer id);
 
     boolean exportMonthAttendanceReportXls(List<MonthAttendance> ads, String fileName);
+
+    List<MonthAttendance> list(String user, Integer year, Integer month, Integer deptId);
 }

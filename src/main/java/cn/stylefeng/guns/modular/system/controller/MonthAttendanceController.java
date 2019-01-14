@@ -1,7 +1,9 @@
 package cn.stylefeng.guns.modular.system.controller;
 
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.system.model.MonthCount;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.datascope.DataScope;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,23 +67,13 @@ public class MonthAttendanceController extends BaseController {
     @RequestMapping(value = "/list")
     @ResponseBody
     public Object list(String user, String year,String month) {
-        EntityWrapper<MonthAttendance> wrapper = new EntityWrapper<MonthAttendance>();
-        wrapper.orderDesc(Collections.singleton("year"))
-                .orderDesc(Collections.singleton("month"))
-                .orderDesc(Collections.singleton("user_Id"));
-        wrapper.where("1=1");
-        if(user != null && !"".equalsIgnoreCase(user)) {
-            wrapper.where("(user_Id like '%" + user+"%' or user_name like '%"+user+"%')");
-        }
-        if(year != null && !"".equalsIgnoreCase(year) ) {
-            wrapper.eq("year",Integer.parseInt(year));
-        }
-        if(month != null && !"".equalsIgnoreCase(month)) {
-            wrapper.eq("month",Integer.parseInt(month));
-        }
 
-        List<MonthAttendance> records = monthAttendanceService.selectList(wrapper);
-        return records ;
+        Integer deptId = ShiroKit.getUser().getDeptId();
+
+        return monthAttendanceService.list(user,
+                                            year==null?null:Integer.parseInt(year),
+                                            month==null?null:Integer.parseInt(month),
+                                            deptId);
     }
 
     /**

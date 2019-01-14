@@ -168,4 +168,9 @@ public class MonthAttendanceServiceImpl extends ServiceImpl<MonthAttendanceMappe
         }
         return result;
     }
+
+    @Override
+    public List<MonthAttendance> list(String user, Integer year, Integer month, Integer deptId) {
+        return this.baseMapper.list(user,year,month,deptId);
+    }
 }

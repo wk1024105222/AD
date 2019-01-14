@@ -23,4 +23,9 @@ public interface MonthAttendanceMapper extends BaseMapper<MonthAttendance> {
     List<MonthAttendance> getMonthAttendanceByYearMonthDeptId(@Param("year") Integer year,
                                                               @Param("month") Integer month,
                                                              @Param("deptId") Integer deptId);
+
+    List<MonthAttendance> list(@Param("user") String user,
+                               @Param("year") Integer year,
+                               @Param("month") Integer month,
+                               @Param("deptId") Integer deptId);
 }

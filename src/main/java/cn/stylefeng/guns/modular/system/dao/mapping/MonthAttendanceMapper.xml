@@ -110,6 +110,65 @@
         and (sd.pids like CONCAT('%[',#{deptId},']%') or sd.id= #{deptId})
     </select>
 
+    <select id="list" resultType="cn.stylefeng.guns.modular.system.model.MonthAttendance">
+        select
+            uma.id,
+            uma.year,
+            uma.month,
+            uma.days,
+            uma.user_Id,
+            uma.user_Name,
+            uma.company,
+            uma.department,
+            uma.team,
+            uma.day1,
+            uma.day2,
+            uma.day3,
+            uma.day4,
+            uma.day5,
+            uma.day6,
+            uma.day7,
+            uma.day8,
+            uma.day9,
+            uma.day10,
+            uma.day11,
+            uma.day12,
+            uma.day13,
+            uma.day14,
+            uma.day15,
+            uma.day16,
+            uma.day17,
+            uma.day18,
+            uma.day19,
+            uma.day20,
+            uma.day21,
+            uma.day22,
+            uma.day23,
+            uma.day24,
+            uma.day25,
+            uma.day26,
+            uma.day27,
+            uma.day28,
+            uma.day29,
+            uma.day30,
+            uma.day31
+        from user_month_attendance uma
+        left join sys_user su on uma.user_Id=su.account
+        where 1=1
+        <if test="user != null and user != ''">
+            and (su.user_Id like CONCAT('%',#{user},'%') or su.user_name like CONCAT('%',#{user},'%'))
+        </if>
+        <if test="year != null and year != 0">
+            and uma.year = #{year}
+        </if>
+        <if test="month != null and month != 0">
+            and uma.month = #{month}
+        </if>
+        <if test="deptId != null and deptId != 0">
+            and (su.deptid = #{deptId} or su.deptid in ( select id from sys_dept where pids like CONCAT('%[', #{deptId}, ']%') ))
+        </if>
+    </select>
+
     <!--getMonthAttendanceByYearMonth-->
 
 
