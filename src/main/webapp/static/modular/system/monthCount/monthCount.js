@@ -14,15 +14,16 @@ var MonthCount = {
 MonthCount.initColumn = function () {
     return [
         {field: 'selectItem', radio: true},
-            {title: '月份', field: 'month', visible: true, align: 'center', valign: 'middle'},
-            {title: '类型', field: 'type', visible: true, align: 'center', valign: 'middle'},
-            {title: '工号', field: 'userId', visible: true, align: 'center', valign: 'middle'},
-            {title: '姓名', field: 'userName', visible: true, align: 'center', valign: 'middle'},
-            {title: '公司', field: 'company', visible: true, align: 'center', valign: 'middle'},
-            {title: '部门', field: 'department', visible: true, align: 'center', valign: 'middle'},
-            {title: '组', field: 'team', visible: true, align: 'center', valign: 'middle'},
-            {title: '次数', field: 'times', visible: true, align: 'center', valign: 'middle'},
-            {title: '日期', field: 'dates', visible: true, align: 'center', valign: 'middle'}
+            {title: '月份', field: 'month', visible: true, align: 'center', valign: 'middle',width:80},
+            {title: '类型', field: 'type', visible: true, align: 'center', valign: 'middle',width:120},
+            {title: '工号', field: 'userId', visible: true, align: 'center', valign: 'middle',width:100},
+            {title: '姓名', field: 'userName', visible: true, align: 'center', valign: 'middle',width:100},
+            {title: '公司', field: 'company', visible: true, align: 'center', valign: 'middle',width:160},
+            {title: '部门', field: 'department', visible: true, align: 'center', valign: 'middle',width:120},
+            {title: '组', field: 'team', visible: true, align: 'center', valign: 'middle',width:100},
+            {title: '次数', field: 'times', visible: true, align: 'center', valign: 'middle',width:60},
+            {title: '日期', field: 'dates', visible: true, align: 'center', valign: 'middle',
+                cellStyle:{css:{"word-break": "normal","word-wrap":"break-word","white-space":"pre-wrap"}	}}
     ];
 };
 

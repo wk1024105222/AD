@@ -23,7 +23,7 @@ AttendanceRecord.initColumn = function () {
             {title: '公司', field: 'company', visible: true, align: 'center', valign: 'middle'},
             {title: '部门', field: 'department', visible: true, align: 'center', valign: 'middle'},
             {title: '组', field: 'team', visible: true, align: 'center', valign: 'middle'},
-            {title: '备注', field: 'note', visible: true, align: 'center', valign: 'middle'}
+            {title: '备注', field: 'note', visible: true, align: 'center', valign: 'middle',width:300}
     ];
 };
 
