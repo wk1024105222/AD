@@ -84,7 +84,11 @@ public enum BizExceptionEnum implements AbstractBaseExceptionEnum {
     /**
      * 其他
      */
-    AUTH_REQUEST_ERROR(400, "账号密码错误");
+    AUTH_REQUEST_ERROR(400, "账号密码错误"),
+
+    ADD_IMAGE_ERROR(400, "新增人脸照片异常"),
+
+    CHANGE_IMAGE_ERROR(400, "变更人脸照片异常");
 
     BizExceptionEnum(int code, String message) {
         this.code = code;

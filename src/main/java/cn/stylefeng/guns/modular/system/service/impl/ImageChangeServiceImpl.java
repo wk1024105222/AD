@@ -33,7 +33,8 @@ public class ImageChangeServiceImpl extends ServiceImpl<ImageChangeMapper, Image
     private IUserService userService;
 
     @Override
-    public void changeImage(ImageChange imgChange) {
+    public Boolean changeImage(ImageChange imgChange) {
+        Boolean result = true;
         String action = imgChange.getActionType();
         StringBuffer reqMsg = new StringBuffer().append(imgChange.getActionType()).append("|");
 
@@ -58,49 +59,60 @@ public class ImageChangeServiceImpl extends ServiceImpl<ImageChangeMapper, Image
                     //新增成功
                     imgChange.setImageId(resArray[3]);
                     userService.updateImgId(imgChange.getUserId(), resArray[3]);
+                } else {
+                    result = false;
                 }
             } else {
                 //删除结果
                 imgChange.setChangeResult(resArray[2]);
                 userService.updateImgId(imgChange.getUserId(), null);
             }
+        } else {
+            result = false;
         }
         imgChange.setUpdateTime(new Date());
         this.insert(imgChange);
+        return result;
     }
 
     @Override
-    public int addImage(UserDto user) {
+    public Boolean addImage(UserDto user) {
         //添加新增操作影像同步记录
         String path = gunsProperties.getFileUploadPath() + user.getAvatar();
         ImageChange img = new ImageChange(path,"1",user.getAccount(),new Date(),"0",null,null,null);
 //        this.insert(img);
-        this.changeImage(img);
+        Boolean result = this.changeImage(img);
 
-        return 1;
+        return result;
     }
 
     @Override
-    public int deleteImage(Integer userId) {
+    public Boolean deleteImage(Integer userId) {
         User user = userService.selectById(userId);
         ImageChange deleteImg = new ImageChange(gunsProperties.getFileUploadPath() + user.getAvatar(),
                 "0",user.getAccount(),new Date(),"0",null,null,user.getImgid());
 
-        this.changeImage(deleteImg);
-        return 1;
+        Boolean result = this.changeImage(deleteImg);
+        return result;
     }
 
     @Override
-    public int updateImage(User oldUser, UserDto user) {
+    public Boolean updateImage(User oldUser, UserDto user) {
+        Boolean result = true;
         ImageChange deleteImg = new ImageChange(gunsProperties.getFileUploadPath() + oldUser.getAvatar(),
                 "0",user.getAccount(),new Date(),"0",null,null,oldUser.getImgid());
-        this.changeImage(deleteImg);
-        ImageChange addImg = new ImageChange(gunsProperties.getFileUploadPath() + user.getAvatar(),
-                "1",user.getAccount(),new Date(),"0",null,null,null);
-        this.changeImage(addImg);
-        oldUser.setImgid(addImg.getImageId());
-
-        return 1;
+        if (this.changeImage(deleteImg)) {
+            ImageChange addImg = new ImageChange(gunsProperties.getFileUploadPath() + user.getAvatar(),
+                    "1", user.getAccount(), new Date(), "0", null, null, null);
+            if (this.changeImage(addImg)) {
+                oldUser.setImgid(addImg.getImageId());
+            } else {
+                result = false;
+            }
+        } else {
+            result = false;
+        }
+        return false;
     }
 
     @Override

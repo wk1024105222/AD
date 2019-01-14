@@ -208,18 +208,17 @@ public class UserMgrController extends BaseController {
         }
 
         // 完善账号信息
-//        String md5 = PersonUtil.getMD5(new File(path));
-//        user.setImgmd5(md5);
         user.setSalt(ShiroKit.getRandomSalt(5));
         user.setPassword(ShiroKit.md5(user.getPassword(), user.getSalt()));
         user.setStatus(ManagerStatus.OK.getCode());
         user.setCreatetime(new Date());
 
-        this.userService.insert(UserFactory.createUser(user));
-
-        this.imageChangeService.addImage(user);
-
-        return SUCCESS_TIP;
+        if (this.imageChangeService.addImage(user)) {
+            this.userService.insert(UserFactory.createUser(user));
+            return SUCCESS_TIP;
+        } else {
+            throw new ServiceException(BizExceptionEnum.ADD_IMAGE_ERROR);
+        }
     }
 
     /**
@@ -241,7 +240,9 @@ public class UserMgrController extends BaseController {
 
             //添加修改操作影像同步记录
             if(!user.getAvatar().equals(oldUser.getAvatar())) {
-                this.imageChangeService.updateImage(oldUser, user);
+                if(!this.imageChangeService.updateImage(oldUser, user)) {
+                    throw new ServiceException(BizExceptionEnum.CHANGE_IMAGE_ERROR);
+                }
             }
             this.userService.updateById(UserFactory.editUser(user, oldUser));
             return SUCCESS_TIP;
@@ -251,8 +252,9 @@ public class UserMgrController extends BaseController {
             if (shiroUser.getId().equals(user.getId())) {
 
                 if(!user.getAvatar().equals(oldUser.getAvatar())) {
-                    //添加修改操作影像同步记录
-                    this.imageChangeService.updateImage(oldUser, user);
+                    if(!this.imageChangeService.updateImage(oldUser, user)) {
+                        throw new ServiceException(BizExceptionEnum.CHANGE_IMAGE_ERROR);
+                    }
                 }
                 this.userService.updateById(UserFactory.editUser(user, oldUser));
                 return SUCCESS_TIP;

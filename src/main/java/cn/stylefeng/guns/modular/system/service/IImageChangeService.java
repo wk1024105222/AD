@@ -17,13 +17,13 @@ import java.util.List;
  */
 public interface IImageChangeService extends IService<ImageChange> {
 
-    int addImage(UserDto user);
+    Boolean addImage(UserDto user);
 
-    int deleteImage(Integer userId);
+    Boolean deleteImage(Integer userId);
 
-    int updateImage(User oldUser, UserDto user);
+    Boolean updateImage(User oldUser, UserDto user);
 
     List<ImageChange> getErrorImageChanges();
 
-    void changeImage(ImageChange imgChange) ;
+    Boolean changeImage(ImageChange imgChange) ;
 }
