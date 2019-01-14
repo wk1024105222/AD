@@ -439,7 +439,7 @@ public class UserMgrController extends BaseController {
         String response = PersonUtil.sendMsg("3|");
         if (response != null && !response.equals("")) {
             String[] arr = response.split("\\|");
-            if (arr.length==2) {
+            if (arr.length==3) {
                 String pictureName = UUID.randomUUID().toString() + "." + "jpg";
                 String path = gunsProperties.getFileUploadPath() + pictureName;
                 File file = new File(arr[1]);

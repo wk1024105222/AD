@@ -98,6 +98,7 @@ public class ImageChangeServiceImpl extends ServiceImpl<ImageChangeMapper, Image
         ImageChange addImg = new ImageChange(gunsProperties.getFileUploadPath() + user.getAvatar(),
                 "1",user.getAccount(),new Date(),"0",null,null,null);
         this.changeImage(addImg);
+        oldUser.setImgid(addImg.getImageId());
 
         return 1;
     }

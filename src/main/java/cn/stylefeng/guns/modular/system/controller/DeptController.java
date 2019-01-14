@@ -118,6 +118,20 @@ public class DeptController extends BaseController {
     @ResponseBody
     public Object list(String condition) {
         List<Map<String, Object>> list = this.deptService.list(condition);
+        for (Map<String, Object> map : list) {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                if (entry.getKey().equals("send_email_cycle")) {
+                    String type = (String)entry.getValue();
+                    if (type.equals("1")) {
+                        map.put("send_email_cycle","每天");
+                    } else if (type.equals("2")) {
+                        map.put("send_email_cycle","每周一");
+                    } else {
+                        map.put("send_email_cycle","每月一日");
+                    }
+                }
+            }
+        }
         return super.warpObject(new DeptWarpper(list));
     }
 
