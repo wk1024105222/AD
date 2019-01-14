@@ -20,4 +20,8 @@ public interface MonthCountMapper extends BaseMapper<MonthCount> {
     void deleteMonthCountByDate(@Param("date") String date);
 
     List<Map<String,Object>> getMonthCountByDate(@Param("date") String date);
+
+    List<MonthCount> list(@Param("user") String user,
+                          @Param("month")  String month,
+                          @Param("deptId")  Integer deptId);
 }

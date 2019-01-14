@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.system.controller;
 
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.PersonUtil;
 import cn.stylefeng.guns.modular.system.model.AttendanceRecord;
 import cn.stylefeng.guns.modular.system.warpper.AttendanceWarpper;
@@ -70,20 +71,24 @@ public class MonthCountController extends BaseController {
     @ResponseBody
     public Object list(String user, String month) {
 
-        EntityWrapper<MonthCount> wrapper = new EntityWrapper<MonthCount>();
-        wrapper.where("1=1");
-        if(user != null && !"".equalsIgnoreCase(user)) {
-            wrapper.where("(user_Id like '%" + user+"%' or user_name like '%"+user+"%')");
-        }
-        if(month != null && !"".equalsIgnoreCase(month)) {
-            wrapper.eq("month",month);
-        }
-        wrapper.orderDesc(Collections.singleton("month")).orderDesc(Collections.singleton("user_Id"));
+        Integer deptId = ShiroKit.getUser().getDeptId();
 
-        List<MonthCount> records = monthCountService.selectList(wrapper);
-        return records ;
+//        EntityWrapper<MonthCount> wrapper = new EntityWrapper<MonthCount>();
+//        wrapper.where("1=1");
+//        if(user != null && !"".equalsIgnoreCase(user)) {
+//            wrapper.where("(user_Id like '%" + user+"%' or user_name like '%"+user+"%')");
+//        }
+//        if(month != null && !"".equalsIgnoreCase(month)) {
+//            wrapper.eq("month",month);
+//        }
+//        wrapper.orderDesc(Collections.singleton("month")).orderDesc(Collections.singleton("user_Id"));
+//
+//        List<MonthCount> records = monthCountService.selectList(wrapper);
+//        return records ;
 
-//        return monthCountService.selectList(null);
+        List<MonthCount> records = monthCountService.list(user,month,deptId);
+
+        return records;
     }
 
     /**

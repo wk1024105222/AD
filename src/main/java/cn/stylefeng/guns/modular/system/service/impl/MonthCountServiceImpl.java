@@ -94,4 +94,9 @@ public class MonthCountServiceImpl extends ServiceImpl<MonthCountMapper, MonthCo
 
         return maps.size();
     }
+
+    @Override
+    public List<MonthCount> list(String user, String month, Integer deptId) {
+        return this.baseMapper.list(user,month,deptId);
+    }
 }
