@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.system.controller;
 
 import cn.stylefeng.guns.core.log.LogObjectHolder;
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.PersonUtil;
 import cn.stylefeng.guns.modular.system.model.AttendanceRecord;
 import cn.stylefeng.guns.modular.system.service.IAttendanceService;
@@ -9,6 +10,7 @@ import cn.stylefeng.guns.modular.system.service.IMonthAttendanceService;
 import cn.stylefeng.guns.modular.system.service.IMonthCountService;
 import cn.stylefeng.guns.modular.system.warpper.AttendanceWarpper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.datascope.DataScope;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -83,29 +85,18 @@ public class AttendanceController extends BaseController {
     @RequestMapping(value = "/list")
     @ResponseBody
     public Object list(String user, String date) {
+        Integer deptId = ShiroKit.getUser().getDeptId();
 
-        EntityWrapper<AttendanceRecord> wrapper = new EntityWrapper<AttendanceRecord>();
+        List<AttendanceRecord> records = attendanceRecordService.getList(user, date, deptId);
 
-
-        wrapper.where("1=1");
-        if(user != null && !"".equalsIgnoreCase(user)) {
-            wrapper.where("(user_Id like '%" + user+"%' or user_name like '%"+user+"%')");
-        }
-        if(date != null && !"".equalsIgnoreCase(date) ) {
-            wrapper.like("attendance_Time",date+"%");
-        }
-
-        wrapper.orderDesc(Collections.singleton("attendance_Time"));
-
-
-        List<AttendanceRecord> records = attendanceRecordService.selectList(wrapper);
         List<Map<String, Object>> mapRecords = new ArrayList<Map<String, Object>>(records.size());
         for (AttendanceRecord a : records) {
             mapRecords.add(PersonUtil.beanToMap(a));
         }
 
         List<Map<String, Object>> result = new AttendanceWarpper(mapRecords).wrap();
-        return result ;
+        return result;
+
     }
 
     /**

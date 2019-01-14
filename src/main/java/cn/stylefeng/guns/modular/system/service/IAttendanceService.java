@@ -28,4 +28,6 @@ public interface IAttendanceService extends IService<AttendanceRecord> {
     List<AttendanceRecord> getLackDeptInfoAttendanceRecord();
 
     int fillAttendRecordDeptInfo();
+
+    List<AttendanceRecord> getList(String user, String date, Integer deptId);
 }

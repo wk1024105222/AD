@@ -119,8 +119,6 @@ public class DeptController extends BaseController {
     @Permission
     @ResponseBody
     public Object list(String condition) {
-        DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope());
-
         List<Map<String, Object>> list = this.deptService.list(condition,ShiroKit.getUser().getDeptId());
         for (Map<String, Object> map : list) {
             for (Map.Entry<String, Object> entry : map.entrySet()) {

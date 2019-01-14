@@ -513,6 +513,11 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
         return adrs.size();
     }
 
+    @Override
+    public List<AttendanceRecord> getList(String user, String date, Integer deptId) {
+        return this.baseMapper.getList(user, date, deptId) ;
+    }
+
     private void markEnterAndLeave(OneLeaveOneEnter o, Dept dept, String startWorkId) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
