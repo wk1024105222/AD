@@ -213,10 +213,14 @@ public class UserMgrController extends BaseController {
         user.setStatus(ManagerStatus.OK.getCode());
         user.setCreatetime(new Date());
 
-        if (this.imageChangeService.addImage(user)) {
-            this.userService.insert(UserFactory.createUser(user));
+        User sysuser = UserFactory.createUser(user);
+
+
+        if (this.imageChangeService.addImage(sysuser)) {
+            this.userService.insert(sysuser);
             return SUCCESS_TIP;
         } else {
+            this.userService.deleteById(UserFactory.createUser(user));
             throw new ServiceException(BizExceptionEnum.ADD_IMAGE_ERROR);
         }
     }
@@ -280,11 +284,13 @@ public class UserMgrController extends BaseController {
             throw new ServiceException(BizExceptionEnum.CANT_DELETE_ADMIN);
         }
         assertAuth(userId);
-        this.userService.setStatus(userId, ManagerStatus.DELETED.getCode());
-        //添加删除操作影像同步记录
-        this.imageChangeService.deleteImage(userId);
 
-        return SUCCESS_TIP;
+        if(this.imageChangeService.deleteImage(userId)) {
+            this.userService.setStatus(userId, ManagerStatus.DELETED.getCode());
+            return SUCCESS_TIP;
+        } else {
+            throw new ServiceException(BizExceptionEnum.DELETE_IMAGE_ERROR);
+        }
     }
 
     /**

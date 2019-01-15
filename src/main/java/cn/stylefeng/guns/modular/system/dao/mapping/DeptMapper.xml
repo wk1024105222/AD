@@ -40,6 +40,9 @@
 		'false'
 		END
 		) as isOpen from sys_dept
+        <if test="deptId != null and deptId != 0">
+           where (id = #{deptId} or id in ( select id from sys_dept where pids like CONCAT('%[', #{deptId}, ']%') ))
+        </if>
 	</select>
 
     <select id="list" resultType="map">

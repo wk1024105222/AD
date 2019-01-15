@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface IImageChangeService extends IService<ImageChange> {
 
-    Boolean addImage(UserDto user);
+    Boolean addImage(User user);
 
     Boolean deleteImage(Integer userId);
 

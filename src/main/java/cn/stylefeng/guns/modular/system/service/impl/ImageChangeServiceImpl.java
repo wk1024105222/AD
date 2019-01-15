@@ -64,8 +64,14 @@ public class ImageChangeServiceImpl extends ServiceImpl<ImageChangeMapper, Image
                 }
             } else {
                 //删除结果
-                imgChange.setChangeResult(resArray[2]);
-                userService.updateImgId(imgChange.getUserId(), null);
+                if(resArray[2].equals("1")) {
+                    imgChange.setChangeResult(resArray[2]);
+                    userService.updateImgId(imgChange.getUserId(), null);
+                } else {
+                    imgChange.setChangeResult(resArray[2]);
+                    result = false;
+                }
+
             }
         } else {
             result = false;
@@ -76,12 +82,13 @@ public class ImageChangeServiceImpl extends ServiceImpl<ImageChangeMapper, Image
     }
 
     @Override
-    public Boolean addImage(UserDto user) {
+    public Boolean addImage(User user) {
         //添加新增操作影像同步记录
         String path = gunsProperties.getFileUploadPath() + user.getAvatar();
         ImageChange img = new ImageChange(path,"1",user.getAccount(),new Date(),"0",null,null,null);
 //        this.insert(img);
         Boolean result = this.changeImage(img);
+        user.setImgid(img.getImageId());
 
         return result;
     }
@@ -112,7 +119,7 @@ public class ImageChangeServiceImpl extends ServiceImpl<ImageChangeMapper, Image
         } else {
             result = false;
         }
-        return false;
+        return result;
     }
 
     @Override

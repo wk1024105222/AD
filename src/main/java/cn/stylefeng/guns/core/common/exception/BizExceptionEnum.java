@@ -88,7 +88,9 @@ public enum BizExceptionEnum implements AbstractBaseExceptionEnum {
 
     ADD_IMAGE_ERROR(400, "新增人脸照片异常"),
 
-    CHANGE_IMAGE_ERROR(400, "变更人脸照片异常");
+    CHANGE_IMAGE_ERROR(400, "变更人脸照片异常"),
+
+    DELETE_IMAGE_ERROR(400, "删除人脸照片异常");
 
     BizExceptionEnum(int code, String message) {
         this.code = code;

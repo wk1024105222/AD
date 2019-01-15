@@ -23,6 +23,7 @@ import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
+import cn.stylefeng.guns.core.shiro.ShiroUser;
 import cn.stylefeng.guns.modular.system.model.Dept;
 import cn.stylefeng.guns.modular.system.service.IDeptService;
 import cn.stylefeng.guns.modular.system.warpper.DeptWarpper;
@@ -91,8 +92,12 @@ public class DeptController extends BaseController {
     @RequestMapping(value = "/tree")
     @ResponseBody
     public List<ZTreeNode> tree() {
-        List<ZTreeNode> tree = this.deptService.tree();
-        tree.add(ZTreeNode.createParent());
+        ShiroUser user = ShiroKit.getUser();
+        Integer deptid = user.getDeptId();
+        List<ZTreeNode> tree = this.deptService.tree(deptid);
+        if (user.getDeptId()==0) {
+            tree.add(ZTreeNode.createParent());
+        }
         return tree;
     }
 
