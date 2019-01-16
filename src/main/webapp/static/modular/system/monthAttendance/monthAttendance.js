@@ -17,7 +17,7 @@ MonthAttendance.initColumn = function () {
         //     {title: '', field: 'uuid', visible: true, align: 'center', valign: 'middle'},
         {title: '年份', field: 'year', visible: true, align: 'center', valign: 'middle',width:50},
         {title: '月份', field: 'month', visible: true, align: 'center', valign: 'middle',width:50},
-        {title: '天数', field: 'days', visible: true, align: 'center', valign: 'middle',width:50},
+        // {title: '天数', field: 'days', visible: true, align: 'center', valign: 'middle',width:50},
         {title: '工号', field: 'userId', visible: true, align: 'center', valign: 'middle',width:100},
         {title: '姓名', field: 'userName', visible: true, align: 'center', valign: 'middle',width:100},
         {title: '公司', field: 'company', visible: true, align: 'center', valign: 'middle',width:160},
