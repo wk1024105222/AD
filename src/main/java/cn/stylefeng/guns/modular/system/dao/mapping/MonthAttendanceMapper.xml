@@ -156,7 +156,7 @@
         left join sys_user su on uma.user_Id=su.account
         where 1=1
         <if test="user != null and user != ''">
-            and (su.user_Id like CONCAT('%',#{user},'%') or su.user_name like CONCAT('%',#{user},'%'))
+            and (su.account like CONCAT('%',#{user},'%') or su.name like CONCAT('%',#{user},'%'))
         </if>
         <if test="year != null and year != 0">
             and uma.year = #{year}

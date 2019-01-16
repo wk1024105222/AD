@@ -9,13 +9,28 @@
                 <div class="row row-lg">
                     <div class="col-sm-12">
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <#NameCon id="user" name="用户名称" placeholder="工号/姓名"/>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <#NameCon id="month" name="月份" placeholder="YYYY-MM"/>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
+                                <#SelectCon id="typeFlag" name="类型" >
+                                    <option value="">全部</option>
+                                    <option value="1">全天旷工</option>
+                                    <option value="2">上午旷工</option>
+                                    <option value="3">下午旷工</option>
+                                    <option value="4">上班迟到</option>
+                                    <option value="5">午休迟到</option>
+                                    <option value="6">下班早退</option>
+                                    <option value="7">缺少下班记录</option>
+                                    <option value="8">提前就餐</option>
+                                    <option value="9">休息有进出记录</option>
+                                    <option value="10">加班</option>
+                                </#SelectCon>
+                            </div>
+                            <div class="col-sm-2">
                                 <#button name="搜索" icon="fa-search" clickFun="MonthCount.search()"/>
                             </div>
                         </div>

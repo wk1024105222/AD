@@ -23,5 +23,6 @@ public interface MonthCountMapper extends BaseMapper<MonthCount> {
 
     List<MonthCount> list(@Param("user") String user,
                           @Param("month")  String month,
+                          @Param("type")  String type,
                           @Param("deptId")  Integer deptId);
 }

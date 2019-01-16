@@ -71,8 +71,8 @@ public class MonthAttendanceController extends BaseController {
         Integer deptId = ShiroKit.getUser().getDeptId();
 
         return monthAttendanceService.list(user,
-                                            year==null?null:Integer.parseInt(year),
-                                            month==null?null:Integer.parseInt(month),
+                                            year==null||year.equals("")?null:Integer.parseInt(year),
+                                            month==null||month.equals("")?null:Integer.parseInt(month),
                                             deptId);
     }
 
