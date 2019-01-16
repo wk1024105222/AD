@@ -48,6 +48,7 @@
         <if test="deptId != null and deptId != 0">
             and (su.deptid = #{deptId} or su.deptid in ( select id from sys_dept where pids like CONCAT('%[', #{deptId}, ']%') ))
         </if>
+        order by umc.type,umc.times desc
     </select>
 
 </mapper>

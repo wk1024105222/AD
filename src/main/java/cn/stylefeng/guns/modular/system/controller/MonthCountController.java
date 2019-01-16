@@ -94,10 +94,11 @@ public class MonthCountController extends BaseController {
                 case 4:  type = "上班迟到"; break;
                 case 5:  type = "午休迟到"; break;
                 case 6:  type = "下班早退"; break;
-                case 7:  type = "缺少下班记录"; break;
-                case 8:  type = "提前就餐"; break;
-                case 9:  type = "休息有进出记录"; break;
-                case 10: type = "加班"; break;
+                case 7:  type = "离岗超时"; break;
+                case 8:  type = "缺少下班记录"; break;
+                case 9:  type = "提前就餐"; break;
+                case 10:  type = "休息有进出记录"; break;
+                case 11: type = "加班"; break;
                 default: type = null; break;
             }
         }

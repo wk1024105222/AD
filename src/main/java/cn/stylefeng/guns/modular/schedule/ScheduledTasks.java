@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -73,39 +74,61 @@ public class ScheduledTasks {
         List<Dept> depts = deptService.getDeptBySendEmailCycle(cycle);
 
         for (Dept d : depts) {
+            File file = null;
+            HSSFWorkbook workbook = new HSSFWorkbook();
+
             List<MonthAttendance> ads = monthAttendanceService.getMonthAttendanceByYearMonthDeptId(year, month, d.getId());
             if (ads.size() > 0) {
-                String fileName = d.getSimplename() + yesterday.format(dtf) + "月度考勤表.xls";
-                File f = new File(fileName);
-                if (f.exists()) {
-                    f.delete();
-                }
-                monthAttendanceService.exportMonthAttendanceReportXls(ads, fileName);
-
-                if (f.exists()) {
-                    List<String> toEmails = new ArrayList<String>();
-                    if (d.getEmail1() != null) {
-                        toEmails.add(d.getEmail1());
-                    }
-                    if (d.getEmail2() != null) {
-                        toEmails.add(d.getEmail2());
-                    }
-                    if (d.getEmail3() != null) {
-                        toEmails.add(d.getEmail3());
-                    }
-                    String[] to = new String[toEmails.size()];
-                    for (int i = 0; i != to.length; i++) {
-                        to[i] = toEmails.get(i);
-                    }
-                    PersonUtil.sendMail(mailSender,
-                            "18565430729@163.com",
-                            to,
-                            fileName,
-                            "",
-                            new File(fileName),
-                            yesterday.format(dtf) + ".xls");
-                }
+                monthAttendanceService.exportMonthAttendanceReportXls(workbook,ads);
             }
+            List<MonthCount> records = monthCountService.list(null,yesterday.format(dtf), null,d.getId());
+            if(records.size()>0) {
+                monthCountService.exportMonthCountReportXls(workbook,records);
+            }
+
+            String fileName = d.getSimplename()+"_" + yesterday.format(dtf) + "_月度考勤表.xls";
+
+            file = new File(fileName);
+            if (file.exists()) {
+                file.delete();
+            }
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(fileName);
+                workbook.write(fos);
+                fos.flush();
+                fos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            if (file.exists()) {
+                List<String> toEmails = new ArrayList<String>();
+                if (d.getEmail1() != null && !d.getEmail1().equals("") ) {
+                    toEmails.add(d.getEmail1());
+                }
+                if (d.getEmail2() != null && !d.getEmail2().equals("") ) {
+                    toEmails.add(d.getEmail2());
+                }
+                if (d.getEmail3() != null && !d.getEmail3().equals("") ) {
+                    toEmails.add(d.getEmail3());
+                }
+                String[] to = new String[toEmails.size()];
+                for (int i = 0; i != to.length; i++) {
+                    to[i] = toEmails.get(i);
+                }
+                PersonUtil.sendMail(mailSender,
+                        "18565430729@163.com",
+                        to,
+                        fileName,
+                        "",
+                        file,
+                        yesterday.format(dtf) + ".xls");
+            }
+
         }
     }
 

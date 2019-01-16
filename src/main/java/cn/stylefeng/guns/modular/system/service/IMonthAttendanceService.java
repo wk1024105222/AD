@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.system.service;
 
 import cn.stylefeng.guns.modular.system.model.MonthAttendance;
 import com.baomidou.mybatisplus.service.IService;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface IMonthAttendanceService extends IService<MonthAttendance> {
 
     List<MonthAttendance> getMonthAttendanceByYearMonthDeptId(Integer year, Integer month, Integer id);
 
-    boolean exportMonthAttendanceReportXls(List<MonthAttendance> ads, String fileName);
+    boolean exportMonthAttendanceReportXls(HSSFWorkbook workbook, List<MonthAttendance> ads);
 
     List<MonthAttendance> list(String user, Integer year, Integer month, Integer deptId);
 }
