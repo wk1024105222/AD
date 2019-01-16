@@ -19,5 +19,5 @@ public interface IMonthCountService extends IService<MonthCount> {
 
     int insertNewMonthCountByDate(String date);
 
-    List<MonthCount> list(String user, String month, Integer deptId);
+    List<MonthCount> list(String user, String month, String type, Integer deptId);
 }

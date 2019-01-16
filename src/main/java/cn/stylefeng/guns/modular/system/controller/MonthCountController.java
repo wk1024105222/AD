@@ -69,7 +69,7 @@ public class MonthCountController extends BaseController {
      */
     @RequestMapping(value = "/list")
     @ResponseBody
-    public Object list(String user, String month) {
+    public Object list(String user, String month, Integer typeFlag) {
 
         Integer deptId = ShiroKit.getUser().getDeptId();
 
@@ -85,8 +85,24 @@ public class MonthCountController extends BaseController {
 //
 //        List<MonthCount> records = monthCountService.selectList(wrapper);
 //        return records ;
+        String type = null;
+        if (typeFlag != null) {
+            switch (typeFlag) {
+                case 1:  type = "全天旷工"; break;
+                case 2:  type = "上午旷工"; break;
+                case 3:  type = "下午旷工"; break;
+                case 4:  type = "上班迟到"; break;
+                case 5:  type = "午休迟到"; break;
+                case 6:  type = "下班早退"; break;
+                case 7:  type = "缺少下班记录"; break;
+                case 8:  type = "提前就餐"; break;
+                case 9:  type = "休息有进出记录"; break;
+                case 10: type = "加班"; break;
+                default: type = null; break;
+            }
+        }
 
-        List<MonthCount> records = monthCountService.list(user,month,deptId);
+        List<MonthCount> records = monthCountService.list(user,month, type,deptId);
 
         return records;
     }

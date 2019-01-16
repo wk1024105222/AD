@@ -96,6 +96,7 @@ MonthCount.search = function () {
     var queryData = {};
     queryData['user'] = $("#user").val();
     queryData['month'] = $("#month").val();
+    queryData['typeFlag'] = $("#typeFlag").val();
     MonthCount.table.refresh({query: queryData});
 };
 
