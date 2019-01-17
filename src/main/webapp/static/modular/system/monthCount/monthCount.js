@@ -90,6 +90,29 @@ MonthCount.delete = function () {
 };
 
 /**
+ * 导出月度统计表列表
+ */
+MonthCount.export = function () {
+    // var request=new XMLHttpRequest();
+    // request.open("POST",Feng.ctxPath + "/monthCount/export");
+    // request.setRequestHeader("Content-type","text/plain;charset=UTF-8");
+    // request.send({"user":$("#user").val(),"month":$("#month").val(),"typeFlag":$("#typeFlag").val()});
+
+
+    // var ajax = new $ax(Feng.ctxPath + "/monthCount/export");
+    // ajax.set("user",$("#user").val());
+    // ajax.set("month",$("#month").val());
+    // ajax.set("typeFlag",$("#typeFlag").val());
+    // ajax.start();
+
+    window.location.href=Feng.ctxPath + "/monthCount/export"+"?" +
+        "user="+ $("#user").val()+
+        "&month="+$("#month").val()+
+        "&typeFlag="+$("#typeFlag").val();
+
+};
+
+/**
  * 查询月度统计表列表
  */
 MonthCount.search = function () {

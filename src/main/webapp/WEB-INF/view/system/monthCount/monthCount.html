@@ -32,7 +32,10 @@
                                 </#SelectCon>
                             </div>
                             <div class="col-sm-2">
-                                <#button name="搜索" icon="fa-search" clickFun="MonthCount.search()"/>
+                                <#button name="搜索" icon="fa-search" clickFun="MonthCount.search()"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                                @if(shiro.hasPermission("/monthCount/export")){
+                                <#button name="导出" icon="fa-download" clickFun="MonthCount.export()"/>
+                                @}
                             </div>
                         </div>
 

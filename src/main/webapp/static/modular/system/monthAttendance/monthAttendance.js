@@ -149,6 +149,18 @@ MonthAttendance.delete = function () {
         ajax.start();
     }
 };
+/**
+ * 导出月度考勤表列表
+ */
+MonthAttendance.export = function () {
+
+    window.location.href=Feng.ctxPath + "/monthAttendance/export"+"?" +
+        "user="+ $("#user").val()+
+        "&year="+$("#year").val()+
+        "&month="+$("#month").val();
+
+};
+
 
 /**
  * 查询月度考勤表列表

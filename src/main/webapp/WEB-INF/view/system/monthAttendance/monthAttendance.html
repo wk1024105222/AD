@@ -19,7 +19,10 @@
                                 <#NameCon id="month" name="月份" placeholder="MM"/>
                             </div>
                             <div class="col-sm-2">
-                                <#button name="搜索" icon="fa-search" clickFun="MonthAttendance.search()"/>
+                                <#button name="搜索" icon="fa-search" clickFun="MonthAttendance.search()"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                                @if(shiro.hasPermission("/monthAttendance/export")){
+                                <#button name="导出" icon="fa-download" clickFun="MonthAttendance.export()"/>
+                                @}
                             </div>
                         </div>
 

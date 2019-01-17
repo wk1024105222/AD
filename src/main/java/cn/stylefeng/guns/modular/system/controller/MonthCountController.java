@@ -6,6 +6,7 @@ import cn.stylefeng.guns.modular.system.model.AttendanceRecord;
 import cn.stylefeng.guns.modular.system.warpper.AttendanceWarpper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,6 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import cn.stylefeng.guns.modular.system.model.MonthCount;
 import cn.stylefeng.guns.modular.system.service.IMonthCountService;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -73,18 +79,6 @@ public class MonthCountController extends BaseController {
 
         Integer deptId = ShiroKit.getUser().getDeptId();
 
-//        EntityWrapper<MonthCount> wrapper = new EntityWrapper<MonthCount>();
-//        wrapper.where("1=1");
-//        if(user != null && !"".equalsIgnoreCase(user)) {
-//            wrapper.where("(user_Id like '%" + user+"%' or user_name like '%"+user+"%')");
-//        }
-//        if(month != null && !"".equalsIgnoreCase(month)) {
-//            wrapper.eq("month",month);
-//        }
-//        wrapper.orderDesc(Collections.singleton("month")).orderDesc(Collections.singleton("user_Id"));
-//
-//        List<MonthCount> records = monthCountService.selectList(wrapper);
-//        return records ;
         String type = null;
         if (typeFlag != null) {
             switch (typeFlag) {
@@ -106,6 +100,54 @@ public class MonthCountController extends BaseController {
         List<MonthCount> records = monthCountService.list(user,month, type,deptId);
 
         return records;
+    }
+
+    @RequestMapping(value = "/export")
+    @ResponseBody
+    public void export(String user, String month, Integer typeFlag, HttpServletResponse response) {
+
+        Integer deptId = ShiroKit.getUser().getDeptId();
+
+        String type = null;
+        if (typeFlag != null) {
+            switch (typeFlag) {
+                case 1:  type = "全天旷工"; break;
+                case 2:  type = "上午旷工"; break;
+                case 3:  type = "下午旷工"; break;
+                case 4:  type = "上班迟到"; break;
+                case 5:  type = "午休迟到"; break;
+                case 6:  type = "下班早退"; break;
+                case 7:  type = "离岗超时"; break;
+                case 8:  type = "缺少下班记录"; break;
+                case 9:  type = "提前就餐"; break;
+                case 10:  type = "休息有进出记录"; break;
+                case 11: type = "加班"; break;
+                default: type = null; break;
+            }
+        }
+
+        List<MonthCount> records = monthCountService.list(user,month, type,deptId);
+
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        if(records.size()>0) {
+            monthCountService.exportMonthCountReportXls(workbook,records);
+            String fileName = "月度统计表.xls";
+
+            try {
+                response.setContentType("application/vnd.ms-excel");
+                response.setHeader("Content-Disposition", "attachment;filename="+URLEncoder.encode(fileName, "utf-8"));
+                OutputStream outputStream = response.getOutputStream();
+                workbook.write(outputStream);
+                outputStream.flush();
+                outputStream.close();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+//        return SUCCESS_TIP;
     }
 
     /**
