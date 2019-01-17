@@ -23,25 +23,9 @@ MgrUser.initColumn = function () {
         {title: '部门', field: 'deptName', align: 'center', valign: 'middle', sortable: true},
         // {title: '邮箱', field: 'email', align: 'center', valign: 'middle', sortable: true},
         // {title: '电话', field: 'phone', align: 'center', valign: 'middle', sortable: true},
-        {title: '创建时间', field: 'createtime', align: 'center', valign: 'middle', sortable: true},
-        {title: '状态', field: 'statusName', align: 'center', valign: 'middle', sortable: true
-            // ,formatter: function (value, row, index) {
-            //
-            //     var index = layer.open({
-            //         type: 2,
-            //         title: '头像',
-            //         area: ['800px', '450px'], //宽高
-            //         fix: false, //不固定
-            //         maxmin: true,
-            //         content: Feng.ctxPath + '/kaptcha/' + this.seItem.avatar
-            //     });
-            //     this.layerIndex = index;
-            //
-            //     return '<a class="btn btn-primary btn-sm" href="">头像</a>';
-            //     // return '<img alt="image" class="img-circle" src="${ctxPath}/kaptcha/${avatar}" width="64px" height="64px"/>'
-            // }
-
-        }];
+        {title: '创建时间', field: 'createtime', align: 'center', valign: 'middle', sortable: true}
+        // ,{title: '状态', field: 'statusName', align: 'center', valign: 'middle', sortable: true}
+        ];
 
     return columns;
 };

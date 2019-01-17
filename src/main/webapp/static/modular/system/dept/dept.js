@@ -5,7 +5,8 @@ var Dept = {
     id: "DeptTable",	//表格id
     seItem: null,		//选中的条目
     table: null,
-    layerIndex: -1
+    layerIndex: -1,
+    deptid:0
 };
 
 /**
@@ -19,18 +20,18 @@ Dept.initColumn = function () {
         // {title: '部门全称', field: 'fullname', align: 'center', valign: 'middle', sortable: true},
         // {title: '排序', field: 'num', align: 'center', valign: 'middle', sortable: true},
         //{title: '备注', field: 'tips', align: 'center', valign: 'middle', sortable: true},
-        {title: '打卡次数', field: 'attend_times', visible: true, align: 'center', valign: 'middle',width:'80px'},
-        {title: '上班时间', field: 'start_work_time', visible: true, align: 'center', valign: 'middle',width:'80px'},
-        {title: '下班时间', field: 'end_work_time', visible: true, align: 'center', valign: 'middle',width:'80px'},
-        {title: '午休开始', field: 'start_rest_time', visible: true, align: 'center', valign: 'middle',width:'80px'},
-        {title: '午休结束', field: 'end_rest_time', visible: true, align: 'center', valign: 'middle',width:'80px'},
-        {title: '离岗时间', field: 'leave_time', visible: true, align: 'center', valign: 'middle',width:'80px'},
-        {title: '加班时间', field: 'start_over_time', visible: true, align: 'center', valign: 'middle',width:'80px'},
+        {title: '打卡次数', field: 'attend_times', visible: true, align: 'center', valign: 'middle',width:'60px'},
+        {title: '上班时间', field: 'start_work_time', visible: true, align: 'center', valign: 'middle',width:'60px'},
+        {title: '下班时间', field: 'end_work_time', visible: true, align: 'center', valign: 'middle',width:'60px'},
+        {title: '午休开始', field: 'start_rest_time', visible: true, align: 'center', valign: 'middle',width:'60px'},
+        {title: '午休结束', field: 'end_rest_time', visible: true, align: 'center', valign: 'middle',width:'60px'},
+        {title: '离岗时间', field: 'leave_time', visible: true, align: 'center', valign: 'middle',width:'60px'},
+        {title: '加班时间', field: 'start_over_time', visible: true, align: 'center', valign: 'middle',width:'60px'},
         {title: '邮箱1', field: 'email1', visible: true, align: 'center', valign: 'middle',width:'120px'},
         {title: '邮箱2', field: 'email2', visible: true, align: 'center', valign: 'middle',width:'120px'},
         {title: '邮箱3', field: 'email3', visible: true, align: 'center', valign: 'middle',width:'120px'},
         {title: '发送周期', field: 'send_email_cycle', visible: true, align: 'center', valign: 'middle',width:'80px'},
-        {title: '工作日', field: 'work_day', visible: true, align: 'center', valign: 'middle',width:'80px'}
+        {title: '工作日', field: 'work_day', visible: true, align: 'center', valign: 'middle',width:'60px'}
 
         ];
 };
@@ -108,17 +109,27 @@ Dept.delete = function () {
 Dept.search = function () {
     var queryData = {};
     queryData['condition'] = $("#condition").val();
+    queryData['id'] = Dept.deptid;
     Dept.table.refresh({query: queryData});
+};
+
+Dept.onClickDept = function (e, treeId, treeNode) {
+    Dept.deptid = treeNode.id;
+    Dept.search();
 };
 
 $(function () {
     var defaultColunms = Dept.initColumn();
     var table = new BSTreeTable(Dept.id, "/dept/list", defaultColunms);
-    table.setExpandColumn(1);
+    // table.setExpandColumn(1);
     table.setIdField("id");
     table.setCodeField("id");
     table.setParentCodeField("pid");
     table.setExpandAll(true);
     table.init();
     Dept.table = table;
+
+    var ztree = new $ZTree("deptTree", "/dept/tree");
+    ztree.bindOnClick(Dept.onClickDept);
+    ztree.init();
 });

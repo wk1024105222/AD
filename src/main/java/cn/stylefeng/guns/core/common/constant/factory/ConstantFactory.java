@@ -143,11 +143,11 @@ public class ConstantFactory implements IConstantFactory {
      * 获取部门名称
      */
     @Override
-    @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.DEPT_NAME + "'+#deptId")
+//    @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.DEPT_NAME + "'+#deptId")
     public String getDeptName(Integer deptId) {
         Dept dept = deptMapper.selectById(deptId);
-        if (ToolUtil.isNotEmpty(dept) && ToolUtil.isNotEmpty(dept.getFullname())) {
-            return dept.getFullname();
+        if (ToolUtil.isNotEmpty(dept) && ToolUtil.isNotEmpty(dept.getSimplename())) {
+            return dept.getSimplename();
         }
         return "";
     }

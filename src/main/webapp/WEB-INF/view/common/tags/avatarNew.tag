@@ -3,7 +3,7 @@
     name : 名称
     id : 头像的id
 @*/
-<div class="form-group">
+<div class="form-group" style="height: 110px">
     <label class="col-sm-3 control-label head-scu-label">${name}</label>
     <div class="col-sm-4">
         <div id="${id}PreId">
@@ -16,11 +16,8 @@
         </div>
     </div>
     <div class="col-sm-2">
-        <div class="btn-group-vertical">
 
-            <div class="btn btn-sm btn-primary" onclick="openCamera()">&nbsp;拍照</div>
-            <div class="btn btn-sm btn-primary" onclick="takePhoto()">&nbsp;确定</div>
-            <div class="btn btn-sm btn-primary">&nbsp;关闭</div>
+            <div class="btn btn-sm btn-primary" onclick="takePhoto()" style="width: 55px; height: 32px; font-size: 14px ">&nbsp;拍照</div>
 
             <script>
                 var xmlHttpReq;
@@ -74,9 +71,8 @@
                 }
 
             </script>
-        </div>
-    </div>
-    <div class="col-sm-2 right">
+
+
 
         <div class="upload-btn" id="${id}BtnId">&nbsp;本地</div>
 

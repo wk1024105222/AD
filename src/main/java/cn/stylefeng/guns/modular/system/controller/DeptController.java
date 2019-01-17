@@ -123,8 +123,15 @@ public class DeptController extends BaseController {
     @RequestMapping(value = "/list")
     @Permission
     @ResponseBody
-    public Object list(String condition) {
-        List<Map<String, Object>> list = this.deptService.list(condition,ShiroKit.getUser().getDeptId());
+    public Object list(String condition, Integer id) {
+        List<Map<String, Object>> list = null;
+
+        if (id != null) {
+            list = this.deptService.list(condition,id);
+        } else {
+            list = this.deptService.list(condition,ShiroKit.getUser().getDeptId());
+        }
+
         for (Map<String, Object> map : list) {
             for (Map.Entry<String, Object> entry : map.entrySet()) {
                 if (entry.getKey().equals("send_email_cycle")) {
