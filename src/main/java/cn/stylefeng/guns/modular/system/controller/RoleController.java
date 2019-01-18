@@ -24,6 +24,7 @@ import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.CacheUtil;
 import cn.stylefeng.guns.modular.system.model.Role;
 import cn.stylefeng.guns.modular.system.model.User;
@@ -218,7 +219,7 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/roleTreeList")
     @ResponseBody
     public List<ZTreeNode> roleTreeList() {
-        List<ZTreeNode> roleTreeList = this.roleService.roleTreeList();
+        List<ZTreeNode> roleTreeList = this.roleService.roleTreeList(null);
         roleTreeList.add(ZTreeNode.createParent());
         return roleTreeList;
     }
@@ -229,14 +230,30 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/roleTreeListByUserId/{userId}")
     @ResponseBody
     public List<ZTreeNode> roleTreeListByUserId(@PathVariable Integer userId) {
+
+        List<Integer> userRoleList = ShiroKit.getUser().getRoleList();
         User theUser = this.userService.selectById(userId);
         String roleid = theUser.getRoleid();
-        if (ToolUtil.isEmpty(roleid)) {
-            return this.roleService.roleTreeList();
+
+        if (ShiroKit.hasRole(Const.ADMIN_NAME)) {
+
+            if (ToolUtil.isEmpty(roleid)) {
+                return this.roleService.roleTreeList(null);
+            } else {
+                String[] strArray = roleid.split(",");
+                return this.roleService.roleTreeListByRoleId(strArray, null);
+            }
         } else {
-            String[] strArray = roleid.split(",");
-            return this.roleService.roleTreeListByRoleId(strArray);
+            if (ToolUtil.isEmpty(roleid)) {
+                return this.roleService.roleTreeList(userRoleList);
+            } else {
+                String[] strArray = roleid.split(",");
+                return this.roleService.roleTreeListByRoleId(strArray, userRoleList);
+            }
         }
+
+
+
     }
 
 }

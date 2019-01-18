@@ -33,7 +33,13 @@
 	<select id="roleTreeList" resultType="cn.stylefeng.guns.core.common.node.ZTreeNode">
 		select id "id",pId
 		"pId",name as "name",(case when (pId=0 or pId is null) then 'true'
-		else 'false' end) "open" from sys_role
+		else 'false' end) "open" from sys_role where 1=1
+		<if test="userRoleList != null ">
+			and id IN
+			<foreach collection="userRoleList" index="index" item="i" open="(" separator="," close=")">
+				#{i}
+			</foreach>
+		</if>
 	</select>
 
 	<select id="roleTreeListByRoleId" resultType="cn.stylefeng.guns.core.common.node.ZTreeNode">
@@ -67,11 +73,17 @@
 		WHERE
 		ID IN
 
-		<foreach collection="array" index="index" item="i" open="(" separator="," close=")">
+		<foreach collection="roleId" index="index" item="i" open="(" separator="," close=")">
 			#{i}
 		</foreach>
 
-		) r1 ON r.ID = r1.ID
+		) r1 ON r.ID = r1.ID where 1=1
+		<if test="userRoleList != null ">
+			and r.id IN
+			<foreach collection="userRoleList" index="index" item="i" open="(" separator="," close=")">
+				#{i}
+			</foreach>
+		</if>
 		ORDER BY
 		pId,
 		num ASC

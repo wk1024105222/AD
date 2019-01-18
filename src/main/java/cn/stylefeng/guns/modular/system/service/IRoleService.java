@@ -69,8 +69,9 @@ public interface IRoleService extends IService<Role> {
      *
      * @return
      * @date 2017年2月18日 上午10:32:04
+     * @param userRoleList
      */
-    List<ZTreeNode> roleTreeList();
+    List<ZTreeNode> roleTreeList(List<Integer> userRoleList);
 
     /**
      * 获取角色列表树
@@ -78,5 +79,5 @@ public interface IRoleService extends IService<Role> {
      * @return
      * @date 2017年2月18日 上午10:32:04
      */
-    List<ZTreeNode> roleTreeListByRoleId(String[] roleId);
+    List<ZTreeNode> roleTreeListByRoleId(String[] roleId, List<Integer> userRoleList);
 }
