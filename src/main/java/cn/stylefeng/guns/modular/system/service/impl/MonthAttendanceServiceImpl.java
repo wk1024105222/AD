@@ -5,10 +5,10 @@ import cn.stylefeng.guns.modular.system.model.MonthAttendance;
 import cn.stylefeng.guns.modular.system.service.IMonthAttendanceService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
+
+import org.apache.poi.ss.usermodel.CellStyle;
 
 import javax.swing.*;
 import java.io.FileNotFoundException;
@@ -92,6 +92,7 @@ public class MonthAttendanceServiceImpl extends ServiceImpl<MonthAttendanceMappe
         style.setBorderTop(BorderStyle.THIN);//上边框
         style.setBorderRight(BorderStyle.THIN);//右边框
 
+
         HSSFCell cell;
         cell=row.createCell(0);cell.setCellValue("序号");cell.setCellStyle(style);
         cell=row.createCell(1);cell.setCellValue("年份");cell.setCellStyle(style);
@@ -141,13 +142,25 @@ public class MonthAttendanceServiceImpl extends ServiceImpl<MonthAttendanceMappe
         HSSFSheet sheet = workbook.createSheet("月度考勤表");
         createTitle(workbook,sheet);
 
-        HSSFCellStyle cellStyle=workbook.createCellStyle();
-        cellStyle.setWrapText(true);
-        cellStyle.setBorderBottom(BorderStyle.THIN); //下边框
-        cellStyle.setBorderLeft(BorderStyle.THIN);//左边框
-        cellStyle.setBorderTop(BorderStyle.THIN);//上边框
-        cellStyle.setBorderRight(BorderStyle.THIN);//右边框
-        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        HSSFCellStyle cellStyle1=workbook.createCellStyle();
+        cellStyle1.setWrapText(true);
+        cellStyle1.setBorderBottom(BorderStyle.THIN); //下边框
+        cellStyle1.setBorderLeft(BorderStyle.THIN);//左边框
+        cellStyle1.setBorderTop(BorderStyle.THIN);//上边框
+        cellStyle1.setBorderRight(BorderStyle.THIN);//右边框
+        cellStyle1.setVerticalAlignment(VerticalAlignment.CENTER);
+        cellStyle1.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        cellStyle1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        HSSFCellStyle cellStyle2=workbook.createCellStyle();
+        cellStyle2.setWrapText(true);
+        cellStyle2.setBorderBottom(BorderStyle.THIN); //下边框
+        cellStyle2.setBorderLeft(BorderStyle.THIN);//左边框
+        cellStyle2.setBorderTop(BorderStyle.THIN);//上边框
+        cellStyle2.setBorderRight(BorderStyle.THIN);//右边框
+        cellStyle2.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        HSSFCellStyle cellStyle= null;
 
         //新增数据行，并且设置单元格数据
         int rowNum=1;
@@ -155,6 +168,12 @@ public class MonthAttendanceServiceImpl extends ServiceImpl<MonthAttendanceMappe
             HSSFRow row = sheet.createRow(rowNum);
             row.setHeight((short) (15.625*17*5));
             HSSFCell cell;
+            if (rowNum % 2 == 1) {
+                cellStyle = cellStyle1;
+            } else {
+                cellStyle = cellStyle2;
+            }
+
             cell=row.createCell(0);cell.setCellValue(rowNum);cell.setCellStyle(cellStyle);
             cell=row.createCell(1);if(mad.getYear()!=null){cell.setCellValue(mad.getYear());}cell.setCellStyle(cellStyle);
             cell=row.createCell(2);if(mad.getMonth()!=null){cell.setCellValue(mad.getMonth());}cell.setCellStyle(cellStyle);
