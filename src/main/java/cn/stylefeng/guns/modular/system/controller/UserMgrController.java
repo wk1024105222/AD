@@ -276,9 +276,10 @@ public class UserMgrController extends BaseController {
     @Permission
     @ResponseBody
     public ResponseData delete(@RequestParam Integer userId) {
+        Integer id = ShiroKit.getUser().getId();
         if (ToolUtil.isEmpty(userId)) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
-        } else if(ShiroKit.getUser().getDeptId().equals(userId)) {
+        } else if(id.equals(userId)) {
             throw new ServiceException(BizExceptionEnum.DELETE_SELF_ERROR);
         }
         //不能删除超级管理员
