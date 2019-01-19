@@ -90,7 +90,11 @@ public enum BizExceptionEnum implements AbstractBaseExceptionEnum {
 
     CHANGE_IMAGE_ERROR(400, "变更人脸照片异常"),
 
-    DELETE_IMAGE_ERROR(400, "删除人脸照片异常");
+    DELETE_IMAGE_ERROR(400, "删除人脸照片异常"),
+
+    DELETE_DEPT_WITH_CHILD_ERROR(400, "存在子机构,请先删除子机构"),
+    DELETE_DEPT_WITH_USER_ERROR(400, "部门存在用户,请先删用户");
+
 
     BizExceptionEnum(int code, String message) {
         this.code = code;

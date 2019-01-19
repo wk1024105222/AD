@@ -24,13 +24,17 @@ import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.shiro.ShiroUser;
+import cn.stylefeng.guns.modular.system.model.Camera;
 import cn.stylefeng.guns.modular.system.model.Dept;
+import cn.stylefeng.guns.modular.system.model.User;
 import cn.stylefeng.guns.modular.system.service.IDeptService;
+import cn.stylefeng.guns.modular.system.service.IUserService;
 import cn.stylefeng.guns.modular.system.warpper.DeptWarpper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.datascope.DataScope;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,6 +60,8 @@ public class DeptController extends BaseController {
 
     @Autowired
     private IDeptService deptService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 跳转到部门管理首页
@@ -190,6 +196,18 @@ public class DeptController extends BaseController {
     @Permission
     @ResponseBody
     public Object delete(@RequestParam Integer deptId) {
+        EntityWrapper<Dept> ewDept = new EntityWrapper<Dept>();
+        ewDept.where("pid = " + deptId);
+        List<Dept> depts = deptService.selectList(ewDept);
+        if (!ToolUtil.isEmpty(depts)) {
+            throw new ServiceException(BizExceptionEnum.DELETE_DEPT_WITH_CHILD_ERROR);
+        }
+        EntityWrapper<User> ewUser = new EntityWrapper<User>();
+        ewUser.where("deptid = " + deptId);
+        List<User> users = userService.selectList(ewUser);
+        if (!ToolUtil.isEmpty(users)) {
+            throw new ServiceException(BizExceptionEnum.DELETE_DEPT_WITH_USER_ERROR);
+        }
 
         //缓存被删除的部门名称
         LogObjectHolder.me().set(ConstantFactory.me().getDeptName(deptId));
