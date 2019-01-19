@@ -20,7 +20,7 @@ Dept.initColumn = function () {
         // {title: '部门全称', field: 'fullname', align: 'center', valign: 'middle', sortable: true},
         // {title: '排序', field: 'num', align: 'center', valign: 'middle', sortable: true},
         //{title: '备注', field: 'tips', align: 'center', valign: 'middle', sortable: true},
-        {title: '打卡次数', field: 'attend_times', visible: true, align: 'center', valign: 'middle',width:'60px'},
+        // {title: '打卡次数', field: 'attend_times', visible: true, align: 'center', valign: 'middle',width:'60px'},
         {title: '上班时间', field: 'start_work_time', visible: true, align: 'center', valign: 'middle',width:'60px'},
         {title: '下班时间', field: 'end_work_time', visible: true, align: 'center', valign: 'middle',width:'60px'},
         {title: '午休开始', field: 'start_rest_time', visible: true, align: 'center', valign: 'middle',width:'60px'},
