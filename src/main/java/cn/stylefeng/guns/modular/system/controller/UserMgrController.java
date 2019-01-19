@@ -278,6 +278,8 @@ public class UserMgrController extends BaseController {
     public ResponseData delete(@RequestParam Integer userId) {
         if (ToolUtil.isEmpty(userId)) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
+        } else if(ShiroKit.getUser().getDeptId().equals(userId)) {
+            throw new ServiceException(BizExceptionEnum.DELETE_SELF_ERROR);
         }
         //不能删除超级管理员
         if (userId.equals(Const.ADMIN_ID)) {
