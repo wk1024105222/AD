@@ -216,9 +216,12 @@ public class MonthAttendanceServiceImpl extends ServiceImpl<MonthAttendanceMappe
 
             rowNum++;
         }
+        sheet.createFreezePane(8,0,8,0);
 
         return result;
     }
+
+
 
     @Override
     public List<MonthAttendance> list(String user, Integer year, Integer month, Integer deptId) {
