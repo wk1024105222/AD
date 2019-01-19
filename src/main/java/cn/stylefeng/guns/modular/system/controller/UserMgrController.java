@@ -369,7 +369,7 @@ public class UserMgrController extends BaseController {
     @Permission
     @ResponseBody
     public ResponseData setRole(@RequestParam("userId") Integer userId, @RequestParam("roleIds") String roleIds) {
-        if (ToolUtil.isOneEmpty(userId, roleIds)) {
+        if (ToolUtil.isAllEmpty(userId)) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
         //不能修改超级管理员
