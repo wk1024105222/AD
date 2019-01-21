@@ -9,11 +9,11 @@
                 <div class="col-sm-6 b-r">
                     <#input id="simplename" name="部门名称" underline="true" value="${dept.simplename}"/>
 
-                    <#input id="startWorkTime" name="上班时间" underline="true" value="${dept.startWorkTime}"/>
+                    <#inputTime id="startWorkTime" name="上班时间" underline="true" value="${dept.startWorkTime}" format="hh:ii:ss" startView="1" minView="0" minuteStep="10"/>
 
-                    <#input id="startRestTime" name="午休开始" underline="true" value="${dept.startRestTime}"/>
+                    <#inputTime id="startRestTime" name="午休开始" underline="true" value="${dept.startRestTime}" format="hh:ii:ss" startView="1" minView="0" minuteStep="10"/>
 
-                    <#input id="leaveTime" name="离岗时间" underline="true" value="${dept.leaveTime}"/>
+                    <#input id="leaveTime" name="离岗时长" underline="true" value="${dept.leaveTime}"/>
 
                     <#input id="email1" name="邮箱1" underline="true" value="${dept.email1}"/>
 
@@ -31,11 +31,11 @@
                             style="background-color: #ffffff !important;" underline="true"/>
 
 
-                    <#input id="endWorkTime" name="下班时间" underline="true" value="${dept.endWorkTime}"/>
+                    <#inputTime id="endWorkTime" name="下班时间" underline="true" value="${dept.endWorkTime}" format="hh:ii:ss" startView="1" minView="0" minuteStep="10"/>
 
-                    <#input id="endRestTime" name="午休结束" underline="true" value="${dept.endRestTime}"/>
+                    <#inputTime id="endRestTime" name="午休结束" underline="true" value="${dept.endRestTime}" format="hh:ii:ss" startView="1" minView="0" minuteStep="10"/>
 
-                    <#input id="startOverTime" name="加班时间" underline="true" value="${dept.startOverTime}"/>
+                    <#inputTime id="startOverTime" name="加班时间" underline="true" value="${dept.startOverTime}" format="hh:ii:ss" startView="1" minView="0" minuteStep="10"/>
 
                     <#select id="sendEmailCycle" name="发送周期" underline="true"  value="${dept.sendEmailCycle}">
                         <option value="1">每天</option>

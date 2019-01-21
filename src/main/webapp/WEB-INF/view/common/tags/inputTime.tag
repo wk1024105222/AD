@@ -2,11 +2,7 @@
 <div class="form-group">
     <label class="col-sm-3 control-label">${name}</label>
     <div class="col-sm-9">
-        <input class="form-control" id="${id}" name="${id}" readonly
-               @if(isNotEmpty(value)){
-               value="${tool.dateType(value)}"
-               @}
-        >
+        <input class="form-control" id="${id}" name="${id}" readonly  >
         <script type="text/javascript">
             $("#${id}").datetimepicker({
                 format: '${format}',  //显示格式可为yyyymm/yyyy-mm-dd/yyyy.mm.dd
@@ -14,13 +10,22 @@
                 autoclose: true,
                 startView: ${startView},  	//打开时显示的视图。0-'hour' 1-'day' 2-'month' 3-'year' 4-'decade'
                 minView: ${minView},  	//最小时间视图。默认0-'hour'
-                initialDate: new Date(),	//初始化日期.默认new Date()当前日期
+                @if(isNotEmpty(value)){
+                    initialDate: new Date('2015-03-05 ${value}'.replace(/-/g,'/')),	//初始化日期.默认new Date()当前日期
+                @} else {
+                    initialDate: new Date(),
+                @}
                 forceParse: false,  	//当输入非格式化日期时，强制格式化。默认true
                 bootcssVer:3,	//显示向左向右的箭头
                 language: 'zh-CN', //语言
                 minuteStep: ${minuteStep}
-            });
+            })
+            @if(isNotEmpty(value)){
+                $("#${id}").val("${value}")
+            @}
+
         </script>
+
     </div>
 </div>
 @if(isNotEmpty(underline) && underline == 'true'){
