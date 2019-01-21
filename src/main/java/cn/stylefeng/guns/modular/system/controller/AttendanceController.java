@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -215,6 +216,84 @@ public class AttendanceController extends BaseController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+
+        return result.toString();
+    }
+
+    @RequestMapping("/sendMail")
+    @ResponseBody
+    public String sendMail() {
+        StringBuffer result = new StringBuffer();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM");
+        LocalDate yesterday = LocalDate.now().minus(1, ChronoUnit.DAYS);
+        int year = yesterday.getYear();
+        int month = yesterday.getMonthValue();
+
+
+        List<Dept> depts = deptService.getDeptBySendEmailCycle("1");
+
+        for (Dept d : depts) {
+            File file = null;
+            HSSFWorkbook workbook = new HSSFWorkbook();
+
+            List<MonthAttendance> ads = monthAttendanceService.getMonthAttendanceByYearMonthDeptId(year, month, d.getId());
+            if (ads.size() > 0) {
+                monthAttendanceService.exportMonthAttendanceReportXls(workbook,ads);
+            }
+            List<MonthCount> records = monthCountService.list(null,yesterday.format(dtf), null,d.getId());
+            if(records.size()>0) {
+                monthCountService.exportMonthCountReportXls(workbook,records);
+            }
+
+            String fileName = d.getSimplename()+"_" + yesterday.format(dtf) + "_月度考勤表.xls";
+
+            file = new File(fileName);
+            if (file.exists()) {
+                file.delete();
+            }
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(fileName);
+                workbook.write(fos);
+                fos.flush();
+                fos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            if (file.exists()) {
+                List<String> toEmails = new ArrayList<String>();
+                if (d.getEmail1() != null && !d.getEmail1().equals("") ) {
+                    toEmails.add(d.getEmail1());
+                }
+                if (d.getEmail2() != null && !d.getEmail2().equals("") ) {
+                    toEmails.add(d.getEmail2());
+                }
+                if (d.getEmail3() != null && !d.getEmail3().equals("") ) {
+                    toEmails.add(d.getEmail3());
+                }
+                String[] to = new String[toEmails.size()];
+                for (int i = 0; i != to.length; i++) {
+                    to[i] = toEmails.get(i);
+                }
+                PersonUtil.sendMail(mailSender,
+                        "contact@2408vr.com",
+                        to,
+                        fileName,
+                        "您好：\n\t附件为"+fileName.substring(0,fileName.length()-4)+"\n\t请查收！\n"+sdf.format(new Date()),
+                        file,
+                        yesterday.format(dtf) + ".xls");
+                result.append(fileName).append(",");
+            }
+
         }
 
 
