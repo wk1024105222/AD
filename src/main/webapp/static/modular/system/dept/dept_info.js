@@ -12,17 +12,53 @@ var DeptInfoDlg = {
                 }
             }
         },
-        fullname: {
-            validators: {
-                notEmpty: {
-                    message: '部门全称不能为空'
-                }
-            }
-        },
+        // fullname: {
+        //     validators: {
+        //         notEmpty: {
+        //             message: '部门全称不能为空'
+        //         }
+        //     }
+        // },
         pName: {
             validators: {
                 notEmpty: {
                     message: '上级名称不能为空'
+                }
+            }
+        },
+        leaveTime: {
+            validators: {
+                numeric: {
+                    message: '离岗时长必须是数字'
+                }
+            }
+        },
+        email1: {
+            validators: {
+                emailAddress: {
+                    message: '邮箱1地址格式有误'
+                }
+            }
+        },
+        email2: {
+            validators: {
+                emailAddress: {
+                    message: '邮箱2地址格式有误'
+                }
+            }
+        },
+        email3: {
+            validators: {
+                emailAddress: {
+                    message: '邮箱3地址格式有误'
+                }
+            }
+        },
+        workDay: {
+            validators: {
+                regexp: {
+                    regexp: /^[1-7]+$/,
+                    message: '工作日只能包含1-7的数字'
                 }
             }
         }
