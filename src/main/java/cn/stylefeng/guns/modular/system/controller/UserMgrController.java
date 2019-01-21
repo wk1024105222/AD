@@ -237,35 +237,16 @@ public class UserMgrController extends BaseController {
         if (result.hasErrors()) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
-
         User oldUser = userService.selectById(user.getId());
 
-        if (ShiroKit.hasRole(Const.ADMIN_NAME)) {
-
-            //添加修改操作影像同步记录
-            if(!user.getAvatar().equals(oldUser.getAvatar())) {
-                if(!this.imageChangeService.updateImage(oldUser, user)) {
-                    throw new ServiceException(BizExceptionEnum.CHANGE_IMAGE_ERROR);
-                }
-            }
-            this.userService.updateById(UserFactory.editUser(user, oldUser));
-            return SUCCESS_TIP;
-        } else {
-            assertAuth(user.getId());
-            ShiroUser shiroUser = ShiroKit.getUser();
-            if (shiroUser.getId().equals(user.getId())) {
-
-                if(!user.getAvatar().equals(oldUser.getAvatar())) {
-                    if(!this.imageChangeService.updateImage(oldUser, user)) {
-                        throw new ServiceException(BizExceptionEnum.CHANGE_IMAGE_ERROR);
-                    }
-                }
-                this.userService.updateById(UserFactory.editUser(user, oldUser));
-                return SUCCESS_TIP;
-            } else {
-                throw new ServiceException(BizExceptionEnum.NO_PERMITION);
+        //添加修改操作影像同步记录
+        if(!user.getAvatar().equals(oldUser.getAvatar())) {
+            if(!this.imageChangeService.updateImage(oldUser, user)) {
+                throw new ServiceException(BizExceptionEnum.CHANGE_IMAGE_ERROR);
             }
         }
+        this.userService.updateById(UserFactory.editUser(user, oldUser));
+        return SUCCESS_TIP;
     }
 
     /**
