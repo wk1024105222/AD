@@ -65,6 +65,8 @@ public class ScheduledTasks {
     }
 
     private void sendReportMail(String cycle) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM");
         LocalDate yesterday = LocalDate.now().minus(1, ChronoUnit.DAYS);
         int year = yesterday.getYear();
@@ -124,7 +126,7 @@ public class ScheduledTasks {
                         "1024105222@qq.com",
                         to,
                         fileName,
-                        "",
+                        "您好：\n\t附件为"+fileName.substring(0,fileName.length()-4)+"\n\t请查收！\n"+sdf.format(new Date()),
                         file,
                         yesterday.format(dtf) + ".xls");
             }
