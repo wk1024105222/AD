@@ -121,7 +121,7 @@ public class ScheduledTasks {
                     to[i] = toEmails.get(i);
                 }
                 PersonUtil.sendMail(mailSender,
-                        "18565430729@163.com",
+                        "1024105222@qq.com",
                         to,
                         fileName,
                         "",
