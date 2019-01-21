@@ -362,18 +362,20 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 note = ((String) tmp.get("result")).replace(",", "</br>");
             } else {
                 //无考勤记录需判断是否为休息日
-                workDays = dept.getWorkDay();
                 if (dept != null) {
-                    if (workDays.indexOf(String.valueOf(dayOfWeek) ) == -1) {
-                        //休息日
-                        note = "休息";
-                    } else {
-                        note = "全天旷工";
-                        attendanceDetailService.insert(
-                                new AttendanceDetail(UUID.randomUUID().toString().replaceAll("-", ""),
-                                        date.format(dtf),
-                                        userId,
-                                        note));
+                    workDays = dept.getWorkDay();
+                    if(workDays != null) {
+                        if (workDays.indexOf(String.valueOf(dayOfWeek) ) == -1) {
+                            //休息日
+                            note = "休息";
+                        } else {
+                            note = "全天旷工";
+                            attendanceDetailService.insert(
+                                    new AttendanceDetail(UUID.randomUUID().toString().replaceAll("-", ""),
+                                            date.format(dtf),
+                                            userId,
+                                            note));
+                        }
                     }
                 }
             }
@@ -388,21 +390,23 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
                 ma.setUserId(userId);
                 ma.setUserName(user.getName());
 
-                pids = dept.getPids();
-                rank = pids.split(",").length;
-                if(rank == 3) {
-                    int index1=pids.indexOf(',');
-                    int index2=pids.indexOf(',',index1+1);
-                    ma.setCompany(idToDept.get(pids.substring(index1+2,index2-1)).getSimplename());
-                    ma.setDepartment(idToDept.get(pids.substring(index2+2,pids.length()-2)).getSimplename());
-                    ma.setTeam(idToDept.get(user.getDeptid().toString()).getSimplename());
+                if (dept != null) {
+                    pids = dept.getPids();
+                    rank = pids.split(",").length;
+                    if(rank == 3) {
+                        int index1=pids.indexOf(',');
+                        int index2=pids.indexOf(',',index1+1);
+                        ma.setCompany(idToDept.get(pids.substring(index1+2,index2-1)).getSimplename());
+                        ma.setDepartment(idToDept.get(pids.substring(index2+2,pids.length()-2)).getSimplename());
+                        ma.setTeam(idToDept.get(user.getDeptid().toString()).getSimplename());
 
-                } else if(rank == 2) {
-                    int index1=pids.indexOf(',');
-                    ma.setCompany(idToDept.get(pids.substring(index1+2,pids.length()-2)).getSimplename());
-                    ma.setDepartment(idToDept.get(user.getDeptid().toString()).getSimplename());
-                } else {
-                    ma.setCompany(idToDept.get(user.getDeptid().toString()).getSimplename());
+                    } else if(rank == 2) {
+                        int index1=pids.indexOf(',');
+                        ma.setCompany(idToDept.get(pids.substring(index1+2,pids.length()-2)).getSimplename());
+                        ma.setDepartment(idToDept.get(user.getDeptid().toString()).getSimplename());
+                    } else {
+                        ma.setCompany(idToDept.get(user.getDeptid().toString()).getSimplename());
+                    }
                 }
             }
 

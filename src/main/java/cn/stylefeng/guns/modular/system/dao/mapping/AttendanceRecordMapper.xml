@@ -28,7 +28,7 @@
         select
         <include refid="Base_Column_List" />
         from user_attendance_record
-        where (attendance_Time between CONCAT(#{date},' 00:00:00') and CONCAT(#{date},' 23:59:59'))
+        where (attendance_Time between CONCAT(#{date},' 00:00:00') and CONCAT(#{date},' 23:59:59')) and user_id is not null
         order by user_Id,attendance_Time
     </select>
 

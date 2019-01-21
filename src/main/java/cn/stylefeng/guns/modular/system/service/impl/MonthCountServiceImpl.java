@@ -81,24 +81,25 @@ public class MonthCountServiceImpl extends ServiceImpl<MonthCountMapper, MonthCo
 
             mc.setUserName(idToUser.get(map.get("user_id")).getName());
 
-            pids = dept.getPids();
-            rank = pids.split(",").length;
-            if(rank == 3) {
-                int index1=pids.indexOf(',');
-                int index2=pids.indexOf(',',index1+1);
-                mc.setCompany(idToDept.get(pids.substring(index1+2,index2-1)).getSimplename());
-                mc.setDepartment(idToDept.get(pids.substring(index2+2,pids.length()-2)).getSimplename());
-                mc.setTeam(idToDept.get(user.getDeptid().toString()).getSimplename());
+            if (dept != null) {
+                pids = dept.getPids();
+                rank = pids.split(",").length;
+                if(rank == 3) {
+                    int index1=pids.indexOf(',');
+                    int index2=pids.indexOf(',',index1+1);
+                    mc.setCompany(idToDept.get(pids.substring(index1+2,index2-1)).getSimplename());
+                    mc.setDepartment(idToDept.get(pids.substring(index2+2,pids.length()-2)).getSimplename());
+                    mc.setTeam(idToDept.get(user.getDeptid().toString()).getSimplename());
 
-            } else if(rank == 2) {
-                int index1=pids.indexOf(',');
-                mc.setCompany(idToDept.get(pids.substring(index1+2,pids.length()-2)).getSimplename());
-                mc.setDepartment(idToDept.get(user.getDeptid().toString()).getSimplename());
-            } else {
-                mc.setCompany(idToDept.get(user.getDeptid().toString()).getSimplename());
+                } else if(rank == 2) {
+                    int index1=pids.indexOf(',');
+                    mc.setCompany(idToDept.get(pids.substring(index1+2,pids.length()-2)).getSimplename());
+                    mc.setDepartment(idToDept.get(user.getDeptid().toString()).getSimplename());
+                } else {
+                    mc.setCompany(idToDept.get(user.getDeptid().toString()).getSimplename());
+                }
+                this.insert(mc);
             }
-
-            this.insert(mc);
         }
 
         return maps.size();
