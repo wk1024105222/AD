@@ -9,9 +9,9 @@
                 <div class="col-sm-6 b-r">
                     <#input id="simplename" name="部门名称" underline="true" placeholder="帐号/姓名"/>
 
-                    <#input id="startWorkTime" name="上班时间" underline="true"/>
+                    <#inputTime id="startWorkTime" name="上班时间" underline="true" format="hh:ii:ss" startView="1" minView="0" minuteStep="10"/>
 
-                    <#input id="startRestTime" name="午休开始" underline="true"/>
+                    <#inputTime id="startRestTime" name="午休开始" underline="true" format="hh:ii:ss" startView="1" minView="0" minuteStep="10"/>
 
                     <#input id="leaveTime" name="离岗时长" underline="true"/>
 
@@ -26,11 +26,11 @@
                     clickFun="DeptInfoDlg.showDeptSelectTree(); return false;"
                     style="background-color: #ffffff !important;" underline="true"/>
 
-                    <#input id="endWorkTime" name="下班时间" underline="true"/>
+                    <#inputTime id="endWorkTime" name="下班时间" underline="true" format="hh:ii:ss" startView="1" minView="0" minuteStep="10"/>
 
-                    <#input id="endRestTime" name="午休结束" underline="true"/>
+                    <#inputTime id="endRestTime" name="午休结束" underline="true" format="hh:ii:ss" startView="1" minView="0" minuteStep="10"/>
 
-                    <#input id="startOverTime" name="加班时间" underline="true"/>
+                    <#inputTime id="startOverTime" name="加班时间" underline="true" format="hh:ii:ss" startView="1" minView="0" minuteStep="10"/>
 
 
                     <#select id="sendEmailCycle" name="发送周期" underline="true">
