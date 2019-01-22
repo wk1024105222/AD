@@ -145,11 +145,17 @@ public class ConstantFactory implements IConstantFactory {
     @Override
 //    @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.DEPT_NAME + "'+#deptId")
     public String getDeptName(Integer deptId) {
-        Dept dept = deptMapper.selectById(deptId);
-        if (ToolUtil.isNotEmpty(dept) && ToolUtil.isNotEmpty(dept.getSimplename())) {
-            return dept.getSimplename();
+        if(deptId == 0) {
+            return "顶级";
+
+        }else {
+            Dept dept = deptMapper.selectById(deptId);
+            if (ToolUtil.isNotEmpty(dept) && ToolUtil.isNotEmpty(dept.getSimplename())) {
+                return dept.getSimplename();
+            } else {
+                return "";
+            }
         }
-        return "";
     }
 
     /**
