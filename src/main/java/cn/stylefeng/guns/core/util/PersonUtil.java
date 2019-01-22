@@ -17,6 +17,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PersonUtil {
     private static final Logger logger = LoggerFactory.getLogger(PersonUtil.class);
@@ -128,5 +130,15 @@ public class PersonUtil {
             return false;
         }
         return true;
+    }
+
+    public static int countAppear(String srcText, String findText) {
+        int count = 0;
+        Pattern p = Pattern.compile(findText);
+        Matcher m = p.matcher(srcText);
+        while (m.find()) {
+            count++;
+        }
+        return count;
     }
 }

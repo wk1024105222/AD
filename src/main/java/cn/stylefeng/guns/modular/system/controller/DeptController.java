@@ -24,6 +24,7 @@ import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.shiro.ShiroUser;
+import cn.stylefeng.guns.core.util.PersonUtil;
 import cn.stylefeng.guns.modular.system.model.Camera;
 import cn.stylefeng.guns.modular.system.model.Dept;
 import cn.stylefeng.guns.modular.system.model.User;
@@ -176,16 +177,23 @@ public class DeptController extends BaseController {
         if (ToolUtil.isEmpty(dept) || dept.getId() == null) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
-        deptSetPids(dept);
-        deptService.updateById(dept);
+        Dept newFather = deptService.selectById(dept.getPid());
+        Dept self = deptService.selectById(dept.getId());
+        if (self.getPid() .equals(dept.getPid())  ||(newFather != null &&
+                PersonUtil.countAppear(self.getPids(), ",") - 1 ==
+                        PersonUtil.countAppear(newFather.getPids(), ","))) {
+            deptSetPids(dept);
+            deptService.updateById(dept);
 
-        if(dept.getUpdateChild().equals("1")) {
-            //更新下属考勤参数
-            int num = deptService.updateChildAttendParam(dept);
+            if(dept.getUpdateChild().equals("1")) {
+                //更新下属考勤参数
+                int num = deptService.updateChildAttendParam(dept);
+            }
+            return SUCCESS_TIP;
 
-//            System.out.println(num);
+        } else {
+            throw new ServiceException(BizExceptionEnum.CHANGE_UNDER_BROTHER_ERROR);
         }
-        return SUCCESS_TIP;
     }
 
     /**

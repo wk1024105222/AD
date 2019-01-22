@@ -96,7 +96,9 @@ public enum BizExceptionEnum implements AbstractBaseExceptionEnum {
 
     DELETE_DEPT_WITH_USER_ERROR(400, "部门存在用户,请先删用户"),
 
-    DELETE_SELF_ERROR(400, "登录用户无法删除自己");
+    DELETE_SELF_ERROR(400, "登录用户无法删除自己"),
+
+    CHANGE_UNDER_BROTHER_ERROR(400, "无法修改部门等级");
 
 
     BizExceptionEnum(int code, String message) {
