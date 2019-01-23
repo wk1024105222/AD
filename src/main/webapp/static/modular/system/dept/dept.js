@@ -6,7 +6,8 @@ var Dept = {
     seItem: null,		//选中的条目
     table: null,
     layerIndex: -1,
-    deptid:0
+    deptid:0,
+    deptTree: null
 };
 
 /**
@@ -92,6 +93,7 @@ Dept.delete = function () {
             var ajax = new $ax(Feng.ctxPath + "/dept/delete", function () {
                 Feng.success("删除成功!");
                 Dept.table.refresh();
+                Dept.deptTree.init();
             }, function (data) {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
             });
@@ -132,4 +134,5 @@ $(function () {
     var ztree = new $ZTree("deptTree", "/dept/tree");
     ztree.bindOnClick(Dept.onClickDept);
     ztree.init();
+    Dept.deptTree = ztree;
 });

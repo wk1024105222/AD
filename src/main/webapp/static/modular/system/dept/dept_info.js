@@ -182,6 +182,7 @@ DeptInfoDlg.addSubmit = function() {
     var ajax = new $ax(Feng.ctxPath + "/dept/add", function(data){
         Feng.success("添加成功!");
         window.parent.Dept.table.refresh();
+        window.parent.Dept.deptTree.init();
         DeptInfoDlg.close();
     },function(data){
         Feng.error("添加失败!" + data.responseJSON.message + "!");
@@ -206,6 +207,7 @@ DeptInfoDlg.editSubmit = function() {
     var ajax = new $ax(Feng.ctxPath + "/dept/update", function(data){
         Feng.success("修改成功!");
         window.parent.Dept.table.refresh();
+        window.parent.Dept.deptTree.init();
         DeptInfoDlg.close();
     },function(data){
         Feng.error("修改失败!" + data.responseJSON.message + "!");
