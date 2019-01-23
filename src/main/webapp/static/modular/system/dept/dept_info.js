@@ -59,6 +59,11 @@ var DeptInfoDlg = {
                 regexp: {
                     regexp: /^[1-7]+$/,
                     message: '工作日只能包含1-7的数字'
+                },
+                stringLength: {
+                    min: 1,
+                    max: 7,
+                    message: '工作日长度必须在1到7之间'
                 }
             }
         }
