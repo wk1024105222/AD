@@ -435,7 +435,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceRecordMapper, A
      */
     @Override
     public int markAttendanceRecord(LocalDate date) {
-        //获取指定日期的所有考勤记录
+        //获取指定日期的所有考勤记录 按工号、考勤时间 升序 排序
         List<AttendanceRecord> ads = attendanceRecordService.getOneDayAttendRecords(date.toString());
         if (ads.size() ==0) {
             return 0;
